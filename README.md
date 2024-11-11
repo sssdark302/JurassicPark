@@ -4,5 +4,5 @@
 
  *EN LA TERMINAL DE INTELIJ*
 
- docker exec -it jurassicpark-postgres-1 bash
- psql myuser -d mydatabase
+ docker exec -it jurassic-postgres bash
+ psql usuario -d jurassic_db 
