@@ -3,10 +3,11 @@
 title Dinosaurio
 
 class Dinosaurio{
+    -gestorCV: GestorCV
     -especie: string
     -edad: int
     -peso: int
-    -vida: int
+    -hp_base: int
     -altura: int
     -sexo: string
     +Dinosaurio(especie: string, edad: int, peso: int, altura: int, sexo: string)
@@ -63,11 +64,12 @@ interface CiclodeVida{
 }
 
 class GestorCV{
-    +iniciarCiclo(): void
-    +AvanzarFase(): void
+    +obtenerFase(Dinosaurio): void
+    +iniciarCiclo(Dinosaurio): void
+    +AvanzarFase(Dinosaurio): void
     +VerificarReproduccion(Dinosaurio): void
     +FaseAdulto(Dinosaurio): void
-    +TerminarCiclo(): void
+    +TerminarCiclo(Dinosaurio): void
 }
 
 class DBConection{
