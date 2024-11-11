@@ -7,3 +7,4 @@
  docker exec -it jurassic-postgres bash
  
  psql usuario -d jurassic_db 
+v
