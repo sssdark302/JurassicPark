@@ -24,8 +24,8 @@ public class DinosaurioDataStore {
     private void cargarDatosCSV(String rutaCSV) {
         try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
             String linea;
-            br.readLine(); // Saltar cabecera
-            while ((linea = br.readLine()) != null) {
+            br.readLine(); // salta header del csv
+            while ((linea = br.readLine()) != null) { //lee los campos mientras que no sean null
                 String[] campos = linea.split(",");
                 String especie = campos[0];
                 int edad = Integer.parseInt(campos[1]);
@@ -35,7 +35,7 @@ public class DinosaurioDataStore {
                 double hpMaxima = Double.parseDouble(campos[5]);
                 String tipo = campos[6];
 
-                Dinosaurio dino;
+                Dinosaurio dino; //diferencia por tipos
                 switch (tipo) {
                     case "Carnivoro":
                         dino = new Carnivoro(especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima);
