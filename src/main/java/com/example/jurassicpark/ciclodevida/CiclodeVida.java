@@ -1,6 +1,7 @@
-package com.example.jurassicpark.CiclodeVida;
+package com.example.jurassicpark.ciclodevida;
 
 public interface CiclodeVida {
+    void huevo();
     void nacer();
     void crecer();
     void reproducirse();

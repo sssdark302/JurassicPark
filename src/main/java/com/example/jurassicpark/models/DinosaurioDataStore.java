@@ -34,7 +34,7 @@ public class DinosaurioDataStore {
                 int edad = Integer.parseInt(campos[1]);
                 double alturaMaxima = Double.parseDouble(campos[2]);
                 int pesoMaximo = Integer.parseInt(campos[3]);
-                char sexo = campos[4].charAt(0);
+                Sexo sexo = convertirSexo(campos[4]);
                 double hpMaxima = Double.parseDouble(campos[5]);
                 String tipo = campos[6];
 
@@ -66,6 +66,17 @@ public class DinosaurioDataStore {
 
     public Collection<Dinosaurio> getAllDinosaurios() {
         return dinosaurios.values();
+    }
+
+    private Sexo convertirSexo(String sexoStr) {
+        switch (sexoStr.toUpperCase()) {
+            case "MACHO":
+                return Sexo.MACHO;
+            case "HEMBRA":
+                return Sexo.HEMBRA;
+            default:
+                throw new IllegalArgumentException("Valor de sexo desconocido: " + sexoStr);
+        }
     }
 
     public String getAllDinosauriosAsJSON() {
