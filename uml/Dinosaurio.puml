@@ -2,7 +2,7 @@
 'https://plantuml.com/class-diagram
 title Dinosaurio
 
-class Dinosaurio{
+abstract class Dinosaurio{
     -gestorCV: GestorCV
     -especie: string
     -edad: int
@@ -17,7 +17,17 @@ class Dinosaurio{
     +getAltura(): int
     +getSexo(): string
 }
-
+class DinosaurioController{
+    +mostrarDinosaurio(String especie): void
+}
+class DinosaurioDataStore{
+    +cargarDatosCSV(String rutaCSV): void
+    +dinosaurioDataStore(): void
+    +getDinosaurio(String especie): Dinosaurio
+}
+class DinosaurioView{
+    +mostrarDinosaurio(Dinosaurio): void
+}
 
 class DinosaurioBuilder{
     +caracteristicaRara(): void
@@ -72,11 +82,6 @@ class GestorCV{
     +TerminarCiclo(Dinosaurio): void
 }
 
-class DBConection{
-    +obtenerDatos(dinosaurioID: int): Dinosaurio
-    +actualizarEstado(dinosaurioID: int, estado: string): void
-}
-
 class Isla{
     -dinosaurios: List<Dinosaurio>
     -instalaciones: List<Instalacion>
@@ -96,7 +101,9 @@ DinosaurioBuilder -> Herbivoro
 DinosaurioBuilder -> Carnivoro
 DinosaurioBuilder -> Omnivoro
 FactoriaInstalaciones ..> Instalacion
-Isla --> DBConection
+Isla --> DinosaurioDataStore
+Dinosaurio --> DinosaurioController
+Dinosaurio --> DinosaurioView
 
 
 @enduml
