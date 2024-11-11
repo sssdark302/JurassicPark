@@ -7,4 +7,5 @@
  docker exec -it jurassic-postgres bash
  
  psql usuario -d jurassic_db 
-v
+
+ UTILIZACION DE CSV Y JSON PARA LA CARGA DE DATOS 

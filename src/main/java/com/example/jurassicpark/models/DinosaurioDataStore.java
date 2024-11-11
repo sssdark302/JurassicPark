@@ -2,12 +2,15 @@ package com.example.jurassicpark.models;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DinosaurioDataStore {
     private static DinosaurioDataStore instance;
-    private Map<String, Dinosaurio> dinosaurios;
+    private static Map<String, Dinosaurio> dinosaurios;
 
     private DinosaurioDataStore() {
         dinosaurios = new HashMap<>();
@@ -57,7 +60,22 @@ public class DinosaurioDataStore {
         }
     }
 
-    public Dinosaurio getDinosaurio(String especie) {
+    public static Dinosaurio getDinosaurio(String especie) {
         return dinosaurios.get(especie);
+    }
+
+    public Collection<Dinosaurio> getAllDinosaurios() {
+        return dinosaurios.values();
+    }
+
+    public String getAllDinosauriosAsJSON() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            //  map completo de dinosaurios a JSON
+            return mapper.writeValueAsString(dinosaurios);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "{}";
+        }
     }
 }
