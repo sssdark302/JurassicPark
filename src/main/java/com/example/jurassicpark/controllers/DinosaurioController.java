@@ -1,5 +1,5 @@
 package com.example.jurassicpark.controllers;
-import com.example.jurassicpark.controllers.exceptiones.DinosaurioNotFoundException;
+import com.example.jurassicpark.exceptiones.DinosaurioNotFoundException;
 import com.example.jurassicpark.models.DinosaurioDataStore;
 import com.example.jurassicpark.models.DinosaurioFactory;
 import com.example.jurassicpark.repository.DinosaurioRepository;
