@@ -34,6 +34,7 @@ public class DinosaurioController {
         DinosaurioDataStore dataStore = DinosaurioDataStore.getInstance();
         return dataStore.getAllDinosauriosAsJSON();
     }
+
     @GetMapping("/{especie}")
     public Dinosaurio getDinosaurioByEspecie(@PathVariable String especie) {
         Dinosaurio dinosaurio = DinosaurioRepository.getDinosaurioByEspecie(especie);
