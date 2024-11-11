@@ -1,0 +1,99 @@
+@startuml
+'https://plantuml.com/class-diagram
+title Dinosaurio
+
+class Dinosaurio{
+    -especie: string
+    -edad: int
+    -peso: int
+    -altura: int
+    -sexo: string
+    +Dinosaurio(especie: string, edad: int, peso: int, altura: int, sexo: string)
+    +getEspecie(): string
+    +getEdad(): int
+    +getPeso(): int
+    +getAltura(): int
+    +getSexo(): string
+}
+
+
+class DinosaurioBuilder{
+    +caracteristicaRara(): void
+    +build(): Dinosaurio
+}
+
+abstract class DinosauroFactory{
+    +crearDinosaurio(tipo: String): Dinosaurio
+}
+
+class CarnivoroFactory extends DinosauroFactory{}
+class HerbivoroFactory extends DinosauroFactory{}
+class OmnivoroFactory extends DinosauroFactory{}
+
+abstract class FactoriaInstalaciones{
+    +crearInstalacion(): Instalacion
+}
+
+class Instalacion{
+    -nombre: string
+    -capacidad: int
+    -temperatura: int
+    -tipo: string
+    -terreno: int
+    +Instalacion(terreno: int, nombre: string, capacidad: int, temperatura: int, tipo: string)
+    +getNombre(): string
+    +getCapacidad(): int
+    +getTemperatura(): int
+    +getTipo(): string
+    +getTerrereno(): int
+}
+
+class Criadero extends Instalacion{}
+class Laboratorio extends Instalacion{}
+class Muelle extends Instalacion{}
+class Puesto extends Instalacion{}
+
+interface CiclodeVida{
+    +nacer(): void
+    +crecer(): void
+    +adulto(): void
+    +reproducir(): void
+    +morir(): void
+}
+
+class GestorCV{
+    +iniciarCiclo(): void
+    +AvanzarFase(): void
+    +VerificarReproduccion(Dinosaurio): void
+    +FaseAdulto(Dinosaurio): void
+    +TerminarCiclo(): void
+}
+
+class DBConection{
+    +obtenerDatos(dinosaurioID: int): Dinosaurio
+    +actualizarEstado(dinosaurioID: int, estado: string): void
+}
+
+class Isla{
+    -dinosaurios: List<Dinosaurio>
+    -instalaciones: List<Instalacion>
+    -factory: DinosaurioFactory
+    -gestorCiclo: GestorCV
+    +agregarDinosaurio(tipo: String, altura: int, peso: int, sexo: String, edad: int, especie: String): void
+    +avanzarCicloDeVida(): void
+}
+
+GestorCV *--> Dinosaurio
+Herbivoro --> Dinosaurio
+Carnivoro --> Dinosaurio
+Omnivoro --> Dinosaurio
+GestorCV ..|> CiclodeVida
+DinosauroFactory ..> Dinosaurio
+DinosaurioBuilder -> Herbivoro
+DinosaurioBuilder -> Carnivoro
+DinosaurioBuilder -> Omnivoro
+FactoriaInstalaciones ..> Instalacion
+Isla --> DBConection
+
+
+@enduml
