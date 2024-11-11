@@ -6,6 +6,7 @@ class Dinosaurio{
     -especie: string
     -edad: int
     -peso: int
+    -vida: int
     -altura: int
     -sexo: string
     +Dinosaurio(especie: string, edad: int, peso: int, altura: int, sexo: string)
