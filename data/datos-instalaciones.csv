@@ -1,15 +1,17 @@
 nombre,capacidad,tipo,terreno,seguridad,descripcion,personal,horario
-Centro de Visitantes,128,Centro de Visitantes,155.38,Media,"Área destinada para visitantes, con mapas y guías.",25,8:00 - 20:00
-Laboratorio de Genética,291,Laboratorio de Genética,111.49,Alta,Laboratorio de alta seguridad para manipulación genética.,34,10:00 - 19:00
-Invernaderos,350,Invernaderos,56.72,Baja,Invernadero de flora jurásica para el estudio de plantas prehistóricas.,16,9:00 - 20:00
+Centro de Visitantes,128,Centro de Visitantes,155.38,Media,Área destinada para visitantes, con mapas y guías.,25,8:00 - 20:00
+Laboratorio de Genética,291,Laboratorio de Genética,111.49,Alta,Laboratorio de alta seguridad para manipulación genética.,34,8:00 - 17:00
+Invernaderos,350,Invernaderos,56.72,Baja,Invernadero de flora jurásica para el estudio de plantas prehistóricas.,16,8:00 - 20:00
 Zona de Observación de Herbívoros,164,Zona de Observación de Herbívoros,94.13,Baja,Área segura para observar dinosaurios herbívoros en su hábitat.,22,8:00 - 21:00
-Zona de Observación de Carnívoros,86,Zona de Observación de Carnívoros,88.29,Alta,Zona de observación segura para carnívoros.,23,8:00 - 18:00
+Zona de Observación de Carnívoros,86,Zona de Observación de Carnívoros,88.29,Alta,Zona de observación segura para carnívoros.,23,8:00 - 17:00
 Zona de Observación de Omnívoros,72,Zona de Observación de Omnívoros,30.08,Media,Área de observación para dinosaurios omnívoros.,49,9:00 - 19:00
 Estación de Alimentos,425,Estación de Alimentos,20.45,Baja,Estación para almacenamiento y preparación de alimentos para los dinosaurios.,12,10:00 - 20:00
-Hospital de Dinosaurios,466,Hospital de Dinosaurios,24.66,Media,Hospital veterinario especializado en dinosaurios.,43,8:00 - 18:00
-Zona de Cuidados Especiales,346,Zona de Cuidados Especiales,13.85,Media,Zona dedicada a cuidados especiales para crías y dinosaurios vulnerables.,26,10:00 - 18:00
+Hospital de Dinosaurios,466,Hospital de Dinosaurios,24.66,Media,Hospital veterinario especializado en dinosaurios.,43,8:00 - 21:00
+Zona de Cuidados Especiales,346,Zona de Cuidados Especiales,13.85,Media,Zona dedicada a cuidados especiales para crías y dinosaurios vulnerables.,26,10:00 - 21:00
 Centro de Control,212,Centro de Control,143.71,Alta,Centro de monitoreo y seguridad del parque.,32,10:00 - 21:00
-Refugios de Emergencia,227,Refugios de Emergencia,196.15,Baja,Refugio seguro para visitantes en caso de emergencia.,5,10:00 - 19:00
-Campamento de Observación Nocturna,83,Campamento de Observación Nocturna,149.32,Alta,Zona de campamento para observar la actividad nocturna.,16,10:00 - 20:00
+Refugios de Emergencia,227,Refugios de Emergencia,196.15,Baja,Refugio seguro para visitantes en caso de emergencia.,5,00:00 - 23:59
+Campamento de Observación Nocturna,83,Campamento de Observación Nocturna,149.32,Alta,Zona de campamento para observar la actividad nocturna.,16,00:00 - 23:59
 Acuario,299,Acuario,149.32,Media,Acuario de criaturas prehistóricas.,22,8:00 - 22:00
-Area de Indominus Rex,405,Area de Indominus Rex,103.4,Baja,"El nuevo dinosaurio de la isla, vigilado de cerca.",14,8:00 - 21:00
+Area de Indominus Rex,405,Area de Indominus Rex,103.4,Baja,El nuevo dinosaurio de la isla, vigilado de cerca.,14,8:00 - 17:00
+Hotel Jurassic,150,Hotel,180.00,Alta,Alojamiento para visitantes con vista a las áreas de dinosaurios.,50,00:00 - 23:59
+
