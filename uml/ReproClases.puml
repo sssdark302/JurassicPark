@@ -1,0 +1,50 @@
+@startuml
+class Dinosaurio {
+    -String especie
+    -int edad
+    -double altura_maxima
+    -int peso_maximo
+    -Sexo sexo
+    -boolean tuvoHijos
+    +getSexo(): Sexo
+    +getTuvoHijos(): boolean
+    +setTuvoHijos(boolean): void
+}
+
+enum Sexo {
+    MACHO
+    HEMBRA
+}
+
+class Carnivoro extends Dinosaurio
+class Herbivoro extends Dinosaurio
+class Omnivoro extends Dinosaurio
+
+class DinosaurioDataStore {
+    -Map<String, Dinosaurio> dinosaurios
+    +getDinosaurio(String especie): Dinosaurio
+    +getAllDinosaurios(): Collection<Dinosaurio>
+}
+
+class GestorCV {
+    -Map<Dinosaurio, FaseCicloDeVida> fasesDinosaurios
+    +verificarReproduccion(Dinosaurio, Dinosaurio): boolean
+    +reproducirse(Dinosaurio, Dinosaurio): void
+}
+
+enum FaseCicloDeVida {
+    HUEVO
+    NACIMIENTO
+    CRECIMIENTO
+    REPRODUCCION
+    ADULTO
+    MUERTE
+}
+
+DinosaurioDataStore "1" --> "*" Dinosaurio : almacena
+Dinosaurio <|-- Carnivoro
+Dinosaurio <|-- Herbivoro
+Dinosaurio <|-- Omnivoro
+GestorCV "1" --> "*" Dinosaurio : ciclo de vida
+GestorCV "1" --> FaseCicloDeVida : controla
+@enduml

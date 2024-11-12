@@ -1,15 +1,18 @@
 @startuml
-'https://plantuml.com/class-diagram
-title Reproduccion
+actor Usuario
+participant DinosaurioDataStore
+participant GestorCV
+participant Dinosaurio
 
-class Dinosaurio{
-    -tuvoHijos: boolean
-}
-
-class GestorCV{
-    +avanzarFase(Dinosaurio): void
-    +verificarReproduccion(Dinosaurio, Dinosaurio): boolean
-    +reproducirse(Dinosaurio): void
-}
-
+Usuario -> DinosaurioDataStore : getDinosaurio("Dino1")
+DinosaurioDataStore -> Usuario : Dinosaurio1
+Usuario -> DinosaurioDataStore : getDinosaurio("Dino2")
+DinosaurioDataStore -> Usuario : Dinosaurio2
+Usuario -> GestorCV : verificarReproduccion(Dinosaurio1, Dinosaurio2)
+GestorCV -> Dinosaurio : getSexo()
+GestorCV -> Dinosaurio : getTuvoHijos()
+GestorCV -> Usuario : "Condiciones para reproducción cumplidas"
+Usuario -> GestorCV : reproducirse(Dinosaurio1, Dinosaurio2)
+GestorCV -> Dinosaurio : setTuvoHijos(true)
+GestorCV -> Usuario : "Reproducción completada"
 @enduml
