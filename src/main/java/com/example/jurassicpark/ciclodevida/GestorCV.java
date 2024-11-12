@@ -111,7 +111,7 @@ public class GestorCV implements CiclodeVida {
                                     int edadNuevoDino = 0;
                                     double alturaMaximaNuevoDino = 0;
                                     int pesoMaximoNuevoDino = 0;
-                                    Sexo sexoNuevoDino = ;
+                                    Sexo sexoNuevoDino = new Random().nextBoolean() ? Sexo.MACHO : Sexo.HEMBRA;
                                     double hpMaximaNuevoDino = 0;
                                     boolean tuvoHijosNuevoDino = false;
                                     String tipoDino = dinosaurio.getTipo();
@@ -136,9 +136,6 @@ public class GestorCV implements CiclodeVida {
         verificarReproduccion(dinosaurio1, dinosaurio2);
     }
 
-    public void randomSexo(Sexo sexo){
-         sexo = new Random().nextBoolean() ? Sexo.MACHO : Sexo.HEMBRA;
-    }
     //incluir MODOS, acelerarFasex2 y acelerarFasex5
     //afecta a la velocidad de las fases
 

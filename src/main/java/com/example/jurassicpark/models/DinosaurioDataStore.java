@@ -41,10 +41,7 @@ public class DinosaurioDataStore {
                 String tipo = campos[5];
                 boolean tuvoHijos = Boolean.parseBoolean(campos[6]);
 
-                // Utilizar la fábrica para crear el dinosaurio
                 Dinosaurio dino = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
-
-                // Añadir el dinosaurio al mapa
                 dinosaurios.put(especie, dino);
             }
         } catch (IOException e) {
