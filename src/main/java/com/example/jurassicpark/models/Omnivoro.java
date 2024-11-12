@@ -10,3 +10,4 @@ public class Omnivoro extends Dinosaurio{
         return "Omnivoro";
     }
 }
+//hola
