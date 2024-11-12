@@ -17,7 +17,7 @@ public class InstalacionDataStore {
 
     private InstalacionDataStore() {
         instalacionFactory = new InstalacionFactory();
-        cargarDatosCSV("data/datos-instalaciones.csv"); // Cambia la ruta del archivo CSV según tu proyecto
+        cargarDatosCSV("data/datos-instalaciones.csv");
     }
 
     public static synchronized InstalacionDataStore getInstance() {
@@ -30,8 +30,8 @@ public class InstalacionDataStore {
     private void cargarDatosCSV(String rutaCSV) {
         try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
             String linea;
-            br.readLine(); // Saltar la cabecera del CSV
-            while ((linea = br.readLine()) != null) { // Leer las líneas mientras no sean nulas
+            br.readLine();
+            while ((linea = br.readLine()) != null) {
                 String[] campos = linea.split(",");
                 String nombre = campos[0];
                 int capacidad = Integer.parseInt(campos[1]);
@@ -57,7 +57,6 @@ public class InstalacionDataStore {
         return instalaciones.values();
     }
 
-    // Convertir todas las instalaciones a JSON
     public String getAllInstalacionesAsJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {
