@@ -8,6 +8,7 @@
  
  psql usuario -d jurassic_db 
 
- UTILIZACION DE CSV Y JSON PARA LA CARGA DE DATOS 
+ UTILIZACION DE CSV Y JSON PARA LA CARGA DE DATOS
  
-Las cosas que tienen cierto peligro cierran sobre las 7, las mas peligrosas sobre las 5 y las menos sobre las 9.
+
+Crear MODOS para pasar tiempo mas rapido: acelerar fases x2, x5
