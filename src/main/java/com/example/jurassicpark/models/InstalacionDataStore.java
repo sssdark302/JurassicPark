@@ -12,10 +12,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class InstalacionDataStore {
 
     private static InstalacionDataStore instance;
-    private static Map<String, Instalacion> instalaciones;
+    private static Map<String, Instalacion> instalaciones = new HashMap<>();
+    private InstalacionFactory instalacionFactory;
 
     private InstalacionDataStore() {
-        instalaciones = new HashMap<>();
+        instalacionFactory = new InstalacionFactory();
         cargarDatosCSV("data/datos-instalaciones.csv"); // Cambia la ruta del archivo CSV según tu proyecto
     }
 
@@ -30,30 +31,25 @@ public class InstalacionDataStore {
         try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
             String linea;
             br.readLine(); // Saltar la cabecera del CSV
-
-            while ((linea = br.readLine()) != null) {
+            while ((linea = br.readLine()) != null) { // Leer las líneas mientras no sean nulas
                 String[] campos = linea.split(",");
-
-                // Crear la instalación usando el InstalacionBuilder
-                Instalacion instalacion = new InstalacionBuilder()
-                        .setNombre(campos[0].trim())
-                        .setCapacidad(Integer.parseInt(campos[1].trim()))
-                        .setTipo(campos[2].trim())
-                        .setTerreno(Double.parseDouble(campos[3].trim()))
-                        .setSeguridad(campos[4].trim())
-                        .setDescripcion(campos[5].trim())
-                        .setPersonal(Integer.parseInt(campos[6].trim()))
-                        .setHorario(campos[7].trim())
-                        .build();
-
-                instalaciones.put(instalacion.getNombre(), instalacion); // Usar el nombre como clave
+                String nombre = campos[0];
+                int capacidad = Integer.parseInt(campos[1]);
+                String tipo = campos[2];
+                int terreno = Integer.parseInt(campos[3]);
+                String seguridad = campos[4];
+                String descripcion = campos[5];
+                int personal = Integer.parseInt(campos[6]);
+                String horario = campos[7];
+                Instalacion instalacion = instalacionFactory.crearInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+                instalaciones.put(instalacion.getNombre(), instalacion);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Instalacion getInstalacion(String nombre) {
+    public static Instalacion getInstalacion(String nombre) {
         return instalaciones.get(nombre);
     }
 
@@ -65,7 +61,6 @@ public class InstalacionDataStore {
     public String getAllInstalacionesAsJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            // Convierte el map completo de instalaciones a JSON
             return mapper.writeValueAsString(instalaciones);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

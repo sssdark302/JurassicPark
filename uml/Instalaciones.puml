@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+title Instalaciones
+actor Usuario
+participant InstalacionDataStore
+participant InstalacionFactory
+participant gestorInstalacion
+
+
+
+
+@enduml

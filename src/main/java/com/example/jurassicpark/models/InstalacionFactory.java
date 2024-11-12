@@ -1,18 +1,17 @@
 package com.example.jurassicpark.models;
 
-import com.example.jurassicpark.exceptiones.InstalacionNotFoundException;
-
 public class InstalacionFactory {
 
-    // Método para obtener o crear una instalación específica
-    public Instalacion obtenerInstalacion(String nombre) {
-        InstalacionDataStore dataStore = InstalacionDataStore.getInstance();
-        Instalacion instalacion = dataStore.getInstalacion(nombre);
-
-        if (instalacion != null) {
-            return instalacion;
-        } else {
-            throw new InstalacionNotFoundException("Instalación con nombre " + nombre + " no encontrada");
+    public static Instalacion crearInstalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario) {
+        switch (tipo) {
+            case "Turismo":
+                return new Turismo(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+            case "Instalacion_Islas":
+                return new Instalacion_Islas(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+            case "Dinosaurios_Plantas":
+                return new Dinosaurios_Plantas(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+            default:
+                throw new IllegalArgumentException("Tipo de dinosaurio desconocido: " + tipo);
         }
     }
 }
