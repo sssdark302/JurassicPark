@@ -1,5 +1,6 @@
-package com.example.jurassicpark.aspects;
+package com.example.jurassicpark.AOP;
 
+import com.example.jurassicpark.exceptiones.DinosaurioNotFoundException;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;

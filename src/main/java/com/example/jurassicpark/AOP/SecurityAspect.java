@@ -1,4 +1,4 @@
-package com.example.jurassicpark.aspects;
+package com.example.jurassicpark.AOP;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class SecurityAspect {
 
     // Intercepta el método reproducir en DinosaurioService para validar permisos
-    @Around("execution(* com.example.jurassicpark.services.DinosaurioService.reproducir(..))")
+    @Around("execution(* com.example.jurassicpark.CiclodeVida.GestorCV.reproducirse(..))")
     public Object checkPermissions(ProceedingJoinPoint joinPoint) throws Throwable {
         if (!tienePermisos()) {
             System.out.println("Permiso denegado: El usuario no tiene permisos para reproducir dinosaurios.");
@@ -21,7 +21,6 @@ public class SecurityAspect {
     }
 
     private boolean tienePermisos() {
-        
         return true; 
     }
 }
