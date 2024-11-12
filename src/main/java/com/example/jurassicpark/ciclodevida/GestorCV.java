@@ -135,6 +135,7 @@ public class GestorCV implements CiclodeVida {
     public void reproducirse(Dinosaurio dinosaurio1, Dinosaurio dinosaurio2) {
         verificarReproduccion(dinosaurio1, dinosaurio2);
     }
+    //reproduccion mejorada
 
     //incluir MODOS, acelerarFasex2 y acelerarFasex5
     //afecta a la velocidad de las fases
