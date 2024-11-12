@@ -23,47 +23,58 @@ enum Sexo{
     -MACHO
     -HEMBRA
 }
+
+class Sensor{
+    -temperaturaCorporal: double
+    -estado: boolean
+    +getTemperaturaCorporal(): double
+    +getEstado(): boolean
+}
 class DinosaurioController{
     +mostrarDinosaurio(String especie): void
 }
 class DinosaurioDataStore{
     +cargarDatosCSV(String rutaCSV): void
-    +dinosaurioDataStore(): void
+    +DinosaurioDataStore getInstance(): DinosaurioDataStore
     +getDinosaurio(String especie): Dinosaurio
+    +getAllDinosaurios(): void
+    +getAllDinosauriosAsJSON(): void
 }
 class DinosaurioView{
     +mostrarDinosaurio(Dinosaurio): void
 }
 
 class DinosaurioBuilder{
-    +caracteristicaRara(): void
+    +caracteristicaRara(): DinosaurioBuilder
     +build(): Dinosaurio
 }
 
-abstract class DinosauroFactory{
+abstract class DinosaurioFactory{
     +crearDinosaurio(tipo: String): Dinosaurio
 }
 
-class CarnivoroFactory extends DinosauroFactory{}
-class HerbivoroFactory extends DinosauroFactory{}
-class OmnivoroFactory extends DinosauroFactory{}
+class CarnivoroFactory extends DinosaurioFactory{}
+class HerbivoroFactory extends DinosaurioFactory{}
+class OmnivoroFactory extends DinosaurioFactory{}
 
 abstract class FactoriaInstalaciones{
-    +crearInstalacion(): Instalacion
+    +crearInstalacion(tipo: String): Instalacion
 }
 
 class Instalacion{
     -nombre: string
     -capacidad: int
-    -temperatura: int
+    -temperatura: double
+    -humedad- double
     -tipo: string
     -terreno: int
-    +Instalacion(terreno: int, nombre: string, capacidad: int, temperatura: int, tipo: string)
+    +Instalacion(terreno: int, nombre: string, capacidad: int, temperatura: double, tipo: string, humedad: double)
     +getNombre(): string
     +getCapacidad(): int
-    +getTemperatura(): int
+    +getTemperatura(): double
+    +getHumedad(): double
     +getTipo(): string
-    +getTerrereno(): int
+    +getTerreno(): int
 }
 
 class Criadero extends Instalacion{}
@@ -88,8 +99,8 @@ class GestorCV{
     +TerminarCiclo(Dinosaurio): void
     +seReproducio(Dinosaurio): void
     +verificarMadre(Dinosaurio): void
-    +obtenerTiempoDeEsperaPorFase(FaseCicloDeVida): void
-    +acelerarFase(FaseCicloDeVida): void
+    +obtenerTiempoDeEsperaPorFase(FaseCicloVida): void
+    +acelerarFase(FaseCicloVida): void
 }
 
 enum FaseCicloVida{
@@ -100,20 +111,18 @@ enum FaseCicloVida{
     -REPRODUCCION
     -MUERTE
 }
+Dinosaurio -->  Sensor
 Sexo --> Dinosaurio
 GestorCV *--> Dinosaurio
 Herbivoro --> Dinosaurio
 Carnivoro --> Dinosaurio
 Omnivoro --> Dinosaurio
 GestorCV ..|> CiclodeVida
-DinosauroFactory ..> Dinosaurio
-DinosaurioBuilder -> HerbivoroFactory
-DinosaurioBuilder -> CarnivoroFactory
-DinosaurioBuilder -> OmnivoroFactory
+DinosaurioFactory ..> Dinosaurio
+DinosaurioBuilder -> DinosaurioFactory
 FactoriaInstalaciones ..> Instalacion
 Dinosaurio --> DinosaurioController
 Dinosaurio --> DinosaurioView
 FaseCicloVida --> GestorCV
-
 
 @enduml
