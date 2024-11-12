@@ -55,11 +55,6 @@ public class GestorCV implements CiclodeVida {
     }
 
     @Override
-    public void huevo() {
-
-    }
-
-    @Override
     public void nacer() {
         System.out.println("El dinosaurio ha nacido.");
     }
