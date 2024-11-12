@@ -1,5 +1,7 @@
 package com.example.jurassicpark.models;
 
+import com.example.jurassicpark.exceptiones.InstalacionNotFoundException;
+
 public class InstalacionFactory {
 
     // Método para obtener o crear una instalación específica
