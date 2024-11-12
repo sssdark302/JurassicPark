@@ -12,24 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/dinosaurios")
 public class DinosaurioController {
-    private DinosaurioFactory factory;
-    private DinosaurioRepository view;
 
-    public DinosaurioController() {
-        factory = new DinosaurioFactory();
-        view = new DinosaurioRepository();
-    }
-
-    public void mostrarDinosaurio(String especie) {
-        Dinosaurio dinosaurio = factory.obtenerDinosaurio(especie);
-        if (dinosaurio != null) {
-            view.mostrarDinosaurio(dinosaurio);
-        } else {
-            System.out.println("Dinosaurio no encontrado.");
-        }
-    }
-
-    @GetMapping
+    @GetMapping("/todosdinosaurios")
     public String getAllDinosaurios() {
         DinosaurioDataStore dataStore = DinosaurioDataStore.getInstance();
         return dataStore.getAllDinosauriosAsJSON();

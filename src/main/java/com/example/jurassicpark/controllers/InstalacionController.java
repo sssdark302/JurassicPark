@@ -13,24 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/instalaciones")
 public class InstalacionController {
-    private InstalacionFactory factory;
-    private InstalacionRepository view;
 
-    public InstalacionController() {
-        factory = new InstalacionFactory();
-        view = new InstalacionRepository();
-    }
-
-    public void mostrarInstalacion(String nombre) {
-        Instalacion instalacion = factory.obtenerInstalacion(nombre);
-        if (instalacion != null) {
-            view.mostrarInstalacion(instalacion);
-        } else {
-            System.out.println("Instalación no encontrada.");
-        }
-    }
-
-    @GetMapping
+    @GetMapping("/todasinstalaciones")
     public String getAllInstalaciones() {
         InstalacionDataStore dataStore = InstalacionDataStore.getInstance();
         return dataStore.getAllInstalacionesAsJSON();
