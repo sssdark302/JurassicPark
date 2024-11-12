@@ -1,28 +1,19 @@
 package com.example.jurassicpark.ciclodevida;
 
-import com.example.jurassicpark.exceptiones.DinosaurioNotFoundException;
-import com.example.jurassicpark.exceptiones.SexoDinosaurioNotFoundException;
 import com.example.jurassicpark.models.Dinosaurio;
-import com.example.jurassicpark.models.Sexo;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static com.example.jurassicpark.ciclodevida.FaseCicloDeVida.*;
 
 public class GestorCV implements CiclodeVida {
     private Map<Dinosaurio, FaseCicloDeVida> fasesDinosaurios = new HashMap<>();
-    private ExecutorService executorService = Executors.newCachedThreadPool();
-    Scanner scanner = new Scanner(System.in);
 
     public FaseCicloDeVida obtenerFase(Dinosaurio dinosaurio) {
-        return fasesDinosaurios.getOrDefault(dinosaurio, HUEVO); //por default empieza como huevo
+        return fasesDinosaurios.getOrDefault(dinosaurio, FaseCicloDeVida.NACIMIENTO);
     }
 
     public void iniciarCiclo(Dinosaurio dinosaurio) {
+
         fasesDinosaurios.put(dinosaurio, HUEVO);
         System.out.println("Quiere iniciar el ciclo de vida de un dinosaurio? (s/n)");
         String respuesta = scanner.nextLine();
@@ -52,6 +43,10 @@ public class GestorCV implements CiclodeVida {
             }
         }
         TerminarCiclo(dinosaurio);
+
+        fasesDinosaurios.put(dinosaurio, FaseCicloDeVida.NACIMIENTO);
+        nacer();
+
     }
 
     public void avanzarFase(Dinosaurio dinosaurio) {
@@ -170,16 +165,17 @@ public class GestorCV implements CiclodeVida {
         }
     }
 
+    public void verificarReproduccion(Dinosaurio dinosaurio) {
+        if (fasesDinosaurios.get(dinosaurio) == FaseCicloDeVida.REPRODUCCION) {
+            reproducirse();
+        }
+    }
+
     public void TerminarCiclo(Dinosaurio dinosaurio) {
         fasesDinosaurios.remove(dinosaurio);
-        System.out.println("El " + dinosaurio + " ha completado su ciclo de vida.");
+        System.out.println(dinosaurio + " ha completado su ciclo de vida.");
     }
-
-    @Override
-    public void huevo() {
-        System.out.println("Se esta desarrollando un huevo.");
-    }
-
+ 
     @Override
     public void nacer() {
         System.out.println("El dinosaurio ha nacido.");
