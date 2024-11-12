@@ -1,0 +1,18 @@
+@startuml
+actor Usuario
+participant DinosaurioDataStore
+participant GestorCV
+participant Dinosaurio
+
+Usuario -> DinosaurioDataStore : getDinosaurio("Dino1")
+DinosaurioDataStore -> Usuario : Dinosaurio1
+Usuario -> DinosaurioDataStore : getDinosaurio("Dino2")
+DinosaurioDataStore -> Usuario : Dinosaurio2
+Usuario -> GestorCV : verificarReproduccion(Dinosaurio1, Dinosaurio2)
+GestorCV -> Dinosaurio : getSexo()
+GestorCV -> Dinosaurio : getTuvoHijos()
+GestorCV -> Usuario : "Condiciones para reproducción cumplidas"
+Usuario -> GestorCV : reproducirse(Dinosaurio1, Dinosaurio2)
+GestorCV -> Dinosaurio : setTuvoHijos(true)
+GestorCV -> Usuario : "Reproducción completada"
+@enduml

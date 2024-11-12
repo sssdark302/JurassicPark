@@ -9,55 +9,72 @@ abstract class Dinosaurio{
     -peso: int
     -hp_base: int
     -altura: int
-    -sexo: string
-    +Dinosaurio(especie: string, edad: int, peso: int, altura: int, sexo: string)
+    -Sexo sexo
+    -tuvoHijos: boolean
+    +Dinosaurio(especie: string, edad: int, peso: int, altura: int, sexo: Sexo, tuvoHijos: boolean)
     +getEspecie(): string
     +getEdad(): int
     +getPeso(): int
     +getAltura(): int
-    +getSexo(): string
+    +getSexo(): Sexo
+    +getTuvoHijos(): boolean
+}
+enum Sexo{
+    -MACHO
+    -HEMBRA
+}
+
+class Sensor{
+    -temperaturaCorporal: double
+    -estado: boolean
+    +getTemperaturaCorporal(): double
+    +getEstado(): boolean
 }
 class DinosaurioController{
     +mostrarDinosaurio(String especie): void
 }
 class DinosaurioDataStore{
     +cargarDatosCSV(String rutaCSV): void
-    +dinosaurioDataStore(): void
+    +DinosaurioDataStore getInstance(): DinosaurioDataStore
     +getDinosaurio(String especie): Dinosaurio
+    +getAllDinosaurios(): void
+    +getAllDinosauriosAsJSON(): void
 }
 class DinosaurioView{
     +mostrarDinosaurio(Dinosaurio): void
 }
 
 class DinosaurioBuilder{
-    +caracteristicaRara(): void
+    +caracteristicaRara(): DinosaurioBuilder
     +build(): Dinosaurio
 }
 
-abstract class DinosauroFactory{
+abstract class DinosaurioFactory{
     +crearDinosaurio(tipo: String): Dinosaurio
 }
 
-class CarnivoroFactory extends DinosauroFactory{}
-class HerbivoroFactory extends DinosauroFactory{}
-class OmnivoroFactory extends DinosauroFactory{}
+class CarnivoroFactory extends DinosaurioFactory{}
+class HerbivoroFactory extends DinosaurioFactory{}
+class OmnivoroFactory extends DinosaurioFactory{}
 
 abstract class FactoriaInstalaciones{
-    +crearInstalacion(): Instalacion
+    +crearInstalacion(tipo: String): Instalacion
 }
 
 class Instalacion{
     -nombre: string
     -capacidad: int
-    -temperatura: int
+    -temperatura: double
+    -humedad- double
     -tipo: string
     -terreno: int
-    +Instalacion(terreno: int, nombre: string, capacidad: int, temperatura: int, tipo: string)
+    +Instalacion(terreno: int, nombre: string, capacidad: int, temperatura: double, tipo: string, humedad: double)
     +getNombre(): string
     +getCapacidad(): int
-    +getTemperatura(): int
+    +getTemperatura(): double
+    +getHumedad(): double
     +getTipo(): string
-    +getTerrereno(): int
+    +getTerreno(): int
 }
 
 class Criadero extends Instalacion{}
@@ -80,30 +97,32 @@ class GestorCV{
     +VerificarReproduccion(Dinosaurio): void
     +FaseAdulto(Dinosaurio): void
     +TerminarCiclo(Dinosaurio): void
+    +seReproducio(Dinosaurio): void
+    +verificarMadre(Dinosaurio): void
+    +obtenerTiempoDeEsperaPorFase(FaseCicloVida): void
+    +acelerarFase(FaseCicloVida): void
 }
 
-class Isla{
-    -dinosaurios: List<Dinosaurio>
-    -instalaciones: List<Instalacion>
-    -factory: DinosaurioFactory
-    -gestorCiclo: GestorCV
-    +agregarDinosaurio(tipo: String, altura: int, peso: int, sexo: String, edad: int, especie: String): void
-    +avanzarCicloDeVida(): void
+enum FaseCicloVida{
+    -HUEVO
+    -NACIMIENTO
+    -CRECIMIENTO
+    -ADULTO
+    -REPRODUCCION
+    -MUERTE
 }
-
+Dinosaurio -->  Sensor
+Sexo --> Dinosaurio
 GestorCV *--> Dinosaurio
 Herbivoro --> Dinosaurio
 Carnivoro --> Dinosaurio
 Omnivoro --> Dinosaurio
 GestorCV ..|> CiclodeVida
-DinosauroFactory ..> Dinosaurio
-DinosaurioBuilder -> Herbivoro
-DinosaurioBuilder -> Carnivoro
-DinosaurioBuilder -> Omnivoro
+DinosaurioFactory ..> Dinosaurio
+DinosaurioBuilder -> DinosaurioFactory
 FactoriaInstalaciones ..> Instalacion
-Isla --> DinosaurioDataStore
 Dinosaurio --> DinosaurioController
 Dinosaurio --> DinosaurioView
-
+FaseCicloVida --> GestorCV
 
 @enduml

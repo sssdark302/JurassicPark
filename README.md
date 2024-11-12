@@ -8,4 +8,7 @@
  
  psql usuario -d jurassic_db 
 
- UTILIZACION DE CSV Y JSON PARA LA CARGA DE DATOS 
+ UTILIZACION DE CSV Y JSON PARA LA CARGA DE DATOS
+ 
+
+Crear MODOS para pasar tiempo mas rapido: acelerar fases x2, x5
