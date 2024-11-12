@@ -3,10 +3,13 @@ package com.example.jurassicpark.ciclodevida;
 import com.example.jurassicpark.exceptiones.DinosaurioNotFoundException;
 import com.example.jurassicpark.exceptiones.SexoDinosaurioNotFoundException;
 import com.example.jurassicpark.models.Dinosaurio;
+import com.example.jurassicpark.models.DinosaurioDataStore;
+import com.example.jurassicpark.models.DinosaurioFactory;
 import com.example.jurassicpark.models.Sexo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,6 +19,7 @@ import static com.example.jurassicpark.ciclodevida.FaseCicloDeVida.*;
 public class GestorCV implements CiclodeVida {
     private Map<Dinosaurio, FaseCicloDeVida> fasesDinosaurios = new HashMap<>();
     private ExecutorService executorService = Executors.newCachedThreadPool();
+    private DinosaurioFactory dinosaurioFactory;
     Scanner scanner = new Scanner(System.in);
 
     public FaseCicloDeVida obtenerFase(Dinosaurio dinosaurio) {
@@ -57,14 +61,12 @@ public class GestorCV implements CiclodeVida {
     public void avanzarFase(Dinosaurio dinosaurio) {
         FaseCicloDeVida faseActual = obtenerFase(dinosaurio);
         long tiempoEspera = obtenerTiempoEsperaPorFase(faseActual);
-
         try {
             System.out.println("El dinosaurio " + dinosaurio.getEspecie() + " está en fase " + faseActual + ". Esperando " + (tiempoEspera / 1000) + " segundos...");
             Thread.sleep(tiempoEspera);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         switch (faseActual) {
             case HUEVO -> {
                 fasesDinosaurios.put(dinosaurio, NACIMIENTO);
@@ -80,7 +82,7 @@ public class GestorCV implements CiclodeVida {
             }
             case REPRODUCCION -> {
                 fasesDinosaurios.put(dinosaurio, ADULTO);
-                //falta logica para que se reproduzcan dos dinos
+                reproducirse();
             }
             case ADULTO -> {
                 fasesDinosaurios.put(dinosaurio, MUERTE);
@@ -91,6 +93,7 @@ public class GestorCV implements CiclodeVida {
     }
 
     public void verificarReproduccion(Dinosaurio dinosaurio, Dinosaurio dinosaurio2) { //si ambos dinos estan en etapa de repro, misma especie, distinto sexo y no han tenido hijos
+        double probabilidadRepro = (Math.random()* (1-100))+ 1;
         if (obtenerFase(dinosaurio) == REPRODUCCION
                 && obtenerFase(dinosaurio2) == REPRODUCCION
                 && dinosaurio.getSexo() != dinosaurio2.getSexo()
@@ -100,23 +103,42 @@ public class GestorCV implements CiclodeVida {
                         reproducirse(dinosaurio, dinosaurio2);
                         dinosaurio.setTuvoHijos(true);
                         dinosaurio2.setTuvoHijos(true);
+                            if (probabilidadRepro < 29) {
+                               System.out.println("No se ha podido realizar la reproducción.");
+                            }  // Obtener el tipo de dinosaurio de uno de los padres
+                              else {
+                                    String especieNuevoDino = dinosaurio.getEspecie();
+                                    int edadNuevoDino = 0;
+                                    double alturaMaximaNuevoDino = 0;
+                                    int pesoMaximoNuevoDino = 0;
+                                    Sexo sexoNuevoDino = ;
+                                    double hpMaximaNuevoDino = 0;
+                                    boolean tuvoHijosNuevoDino = false;
+                                    String tipoDino = dinosaurio.getTipo();
+
+                                    Dinosaurio nuevoDino = DinosaurioFactory.crearDinosaurio(
+                                            tipoDino, especieNuevoDino, edadNuevoDino, alturaMaximaNuevoDino, pesoMaximoNuevoDino, sexoNuevoDino, hpMaximaNuevoDino, tuvoHijosNuevoDino);
+
+                                    System.out.println("¡Nuevo dinosaurio en fase HUEVO creado: " + nuevoDino + "!");
+
+                                    // Agregar el nuevo dinosaurio a DinosaurioDataStore
+                                    DinosaurioDataStore.getInstance().getAllDinosaurios().add(nuevoDino);
+
+                                    // Marcar a los padres como habiendo tenido hijos
+                                    dinosaurio.setTuvoHijos(true);
+                                    dinosaurio2.setTuvoHijos(true);
+                              }
         } else {
-            System.out.println("No es posible la reproducción entre los dinosaurios seleccionados.");
+            System.out.println("Los dinosaurios no cumplen con las condiciones para reproducirse.");
         }
     }
     public void reproducirse(Dinosaurio dinosaurio1, Dinosaurio dinosaurio2) {
-        double probabilidadRepro = (Math.random()* (1-100))+ 1;
-        //verificarReproduccion(dinosaurio1, dinosaurio2);
         verificarReproduccion(dinosaurio1, dinosaurio2);
-        if (probabilidadRepro < 50) {
-            System.out.println("No se ha podido realizar la reproducción.");
-        } else {
-            System.out.println("El dinosaurio " + dinosaurio1.getEspecie() + " y el dinosaurio " + dinosaurio2.getEspecie() + " se están reproduciendo.");
-            //SE CREA UN NUEVO DINO DE MISMA ESPECIE EN FASE HUEVO
-
-        }
     }
 
+    public void randomSexo(Sexo sexo){
+         sexo = new Random().nextBoolean() ? Sexo.MACHO : Sexo.HEMBRA;
+    }
     //incluir MODOS, acelerarFasex2 y acelerarFasex5
     //afecta a la velocidad de las fases
 

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DinosaurioDataStore {
     private static DinosaurioDataStore instance;
     private static Map<String, Dinosaurio> dinosaurios = new ConcurrentHashMap<>();
+    private DinosaurioFactory dinosaurioFactory;
 
     private DinosaurioDataStore() {
         cargarDatosCSV("data/datos-dinos.csv");
@@ -26,41 +27,30 @@ public class DinosaurioDataStore {
     }
 
     private synchronized void cargarDatosCSV(String rutaCSV) {
-            try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
-                String linea;
-                br.readLine(); // salta header del csv
-                while ((linea = br.readLine()) != null) { //lee los campos mientras que no sean null
-                    String[] campos = linea.split(",");
-                    String especie = campos[0];
-                    int edad = Integer.parseInt(campos[1]);
-                    double alturaMaxima = Double.parseDouble(campos[2]);
-                    int pesoMaximo = Integer.parseInt(campos[3]);
-                    Sexo sexo = randomSexo();
-                    double hpMaxima = Double.parseDouble(campos[4]);
-                    String tipo = campos[5];
-                    boolean tuvoHijos = Boolean.parseBoolean(campos[6]);
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
+            String linea;
+            br.readLine(); // Saltar el encabezado del CSV
+            while ((linea = br.readLine()) != null) { // Leer las líneas mientras no sean nulas
+                String[] campos = linea.split(",");
+                String especie = campos[0];
+                int edad = Integer.parseInt(campos[1]);
+                double alturaMaxima = Double.parseDouble(campos[2]);
+                int pesoMaximo = Integer.parseInt(campos[3]);
+                Sexo sexo = randomSexo();
+                double hpMaxima = Double.parseDouble(campos[4]);
+                String tipo = campos[5];
+                boolean tuvoHijos = Boolean.parseBoolean(campos[6]);
 
-                    Dinosaurio dino; //diferencia por tipos
-                    switch (tipo) {
-                        case "Carnivoro":
-                            dino = new Carnivoro(especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
-                            break;
-                        case "Herbivoro":
-                            dino = new Herbivoro(especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
-                            break;
-                        case "Omnivoro":
-                            dino = new Omnivoro(especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Tipo de dinosaurio desconocido: " + tipo);
-                    }
+                // Utilizar la fábrica para crear el dinosaurio
+                Dinosaurio dino = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
 
-                    dinosaurios.put(especie, dino);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                // Añadir el dinosaurio al mapa
+                dinosaurios.put(especie, dino);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
     public static Dinosaurio getDinosaurio(String especie) {
         return dinosaurios.get(especie);
