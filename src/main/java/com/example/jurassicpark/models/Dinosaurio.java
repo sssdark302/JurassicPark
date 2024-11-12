@@ -9,8 +9,9 @@ public abstract class Dinosaurio {
     public String tipo;
     public double hp_maxima;
     public Sexo sexo;
+    public boolean tuvoHijos; //inicializado a false
 
-    public Dinosaurio(String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima) {
+    public Dinosaurio(String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos) {
         this.especie = especie;
         this.edad = edad;
         this.altura_maxima = altura_maxima;
@@ -18,6 +19,7 @@ public abstract class Dinosaurio {
         this.sexo = sexo;
         this.tipo = tipo;
         this.hp_maxima = hp_maxima;
+        this.tuvoHijos = tuvoHijos ;
     }
 
     public abstract String getTipo();
@@ -72,6 +74,14 @@ public abstract class Dinosaurio {
 
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
+    }
+
+    public boolean getTuvoHijos() {
+        return tuvoHijos;
+    }
+
+    public void setTuvoHijos(boolean tuvoHijos) {
+        this.tuvoHijos = false;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.example.jurassicpark.models;
 public class Carnivoro extends Dinosaurio {
-    public Carnivoro(String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hp_maxima) {
-        super(especie, edad, alturaMaxima, pesoMaximo, sexo, hp_maxima);
+    public Carnivoro(String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
+        super(especie, edad, alturaMaxima, pesoMaximo, sexo, hp_maxima, tuvoHijos);
     }
 
     @Override

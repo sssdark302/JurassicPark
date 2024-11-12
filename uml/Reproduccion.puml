@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/class-diagram
+title Reproduccion
+
+class Dinosaurio{
+    -tuvoHijos: boolean
+}
+
+class GestorCV{
+    +avanzarFase(Dinosaurio): void
+    +verificarReproduccion(Dinosaurio, Dinosaurio): boolean
+    +reproducirse(Dinosaurio): void
+}
+
+@enduml

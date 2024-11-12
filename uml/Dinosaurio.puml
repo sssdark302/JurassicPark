@@ -9,13 +9,19 @@ abstract class Dinosaurio{
     -peso: int
     -hp_base: int
     -altura: int
-    -sexo: string
-    +Dinosaurio(especie: string, edad: int, peso: int, altura: int, sexo: string)
+    -Sexo sexo
+    -tuvoHijos: boolean
+    +Dinosaurio(especie: string, edad: int, peso: int, altura: int, sexo: Sexo, tuvoHijos: boolean)
     +getEspecie(): string
     +getEdad(): int
     +getPeso(): int
     +getAltura(): int
-    +getSexo(): string
+    +getSexo(): Sexo
+    +getTuvoHijos(): boolean
+}
+enum Sexo{
+    -MACHO
+    -HEMBRA
 }
 class DinosaurioController{
     +mostrarDinosaurio(String especie): void
@@ -80,30 +86,34 @@ class GestorCV{
     +VerificarReproduccion(Dinosaurio): void
     +FaseAdulto(Dinosaurio): void
     +TerminarCiclo(Dinosaurio): void
+    +seReproducio(Dinosaurio): void
+    +verificarMadre(Dinosaurio): void
+    +obtenerTiempoDeEsperaPorFase(FaseCicloDeVida): void
+    +acelerarFase(FaseCicloDeVida): void
 }
 
-class Isla{
-    -dinosaurios: List<Dinosaurio>
-    -instalaciones: List<Instalacion>
-    -factory: DinosaurioFactory
-    -gestorCiclo: GestorCV
-    +agregarDinosaurio(tipo: String, altura: int, peso: int, sexo: String, edad: int, especie: String): void
-    +avanzarCicloDeVida(): void
+enum FaseCicloVida{
+    -HUEVO
+    -NACIMIENTO
+    -CRECIMIENTO
+    -ADULTO
+    -REPRODUCCION
+    -MUERTE
 }
-
+Sexo --> Dinosaurio
 GestorCV *--> Dinosaurio
 Herbivoro --> Dinosaurio
 Carnivoro --> Dinosaurio
 Omnivoro --> Dinosaurio
 GestorCV ..|> CiclodeVida
 DinosauroFactory ..> Dinosaurio
-DinosaurioBuilder -> Herbivoro
-DinosaurioBuilder -> Carnivoro
-DinosaurioBuilder -> Omnivoro
+DinosaurioBuilder -> HerbivoroFactory
+DinosaurioBuilder -> CarnivoroFactory
+DinosaurioBuilder -> OmnivoroFactory
 FactoriaInstalaciones ..> Instalacion
-Isla --> DinosaurioDataStore
 Dinosaurio --> DinosaurioController
 Dinosaurio --> DinosaurioView
+FaseCicloVida --> GestorCV
 
 
 @enduml
