@@ -28,5 +28,4 @@ public class SecurityAspect {
         }
         return false;
     }
-
 }
