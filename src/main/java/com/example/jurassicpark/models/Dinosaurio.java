@@ -2,27 +2,24 @@ package com.example.jurassicpark.models;
 
 public abstract class Dinosaurio {
 
-    public String especie;
-    public int edad;
-    public double altura_maxima;
-    public int peso_maximo;
-    public String tipo;
-    public double hp_maxima;
-    public Sexo sexo;
-    public boolean tuvoHijos; //inicializado a false
+    protected String especie;
+    protected int edad;
+    protected double altura_maxima;
+    protected int peso_maximo;
+    protected double hp_maxima;
+    protected Sexo sexo;
+    protected boolean tuvoHijos; //inicializado a false
+    protected String tipo;
 
-    public Dinosaurio(String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos) {
+    public Dinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
         this.especie = especie;
         this.edad = edad;
         this.altura_maxima = altura_maxima;
         this.peso_maximo = peso_maximo;
         this.sexo = sexo;
-        this.tipo = tipo;
         this.hp_maxima = hp_maxima;
         this.tuvoHijos = tuvoHijos ;
     }
-
-    public abstract String getTipo();
 
     public String getEspecie() {
         return especie;
@@ -56,10 +53,6 @@ public abstract class Dinosaurio {
         this.peso_maximo = peso_maximo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public double getHp_maxima() {
         return hp_maxima;
     }
@@ -76,12 +69,20 @@ public abstract class Dinosaurio {
         this.sexo = sexo;
     }
 
-    public boolean getTuvoHijos() {
+    public boolean isTuvoHijos() {
         return tuvoHijos;
     }
 
     public void setTuvoHijos(boolean tuvoHijos) {
-        this.tuvoHijos = false;
+        this.tuvoHijos = tuvoHijos;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     @Override
@@ -91,9 +92,10 @@ public abstract class Dinosaurio {
                 ", edad=" + edad +
                 ", altura_maxima=" + altura_maxima +
                 ", peso_maximo=" + peso_maximo +
-                ", Sexo=" + sexo +
-                ", tipo='" + tipo + '\'' +
                 ", hp_maxima=" + hp_maxima +
+                ", sexo=" + sexo +
+                ", tuvoHijos=" + tuvoHijos +
+                ", tipo='" + tipo + '\'' +
                 '}';
     }
 }

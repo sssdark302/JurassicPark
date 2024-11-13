@@ -1,14 +1,14 @@
 package com.example.jurassicpark.models;
 
 public abstract class Instalacion {
-    private String nombre;
-    private int capacidad;
-    private String tipo;
-    private double terreno;
-    private String seguridad;
-    private String descripcion;
-    private int personal;
-    private String horario;
+    protected String nombre;
+    protected int capacidad;
+    protected String tipo;
+    protected double terreno;
+    protected String seguridad;
+    protected String descripcion;
+    protected int personal;
+    protected String horario;
 
     public Instalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario) {
         this.nombre = nombre;

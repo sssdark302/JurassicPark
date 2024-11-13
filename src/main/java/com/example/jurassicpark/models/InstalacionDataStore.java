@@ -6,14 +6,28 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.example.jurassicpark.models.entidades.InstalacionE;
+import com.example.jurassicpark.repository.InstalacionRepository;
+import com.example.jurassicpark.service.InstalacionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class InstalacionDataStore {
 
     private static InstalacionDataStore instance;
-    private static Map<String, Instalacion> instalaciones = new HashMap<>();
+
+    @Autowired
+    private InstalacionService instalacionService;
+
+    @Autowired
     private InstalacionFactory instalacionFactory;
+
+    @Autowired
+    private static InstalacionRepository instalacionRepository;
 
     private InstalacionDataStore() {
         instalacionFactory = new InstalacionFactory();
@@ -32,6 +46,7 @@ public class InstalacionDataStore {
             String linea;
             br.readLine();
             while ((linea = br.readLine()) != null) {
+
                 String[] campos = linea.split(",");
                 String nombre = campos[0];
                 int capacidad = Integer.parseInt(campos[1]);
@@ -41,26 +56,18 @@ public class InstalacionDataStore {
                 String descripcion = campos[5];
                 int personal = Integer.parseInt(campos[6]);
                 String horario = campos[7];
-                Instalacion instalacion = instalacionFactory.crearInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
-                instalaciones.put(instalacion.getNombre(), instalacion);
+
+                instalacionService.agregarInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Instalacion getInstalacion(String nombre) {
-        return instalaciones.get(nombre);
-    }
-
-    public Collection<Instalacion> getAllInstalaciones() {
-        return instalaciones.values();
-    }
-
     public String getAllInstalacionesAsJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.writeValueAsString(instalaciones);
+            return mapper.writeValueAsString(instalacionRepository.findAll());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "{}";

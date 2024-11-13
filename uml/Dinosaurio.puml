@@ -6,12 +6,12 @@ abstract class Dinosaurio{
     -gestorCV: GestorCV
     -especie: string
     -edad: int
-    -peso: int
-    -hp_base: int
-    -altura: int
+    -peso_maximo int
+    -hp_maximae: int
+    -altura_maxima: int
     -Sexo sexo
     -tuvoHijos: boolean
-    +Dinosaurio(especie: string, edad: int, peso: int, altura: int, sexo: Sexo, tuvoHijos: boolean)
+    +Dinosaurio(especie: string, edad: int, peso_maximo: int, altura_maxima: int, sexo: Sexo, tuvoHijos: boolean, hp_maxima: float)
     +getEspecie(): string
     +getEdad(): int
     +getPeso(): int
@@ -22,6 +22,42 @@ abstract class Dinosaurio{
 enum Sexo{
     -MACHO
     -HEMBRA
+}
+entity Dinos{
+    -id: int
+    -especie: string
+    -edad: int
+    -peso_maximo: int
+    -altura_maxima: int
+    -sexo: string
+    -tuvoHijos: boolean
+    -tipo: String
+    -hp_maxima
+}
+
+entity InstalacionE{
+
+}
+
+interface DinosaurioRepository{
+    +findDinosauriobyId(id: int): Dinos
+    +findDinosauriobyEspecie(especie: string): Dinos
+    +findDinosauriobyTipo(tipo: String): Dinos
+}
+
+interface InstalacionRepository{
+    +findInstalacionbyId(id: int): Instalacion
+    +findInstalacionbyNombre(nombre: string): Instalacion
+    +findInstalacionbyTipo(tipo: string): Instalacion
+}
+
+class DinosaurioService{
+    +agregarDinosaurio(Dinos): void
+    +eliminarDinosaurio(Dinos): void
+}
+class InstalacionService{
+    +agregarInstalacion(InstalacionE): void
+    +eliminarInstalacion(InstalacionE): void
 }
 
 class Sensor{
@@ -39,9 +75,6 @@ class DinosaurioDataStore{
     +getDinosaurio(String especie): Dinosaurio
     +getAllDinosaurios(): void
     +getAllDinosauriosAsJSON(): void
-}
-class DinosaurioView{
-    +mostrarDinosaurio(Dinosaurio): void
 }
 
 abstract class DinosaurioFactory{

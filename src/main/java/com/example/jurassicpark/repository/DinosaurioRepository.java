@@ -1,19 +1,15 @@
 package com.example.jurassicpark.repository;
+
 import com.example.jurassicpark.models.Dinosaurio;
-import com.example.jurassicpark.models.DinosaurioDataStore;
+import com.example.jurassicpark.models.DinosaurioFactory;
+import com.example.jurassicpark.models.entidades.Dinos;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
+public interface DinosaurioRepository extends JpaRepository<Dinos,Integer> {
 
-public class DinosaurioRepository {
-    private DinosaurioDataStore dataStore;
-
-    public DinosaurioRepository() {
-        dataStore = DinosaurioDataStore.getInstance();
-    }
-
-    public static Dinosaurio getDinosaurioByEspecie(String especie) {
-        return DinosaurioDataStore.getDinosaurio(especie);
-    }
+    Dinosaurio findDinosaurioByEspecie(String especie);
+    Dinosaurio findDinosaurioByTipo(String tipo);
+    Dinosaurio findDinosaurioById(int id);
 }
 
 

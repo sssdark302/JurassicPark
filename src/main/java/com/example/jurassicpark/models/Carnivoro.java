@@ -1,12 +1,16 @@
 package com.example.jurassicpark.models;
-public class Carnivoro extends Dinosaurio {
-    public Carnivoro(String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
-        super(especie, edad, alturaMaxima, pesoMaximo, sexo, hp_maxima, tuvoHijos);
+
+import com.example.jurassicpark.models.entidades.Dinos;
+
+public class Carnivoro extends Dinos {
+
+    public Carnivoro(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
+        super(especie, edad, altura_maxima, peso_maximo, sexo, hp_maxima, tuvoHijos);
     }
 
     @Override
     public String getTipo() {
-        return "Carnivoro";
+        return "";
     }
 }
 
