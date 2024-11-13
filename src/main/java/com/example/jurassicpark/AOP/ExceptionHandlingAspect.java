@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExceptionHandlingAspect {
 
-    // Maneja la excepción DinosaurioNotFoundException
     @AfterThrowing(pointcut = "execution(* com.example.jurassicpark..*(..))", throwing = "ex")
     public void handleDinosaurioNotFound(DinosaurioNotFoundException ex) {
         System.out.println("Error: " + ex.getMessage());

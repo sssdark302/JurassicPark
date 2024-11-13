@@ -120,12 +120,8 @@ public class GestorCV implements CiclodeVida {
                 Dinosaurio nuevoDino = DinosaurioFactory.crearDinosaurio(
                         tipoDino, especieNuevoDino, edadNuevoDino, alturaMaximaNuevoDino, pesoMaximoNuevoDino, sexoNuevoDino, hpMaximaNuevoDino, tuvoHijosNuevoDino);
 
-                System.out.println("¡Nuevo dinosaurio en fase HUEVO creado: " + nuevoDino + "!");
-
-                // Agregar el nuevo dinosaurio a DinosaurioDataStore
+                System.out.println("¡Nuevo dinosaurio en fase huevo creado: " + nuevoDino + "!");
                 DinosaurioDataStore.getInstance().getAllDinosaurios().add(nuevoDino);
-
-                // Marcar a los padres como habiendo tenido hijos
                 dinosaurio.setTuvoHijos(true);
                 dinosaurio2.setTuvoHijos(true);
             }
@@ -136,10 +132,6 @@ public class GestorCV implements CiclodeVida {
     public void reproducirse(Dinosaurio dinosaurio1, Dinosaurio dinosaurio2) {
         verificarReproduccion(dinosaurio1, dinosaurio2);
     }
-    //reproduccion mejorada
-
-    //incluir MODOS, acelerarFasex2 y acelerarFasex5
-    //afecta a la velocidad de las fases
 
     private long obtenerTiempoEsperaPorFase(FaseCicloDeVida fase) {
         return switch (fase) {
@@ -150,45 +142,6 @@ public class GestorCV implements CiclodeVida {
             case ADULTO -> 10000;
             case MUERTE -> 5000;
         };
-    }
-
-    public long acelerarFasex2(FaseCicloDeVida fase){
-        System.out.println("El ciclo de vida se ha acelerado x2.");
-        switch (fase) {
-            case HUEVO:
-                return 2500;
-            case NACIMIENTO:
-                return 5000;
-            case CRECIMIENTO:
-                return 7500;
-            case REPRODUCCION:
-                return 10000;
-            case ADULTO:
-                return 5000;
-            case MUERTE:
-                return 2500;
-            default:
-                return 0;
-        }
-    }
-    public long acelerarFasex5(FaseCicloDeVida fase){
-        System.out.println("El ciclo de vida se ha acelerado x5.");
-        switch (fase) {
-            case HUEVO:
-                return 1000;
-            case NACIMIENTO:
-                return 2000;
-            case CRECIMIENTO:
-                return 3000;
-            case REPRODUCCION:
-                return 4000;
-            case ADULTO:
-                return 2000;
-            case MUERTE:
-                return 1000;
-            default:
-                return 0;
-        }
     }
 
     public void TerminarCiclo(Dinosaurio dinosaurio) {

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityAspect {
 
-    // Intercepta el método reproducir en DinosaurioService para validar permisos
     @Around("execution(* com.example.jurassicpark.ciclodevida.GestorCV.reproducirse(..))")
     public Object checkPermissions(ProceedingJoinPoint joinPoint) throws Throwable {
         if (!tienePermisos()) {

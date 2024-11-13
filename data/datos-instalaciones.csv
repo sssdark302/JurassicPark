@@ -1,15 +1,7 @@
-nombre,capacidad,tipo,terreno,seguridad,descripcion,personal,horario
-Centro de Visitantes,128,Turismo,155.38,Media,Área destinada para visitantes, con mapas y guías.,25,8:00 - 20:00
-Laboratorio de Genética,291,Instalacion_Islas,111.49,Alta,Laboratorio de alta seguridad para manipulación genética.,34,8:00 - 17:00
-Invernaderos,350,Dinosaurios_Plantas,56.72,Baja,Invernadero de flora jurásica para el estudio de plantas prehistóricas.,16,8:00 - 20:00
-Zona de Observación de Herbívoros,164,Dinosaurios_Plantas,94.13,Baja,Área segura para observar dinosaurios herbívoros en su hábitat.,22,8:00 - 21:00
-Zona de Observación de Carnívoros,86,Dinosaurios_Plantas,88.29,Alta,Zona de observación segura para carnívoros.,23,8:00 - 17:00
-Zona de Observación de Omnívoros,72,Dinosaurios_Plantas,30.08,Media,Área de observación para dinosaurios omnívoros.,49,9:00 - 19:00
-Estación de Alimentos,425,Instalacion_Islas,20.45,Baja,Estación para almacenamiento y preparación de alimentos para los dinosaurios.,12,10:00 - 20:00
-Centro de Control,212,Instalacion_Islas,143.71,Alta,Centro de monitoreo y seguridad del parque.,32,10:00 - 21:00
-Refugios de Emergencia,227,Instalacion_Islas,196.15,Baja,Refugio seguro para visitantes en caso de emergencia.,5,00:00 - 23:59
-Acuario,299,Acuario,149.32,Media,Dinosaurios_Plantas,22,8:00 - 22:00
-Area de Indominus Rex,405,Dinosaurios_Plantas,103.4,Baja,El nuevo dinosaurio de la isla, vigilado de cerca.,14,8:00 - 17:00
-Hotel Jurassic,150,Turismo,180.00,Alta,Alojamiento para visitantes con vista a las áreas de dinosaurios.,50,00:00 - 23:59
-Aviario,200,Dinosaurios_Plantas,100.00,Media,Aviario de criaturas prehistóricas,20,8:00 - 20:00
-
+nombre,capacidad,tipo,seguridad,descripcion,personal,horario
+Centro de Visitantes,422,Centro de Visitantes,Media,"Área destinada para visitantes, con mapas y guías.",7,8:00 - 21:00
+Laboratorio de Genética,474,Laboratorio de Genética,Alta,Laboratorio de alta seguridad para manipulación genética.,25,6:00 - 18:00
+Criadero-Acuatico,426,Criadero-Acuatico,Media,Área de cría y cuidado de especies acuáticas.,6,8:00 - 22:00
+Criadero-Terrestre,434,Criadero-Terrestre,Media,Área de cría y cuidado de especies terrestres.,12,8:00 - 22:00
+Criadero-Aereo,344,Criadero-Aereo,Media,Área de cría y cuidado de especies voladoras.,25,8:00 - 22:00
+Enfermeria,364,Enfermeria,Baja,Área médica para cuidado de especímenes.,26,00:00 - 23:59

@@ -44,18 +44,9 @@ class DinosaurioView{
     +mostrarDinosaurio(Dinosaurio): void
 }
 
-class DinosaurioBuilder{
-    +caracteristicaRara(): DinosaurioBuilder
-    +build(): Dinosaurio
-}
-
 abstract class DinosaurioFactory{
     +crearDinosaurio(tipo: String): Dinosaurio
 }
-
-class CarnivoroFactory extends DinosaurioFactory{}
-class HerbivoroFactory extends DinosaurioFactory{}
-class OmnivoroFactory extends DinosaurioFactory{}
 
 abstract class FactoriaInstalaciones{
     +crearInstalacion(tipo: String): Instalacion
@@ -119,7 +110,6 @@ Carnivoro --> Dinosaurio
 Omnivoro --> Dinosaurio
 GestorCV ..|> CiclodeVida
 DinosaurioFactory ..> Dinosaurio
-DinosaurioBuilder -> DinosaurioFactory
 FactoriaInstalaciones ..> Instalacion
 Dinosaurio --> DinosaurioController
 Dinosaurio --> DinosaurioView
