@@ -4,6 +4,10 @@ import com.example.jurassicpark.models.Dinosaurio;
 import com.example.jurassicpark.models.DinosaurioDataStore;
 import com.example.jurassicpark.models.DinosaurioFactory;
 import com.example.jurassicpark.models.Sexo;
+import com.example.jurassicpark.models.entidades.Dinos;
+import com.example.jurassicpark.service.DinosaurioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +19,20 @@ import java.util.concurrent.Executors;
 import static com.example.jurassicpark.ciclodevida.FaseCicloDeVida.*;
 import static com.example.jurassicpark.ciclodevida.FaseCicloDeVida.HUEVO;
 
+@Service
 public class GestorCV implements CiclodeVida {
+
+    //intentar meter las fases de los dinos en una bdd que se relacione con el id, para que no se pierda la info
     private Map<Dinosaurio, FaseCicloDeVida> fasesDinosaurios = new HashMap<>();
-    private ExecutorService executorService = Executors.newCachedThreadPool();
-    private DinosaurioFactory dinosaurioFactory;
     Scanner scanner = new Scanner(System.in);
+    private ExecutorService executorService = Executors.newCachedThreadPool();
+
+    @Autowired
+    private DinosaurioFactory dinosaurioFactory;
+
+    @Autowired
+    private DinosaurioService dinosaurioService;
+
 
     public FaseCicloDeVida obtenerFase(Dinosaurio dinosaurio) {
         return fasesDinosaurios.getOrDefault(dinosaurio, HUEVO); //por default empieza como huevo
@@ -31,6 +44,7 @@ public class GestorCV implements CiclodeVida {
         String respuesta = scanner.nextLine();
         if (respuesta.equalsIgnoreCase("s")){
             System.out.println("Escoja la especie del dinosaurio: ");
+            //meter la lista de dinos
             String especie = scanner.nextLine();
             System.out.println("Iniciando ciclo de vida para el dinosaurio " + dinosaurio.getEspecie() + "...");
             executorService.submit(() -> ejecutarCicloDeVida(dinosaurio));
@@ -99,13 +113,11 @@ public class GestorCV implements CiclodeVida {
                 && dinosaurio.getEspecie().equals(dinosaurio2.getEspecie())
                 && !dinosaurio.getTuvoHijos() && !dinosaurio2.getTuvoHijos()) {
             System.out.println("Condiciones para la reproduccion cumplidas.");
-            reproducirse(dinosaurio, dinosaurio2);
-            dinosaurio.setTuvoHijos(true);
-            dinosaurio2.setTuvoHijos(true);
             if (probabilidadRepro < 29) {
                 System.out.println("No se ha podido realizar la reproducción.");
-            }  // Obtener el tipo de dinosaurio de uno de los padres
+            }
             else {
+                reproducirse(dinosaurio, dinosaurio2);
                 String especieNuevoDino = dinosaurio.getEspecie();
                 int edadNuevoDino = 0;
                 double alturaMaximaNuevoDino = 0;
@@ -115,8 +127,7 @@ public class GestorCV implements CiclodeVida {
                 boolean tuvoHijosNuevoDino = false;
                 String tipoDino = dinosaurio.getTipo();
 
-                //crearDino desde Service, @Autowired DinosaurioService
-
+                Dinos nuevoDino = dinosaurioService.agregarDinosaurio(tipoDino, especieNuevoDino, edadNuevoDino, alturaMaximaNuevoDino, pesoMaximoNuevoDino, sexoNuevoDino, hpMaximaNuevoDino, tuvoHijosNuevoDino);
                 System.out.println("¡Nuevo dinosaurio en fase huevo creado: " + nuevoDino + "!");
                 dinosaurio.setTuvoHijos(true);
                 dinosaurio2.setTuvoHijos(true);

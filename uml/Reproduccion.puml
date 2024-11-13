@@ -1,18 +1,15 @@
 @startuml
 actor Usuario
-participant DinosaurioDataStore
 participant GestorCV
-participant Dinosaurio
+participant DinosaurioService
+participant DinosaurioFactory
+participant DinosaurioRepository
 
-Usuario -> DinosaurioDataStore : getDinosaurio("Dino1")
-DinosaurioDataStore -> Usuario : Dinosaurio1
-Usuario -> DinosaurioDataStore : getDinosaurio("Dino2")
-DinosaurioDataStore -> Usuario : Dinosaurio2
-Usuario -> GestorCV : verificarReproduccion(Dinosaurio1, Dinosaurio2)
-GestorCV -> Dinosaurio : getSexo()
-GestorCV -> Dinosaurio : getTuvoHijos()
-GestorCV -> Usuario : "Condiciones para reproducción cumplidas"
-Usuario -> GestorCV : reproducirse(Dinosaurio1, Dinosaurio2)
-GestorCV -> Dinosaurio : setTuvoHijos(true)
+Usuario -> GestorCV : Iniciar Reproduccion entre dino1 y dino2
+GestorCV --> DinosaurioService : crear nuevo dino
+DinosaurioService --> DinosaurioFactory : crearDinosaurio()
+DinosaurioFactory --> DinosaurioService : Dinosaurio creado
+DinosaurioService --> DinosaurioRepository : añade
+DinosaurioRepository --> GestorCV : Dinosaurio añadido
 GestorCV -> Usuario : "Reproducción completada"
 @enduml

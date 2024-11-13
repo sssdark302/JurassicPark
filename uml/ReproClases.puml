@@ -1,24 +1,4 @@
 @startuml
-class Dinosaurio {
-    -String especie
-    -int edad
-    -double altura_maxima
-    -int peso_maximo
-    -Sexo sexo
-    -boolean tuvoHijos
-    +getSexo(): Sexo
-    +getTuvoHijos(): boolean
-    +setTuvoHijos(boolean): void
-}
-
-enum Sexo {
-    MACHO
-    HEMBRA
-}
-
-class Carnivoro extends Dinosaurio
-class Herbivoro extends Dinosaurio
-class Omnivoro extends Dinosaurio
 
 class DinosaurioDataStore {
     -Map<String, Dinosaurio> dinosaurios
@@ -26,25 +6,35 @@ class DinosaurioDataStore {
     +getAllDinosaurios(): Collection<Dinosaurio>
 }
 
-class GestorCV {
-    -Map<Dinosaurio, FaseCicloDeVida> fasesDinosaurios
-    +verificarReproduccion(Dinosaurio, Dinosaurio): boolean
-    +reproducirse(Dinosaurio, Dinosaurio): void
+class DinosaurioService{
+    +agregarDinosaurio(Dinos): void
 }
 
-enum FaseCicloDeVida {
-    HUEVO
-    NACIMIENTO
-    CRECIMIENTO
-    REPRODUCCION
-    ADULTO
-    MUERTE
+class DinosaurioFactory{
+    +crearDinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, boolean tuvoHijos): Dinosaurio
 }
 
-DinosaurioDataStore "1" --> "*" Dinosaurio : almacena
-Dinosaurio <|-- Carnivoro
-Dinosaurio <|-- Herbivoro
-Dinosaurio <|-- Omnivoro
-GestorCV "1" --> "*" Dinosaurio : ciclo de vida
-GestorCV "1" --> FaseCicloDeVida : controla
+file datos-dinos.csv{
+}
+interface DinosaurioRepository{
+    +findDinosauriobyId(id: int): Dinosaurio
+    +findDinosauriobyEspecie(especie: string): Dinosaurio
+    +findDinosauriobyTipo(tipo: String): Dinosaurio
+}
+class DinosaurioController{
+    +getDinosauriobyId(id: int): Dinos
+    +getDinosauriobyEspecie(especie: string): Dinos
+    +getDinosauriobyTipo(tipo: String): Dinos
+}
+class frontend{
+}
+
+csv -->  DinosaurioDataStore : almacena
+DinosaurioDataStore --> DinosaurioService : llama
+DinosaurioService --> DinosaurioFactory : llama
+DinosaurioService <-- DinosaurioFactory : crea
+DinosaurioController --> frontend : consume
+DinosaurioService --> DinosaurioRepository : manda
+DinosaurioRepository --> DinosaurioController
+
 @enduml
