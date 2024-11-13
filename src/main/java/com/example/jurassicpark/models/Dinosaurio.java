@@ -1,6 +1,6 @@
 package com.example.jurassicpark.models;
 
-public abstract class Dinosaurio {
+public class Dinosaurio {
 
     protected String especie;
     protected int edad;
@@ -69,12 +69,12 @@ public abstract class Dinosaurio {
         this.sexo = sexo;
     }
 
-    public boolean isTuvoHijos() {
+    public boolean getTuvoHijos() {
         return tuvoHijos;
     }
 
     public void setTuvoHijos(boolean tuvoHijos) {
-        this.tuvoHijos = tuvoHijos;
+        this.tuvoHijos = false;
     }
 
     public String getTipo() {

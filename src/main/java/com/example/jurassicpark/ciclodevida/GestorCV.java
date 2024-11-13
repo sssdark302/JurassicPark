@@ -1,7 +1,5 @@
 package com.example.jurassicpark.ciclodevida;
 
-import com.example.jurassicpark.exceptiones.DinosaurioNotFoundException;
-import com.example.jurassicpark.exceptiones.SexoDinosaurioNotFoundException;
 import com.example.jurassicpark.models.Dinosaurio;
 import com.example.jurassicpark.models.DinosaurioDataStore;
 import com.example.jurassicpark.models.DinosaurioFactory;
@@ -117,11 +115,9 @@ public class GestorCV implements CiclodeVida {
                 boolean tuvoHijosNuevoDino = false;
                 String tipoDino = dinosaurio.getTipo();
 
-                Dinosaurio nuevoDino = DinosaurioFactory.crearDinosaurio(
-                        tipoDino, especieNuevoDino, edadNuevoDino, alturaMaximaNuevoDino, pesoMaximoNuevoDino, sexoNuevoDino, hpMaximaNuevoDino, tuvoHijosNuevoDino);
+                //crearDino desde Service, @Autowired DinosaurioService
 
                 System.out.println("¡Nuevo dinosaurio en fase huevo creado: " + nuevoDino + "!");
-                DinosaurioDataStore.getInstance().getAllDinosaurios().add(nuevoDino);
                 dinosaurio.setTuvoHijos(true);
                 dinosaurio2.setTuvoHijos(true);
             }

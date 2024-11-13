@@ -10,7 +10,7 @@ public class Carnivoro extends Dinos {
 
     @Override
     public String getTipo() {
-        return "";
+        return "Carnivoro";
     }
 }
 

@@ -1,6 +1,6 @@
 package com.example.jurassicpark.models;
 
-public abstract class Instalacion {
+public class Instalacion {
     protected String nombre;
     protected int capacidad;
     protected String tipo;
@@ -21,7 +21,13 @@ public abstract class Instalacion {
         this.horario = horario;
     }
 
-    public abstract String getTipo();
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     public String getNombre() {
         return nombre;
