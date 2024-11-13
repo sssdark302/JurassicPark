@@ -7,13 +7,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.example.jurassicpark.repository.DinosaurioRepository;
+import com.example.jurassicpark.service.DinosaurioService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DinosaurioDataStore {
+
     private static DinosaurioDataStore instance;
-    private static Map<String, Dinosaurio> dinosaurios = new ConcurrentHashMap<>();
+
+    @Autowired
+    private DinosaurioService dinosaurioService;
+
+    @Autowired
     private DinosaurioFactory dinosaurioFactory;
+
+    @Autowired
+    private static DinosaurioRepository dinosaurioRepository;
+
 
     private DinosaurioDataStore() {
         cargarDatosCSV("data/datos-dinos.csv");
@@ -41,20 +56,11 @@ public class DinosaurioDataStore {
                 String tipo = campos[5];
                 boolean tuvoHijos = Boolean.parseBoolean(campos[6]);
 
-                Dinosaurio dino = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
-                dinosaurios.put(especie, dino);
+                dinosaurioService.agregarDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static Dinosaurio getDinosaurio(String especie) {
-        return dinosaurios.get(especie);
-    }
-
-    public Collection<Dinosaurio> getAllDinosaurios() {
-        return dinosaurios.values();
     }
 
     private Sexo randomSexo() {
@@ -65,7 +71,7 @@ public class DinosaurioDataStore {
         ObjectMapper mapper = new ObjectMapper();
         try {
             //  map completo de dinosaurios a JSON
-            return mapper.writeValueAsString(dinosaurios);
+            return mapper.writeValueAsString(dinosaurioFactory);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "{}";

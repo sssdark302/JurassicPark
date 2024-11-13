@@ -1,8 +1,11 @@
 package com.example.jurassicpark.models;
 
-public class Herbivoro extends Dinosaurio{
-    public Herbivoro(String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
-        super(especie, edad, alturaMaxima, pesoMaximo, sexo, hp_maxima, tuvoHijos);
+import com.example.jurassicpark.models.entidades.Dinos;
+
+public class Herbivoro extends Dinos {
+
+    public Herbivoro(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
+        super(especie, edad, altura_maxima, peso_maximo, sexo, hp_maxima, tuvoHijos);
     }
 
     @Override

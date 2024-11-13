@@ -1,14 +1,14 @@
 package com.example.jurassicpark.models;
 
-public abstract class Instalacion {
-    private String nombre;
-    private int capacidad;
-    private String tipo;
-    private double terreno;
-    private String seguridad;
-    private String descripcion;
-    private int personal;
-    private String horario;
+public class Instalacion {
+    protected String nombre;
+    protected int capacidad;
+    protected String tipo;
+    protected double terreno;
+    protected String seguridad;
+    protected String descripcion;
+    protected int personal;
+    protected String horario;
 
     public Instalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario) {
         this.nombre = nombre;
@@ -21,7 +21,13 @@ public abstract class Instalacion {
         this.horario = horario;
     }
 
-    public abstract String getTipo();
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     public String getNombre() {
         return nombre;

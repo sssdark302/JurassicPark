@@ -1,19 +1,21 @@
 package com.example.jurassicpark.models;
 
-public class DinosaurioFactory {
-    private DinosaurioDataStore dataStore;
+import com.example.jurassicpark.models.entidades.Dinos;
+import org.springframework.stereotype.Component;
 
-    public static Dinosaurio crearDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos) {
-        switch (tipo) {
-            case "Carnivoro":
-                return new Carnivoro(especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
-            case "Herbivoro":
-                return new Herbivoro(especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
-            case "Omnivoro":
-                return new Omnivoro(especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
-            default:
-                throw new IllegalArgumentException("Tipo de dinosaurio desconocido: " + tipo);
-        }
-    }
+@Component
+public class DinosaurioFactory {
+  public Dinos crearDinosaurio(String tipo, String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
+      switch (tipo) {
+          case "Carnivoro":
+              return new Carnivoro(especie, edad, altura_maxima, peso_maximo, sexo, hp_maxima, tuvoHijos);
+          case "Herbivoro":
+              return new Herbivoro(especie, edad, altura_maxima, peso_maximo, sexo, hp_maxima, tuvoHijos);
+          case "Omnivoro":
+              return new Omnivoro(especie, edad, altura_maxima, peso_maximo, sexo, hp_maxima, tuvoHijos);
+          default:
+              throw new IllegalArgumentException("Tipo de dinosaurio desconocido: " + tipo);
+      }
+  }
 }
 
