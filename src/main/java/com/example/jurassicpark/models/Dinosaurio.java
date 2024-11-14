@@ -1,5 +1,7 @@
 package com.example.jurassicpark.models;
 
+import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
+
 public class Dinosaurio {
 
     protected String especie;
@@ -11,7 +13,7 @@ public class Dinosaurio {
     protected boolean tuvoHijos; //inicializado a false
     protected String tipo;
 
-    public Dinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
+    public Dinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida) {
         this.especie = especie;
         this.edad = edad;
         this.altura_maxima = altura_maxima;
