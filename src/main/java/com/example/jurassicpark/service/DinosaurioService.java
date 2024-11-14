@@ -1,5 +1,6 @@
 package com.example.jurassicpark.service;
 
+import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
 import com.example.jurassicpark.models.DinosaurioFactory;
 import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
@@ -16,8 +17,8 @@ public class DinosaurioService {
     @Autowired
     private DinosaurioFactory dinosaurioFactory;
 
-    public Dinos agregarDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos) {
-        Dinos dinosaurio = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
+    public Dinos agregarDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida) {
+        Dinos dinosaurio = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, faseCicloDeVida);
         System.out.println("Dinosaurio creado: " + dinosaurio);
         return dinosaurioRepository.save(dinosaurio);
     }

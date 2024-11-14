@@ -3,6 +3,7 @@
 class DinosaurioDataStore {
     +cargarDatosCSV(String rutaCSV): void
     +getAllDinosauriosAsJSON(): void
+    +generarDinosaurio(): void
 }
 
 class DinosaurioService{
@@ -10,7 +11,7 @@ class DinosaurioService{
 }
 
 class DinosaurioFactory{
-    +crearDinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, boolean tuvoHijos): Dinosaurio
+    +crearDinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, boolean tuvoHijos, FaseCicloDeVida faseciclodevida): Dinosaurio
 }
 
 file datos-dinos.csv{

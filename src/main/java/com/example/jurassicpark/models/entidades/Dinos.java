@@ -1,5 +1,6 @@
 package com.example.jurassicpark.models.entidades;
 
+import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
 import com.example.jurassicpark.models.Dinosaurio;
 import com.example.jurassicpark.models.Sexo;
 import jakarta.persistence.*;
@@ -29,12 +30,21 @@ public class Dinos extends Dinosaurio {
     @Column
     private String tipo;
 
-    public Dinos(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos) {
-        super(especie, edad, altura_maxima, peso_maximo, sexo, hp_maxima, tuvoHijos);
+    @Column
+    private boolean tuvoHijos;
+
+    @Enumerated (EnumType.STRING)
+    private Sexo sexo;
+
+    @Enumerated(EnumType.STRING)
+    private FaseCicloDeVida faseCicloDeVida;
+
+    public Dinos(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida) {
+        super(especie, edad, altura_maxima, peso_maximo, sexo, hp_maxima, tuvoHijos, faseCicloDeVida);
     }
 
     public Dinos() {
-        super("", 0, 0, 0, null, 0, false);
+        super("", 0, 0, 0, null, 0, false, null);
     }
 
     public String getEspecie() {

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
 import com.example.jurassicpark.repository.DinosaurioRepository;
 import com.example.jurassicpark.service.DinosaurioService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -54,8 +55,8 @@ public class DinosaurioDataStore {
                 double hpMaxima = Double.parseDouble(campos[4]);
                 String tipo = campos[5];
                 boolean tuvoHijos = Boolean.parseBoolean(campos[6]);
-
-                dinosaurioService.agregarDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
+                FaseCicloDeVida faseCicloDeVida = FaseCicloDeVida.HUEVO;
+                generarDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, faseCicloDeVida);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,6 +66,12 @@ public class DinosaurioDataStore {
         return new Random().nextBoolean() ? Sexo.MACHO : Sexo.HEMBRA;
     }
 
+    private void generarDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida) {
+        //creo nuevo dinosaurio con los datos del CSV
+        //si en el mapa hay mas de 2 dinosaurios de la misma especie, no se agrega
+
+        dinosaurioService.agregarDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, faseCicloDeVida);
+    }
     public String getAllDinosauriosAsJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {
