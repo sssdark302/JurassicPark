@@ -1,9 +1,8 @@
 @startuml
 
 class DinosaurioDataStore {
-    -Map<String, Dinosaurio> dinosaurios
-    +getDinosaurio(String especie): Dinosaurio
-    +getAllDinosaurios(): Collection<Dinosaurio>
+    +cargarDatosCSV(String rutaCSV): void
+    +getAllDinosauriosAsJSON(): void
 }
 
 class DinosaurioService{

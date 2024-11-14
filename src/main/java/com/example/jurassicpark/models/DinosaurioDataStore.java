@@ -29,7 +29,6 @@ public class DinosaurioDataStore {
     @Autowired
     private static DinosaurioRepository dinosaurioRepository;
 
-
     private DinosaurioDataStore() {
         cargarDatosCSV("data/datos-dinos.csv");
     }
@@ -62,7 +61,6 @@ public class DinosaurioDataStore {
             e.printStackTrace();
         }
     }
-
     private Sexo randomSexo() {
         return new Random().nextBoolean() ? Sexo.MACHO : Sexo.HEMBRA;
     }

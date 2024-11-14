@@ -43,14 +43,4 @@ public class InstalacionController {
             throw new InstalacionNotFoundException("Instalación con tipo " + tipo + " no encontrada");
         }
     }
-
-    @GetMapping("/id/{id}")
-    public Instalacion getInstalacionById(@PathVariable int id) {
-        Instalacion instalacion = instalacionRepository.findInstalacionById(id);
-        if (instalacion != null) {
-            return instalacion;
-        } else {
-            throw new InstalacionNotFoundException("Instalación con id " + id + " no encontrada");
-        }
-    }
 }

@@ -6,6 +6,7 @@ import com.example.jurassicpark.models.DinosaurioFactory;
 import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.service.DinosaurioService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,22 +54,29 @@ public class GestorCV implements CiclodeVida {
             System.out.println("Ciclo de vida no iniciado.");
         }
     }
+
     private void ejecutarCicloDeVida(Dinosaurio dinosaurio) {
-        while (fasesDinosaurios.get(dinosaurio) != MUERTE) {
-            System.out.println("¿Desea avanzar la fase del dinosaurio " + dinosaurio.getEspecie() + "? (s/n)");
-            String respuesta = scanner.nextLine();
-            if (respuesta.equalsIgnoreCase("s")) {
-                avanzarFase(dinosaurio);
-            } else {
-                System.out.println("Esperando para avanzar a la siguiente fase...");
-                try {
-                    Thread.sleep(2000); // espera antes de volver a preguntar
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        Thread hilo = new Thread(() -> {
+            try {
+                while (fasesDinosaurios.get(dinosaurio) != MUERTE && !Thread.currentThread().isInterrupted()) {
+                    System.out.println("¿Desea avanzar la fase del dinosaurio " + dinosaurio.getEspecie() + "? (s/n)");
+                    String respuesta = scanner.nextLine();
+                    if (respuesta.equalsIgnoreCase("s")) {
+                        avanzarFase(dinosaurio);
+                    } else {
+                        System.out.println("Esperando para avanzar a la siguiente fase...");
+                        try {
+                            Thread.sleep(2000); // espera antes de volver a preguntar
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt(); // re-interrupt the thread
+                        }
+                    }
                 }
+            } finally {
+                TerminarCiclo(dinosaurio);
             }
-        }
-        TerminarCiclo(dinosaurio);
+        });
+        hilo.start();
     }
 
     public void avanzarFase(Dinosaurio dinosaurio) {
@@ -105,6 +113,8 @@ public class GestorCV implements CiclodeVida {
         }
     }
 
+
+    @SneakyThrows
     public void verificarReproduccion(Dinosaurio dinosaurio, Dinosaurio dinosaurio2) { //si ambos dinos estan en etapa de repro, misma especie, distinto sexo y no han tenido hijos
         double probabilidadRepro = (Math.random()* (1-100))+ 1;
         if (obtenerFase(dinosaurio) == REPRODUCCION
@@ -113,6 +123,7 @@ public class GestorCV implements CiclodeVida {
                 && dinosaurio.getEspecie().equals(dinosaurio2.getEspecie())
                 && !dinosaurio.getTuvoHijos() && !dinosaurio2.getTuvoHijos()) {
             System.out.println("Condiciones para la reproduccion cumplidas.");
+            Thread.sleep(1000);
             if (probabilidadRepro < 29) {
                 System.out.println("No se ha podido realizar la reproducción.");
             }
@@ -126,7 +137,6 @@ public class GestorCV implements CiclodeVida {
                 double hpMaximaNuevoDino = 0;
                 boolean tuvoHijosNuevoDino = false;
                 String tipoDino = dinosaurio.getTipo();
-
                 Dinos nuevoDino = dinosaurioService.agregarDinosaurio(tipoDino, especieNuevoDino, edadNuevoDino, alturaMaximaNuevoDino, pesoMaximoNuevoDino, sexoNuevoDino, hpMaximaNuevoDino, tuvoHijosNuevoDino);
                 System.out.println("¡Nuevo dinosaurio en fase huevo creado: " + nuevoDino + "!");
                 dinosaurio.setTuvoHijos(true);
@@ -136,6 +146,7 @@ public class GestorCV implements CiclodeVida {
             System.out.println("Los dinosaurios no cumplen con las condiciones para reproducirse.");
         }
     }
+    @SneakyThrows
     public void reproducirse(Dinosaurio dinosaurio1, Dinosaurio dinosaurio2) {
         verificarReproduccion(dinosaurio1, dinosaurio2);
     }

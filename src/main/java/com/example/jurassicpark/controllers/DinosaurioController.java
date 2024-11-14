@@ -42,14 +42,4 @@ public class DinosaurioController {
             throw new DinosaurioNotFoundException("Dinosaurio con tipo " + tipo + " no encontrado");
         }
     }
-
-    @GetMapping("/id/{id}")
-    public Dinosaurio getDinosaurioById(@PathVariable int id) {
-        Dinosaurio dinosaurio = dinosaurioRepository.findDinosaurioById(id);
-        if (dinosaurio != null) {
-            return dinosaurio;
-        } else {
-            throw new DinosaurioNotFoundException("Dinosaurio con id " + id + " no encontrado");
-        }
-    }
 }

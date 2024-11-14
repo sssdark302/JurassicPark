@@ -18,6 +18,7 @@ public class DinosaurioService {
 
     public Dinos agregarDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos) {
         Dinos dinosaurio = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos);
+        System.out.println("Dinosaurio creado: " + dinosaurio);
         return dinosaurioRepository.save(dinosaurio);
     }
 

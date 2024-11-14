@@ -17,6 +17,7 @@ public class InstalacionService {
 
     public InstalacionE agregarInstalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario){
         InstalacionE instalacion = instalacionFactory.crearInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+        System.out.println("Se ha creado la instalación: " + instalacion);
         return instalacionRepository.save(instalacion);
     }
 }

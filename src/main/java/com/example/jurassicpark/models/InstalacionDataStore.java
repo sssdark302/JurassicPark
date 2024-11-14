@@ -24,13 +24,9 @@ public class InstalacionDataStore {
     private InstalacionService instalacionService;
 
     @Autowired
-    private InstalacionFactory instalacionFactory;
-
-    @Autowired
     private static InstalacionRepository instalacionRepository;
 
     private InstalacionDataStore() {
-        instalacionFactory = new InstalacionFactory();
         cargarDatosCSV("data/datos-instalaciones.csv");
     }
 
