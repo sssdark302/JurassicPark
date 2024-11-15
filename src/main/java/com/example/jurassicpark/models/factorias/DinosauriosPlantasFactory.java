@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DinosauriosPlantasFactory {
-    public static InstalacionE crearInstalacionDinosauriosPlantas(String nombre, int capacidad, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
+
+    public InstalacionE crearInstalacionDinosauriosPlantas(String nombre, int capacidad, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
         switch (habitat) {
             case "Acuatico":
                 return crearInstalacionAcuatica(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, dieta);

@@ -1,5 +1,7 @@
 package com.example.jurassicpark.service;
 
+import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
+import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.factorias.InstalacionFactory;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.models.entidades.DinosaurioInstalaciones;
@@ -44,7 +46,6 @@ public class InstalacionService {
 
         return true;
     }
-
     private boolean puedenCoexistir(Dinos dino1, Dinos dino2) {
         // Ejemplo básico: carnivoros y herbívoros no pueden coexistir
         if (dino1.getTipo().equals("Carnivoro") && dino2.getTipo().equals("Herbivoro")) {
@@ -56,16 +57,10 @@ public class InstalacionService {
         return true;
     }
 
-    public InstalacionE agregarInstalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario){
-        InstalacionE instalacion = instalacionFactory.crearInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
-        System.out.println("Se ha creado la instalación: " + instalacion);
-        return instalacionRepository.save(instalacion);
+    public void crearYAlmacenarInstalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
+        InstalacionE instalacionE = instalacionFactory.crearInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario, habitat, dieta);
+        instalacionRepository.save(instalacionE);
     }
-    public InstalacionE guardarInstalacion(InstalacionE instalacion) {
-        System.out.println("Guardando instalación: " + instalacion);
-        return instalacionRepository.save(instalacion);
-    }
-
     public void asignarDinosaurioAInstalacion(Dinos dinosaurio) {
         String habitat = dinosaurio.getHabitat();
         String dieta = dinosaurio.getTipo();
