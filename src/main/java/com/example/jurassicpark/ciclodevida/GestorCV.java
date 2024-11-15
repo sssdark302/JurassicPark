@@ -1,8 +1,7 @@
 package com.example.jurassicpark.ciclodevida;
 
 import com.example.jurassicpark.models.Dinosaurio;
-import com.example.jurassicpark.models.DinosaurioDataStore;
-import com.example.jurassicpark.models.DinosaurioFactory;
+import com.example.jurassicpark.models.factorias.DinosaurioFactory;
 import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.service.DinosaurioService;
