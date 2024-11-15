@@ -37,6 +37,14 @@ public class Dinosaurio {
         this.tipo = tipo;
     }
 
+    public boolean getTuvoHijos() {
+        return tuvoHijos;
+    }
+
+    public void setTuvoHijos(boolean tuvoHijos) {
+        this.tuvoHijos = tuvoHijos;
+    }
+
     @Override
     public String toString() {
         return "Dinosaurio{" +

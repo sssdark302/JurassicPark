@@ -137,7 +137,8 @@ public class GestorCV implements CiclodeVida {
                 boolean tuvoHijosNuevoDino = false;
                 String tipoDino = dinosaurio.getTipo();
                 FaseCicloDeVida faseCicloDeVidaND = HUEVO;
-                Dinos nuevoDino = dinosaurioService.agregarDinosaurio(tipoDino, especieNuevoDino, edadNuevoDino, alturaMaximaNuevoDino, pesoMaximoNuevoDino, sexoNuevoDino, hpMaximaNuevoDino, tuvoHijosNuevoDino, faseCicloDeVidaND);
+                String habitatNuevoDino = dinosaurio.getHabitat();
+                Dinos nuevoDino = dinosaurioFactory.crearDinosaurio(tipoDino, especieNuevoDino, edadNuevoDino, alturaMaximaNuevoDino,pesoMaximoNuevoDino, sexoNuevoDino, hpMaximaNuevoDino, false, faseCicloDeVidaND, habitatNuevoDino) ;
                 System.out.println("¡Nuevo dinosaurio en fase huevo creado: " + nuevoDino + "!");
                 dinosaurio.setTuvoHijos(true);
                 dinosaurio2.setTuvoHijos(true);
