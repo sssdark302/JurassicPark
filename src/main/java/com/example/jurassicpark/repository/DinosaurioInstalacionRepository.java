@@ -10,5 +10,4 @@ import java.util.List;
 public interface DinosaurioInstalacionRepository extends JpaRepository {
 
     List<DinosaurioInstalaciones> findByInstalacion(InstalacionE instalacion);
-    List<DinosaurioInstalaciones> findByDinosaurio(Dinos dinosaurio);
 }
