@@ -12,7 +12,7 @@ public class DinosaurioFactory {
         if (!esHabitatCompatible(habitat, tipo)) {
             throw new IllegalArgumentException("El dinosaurio no es compatible con el habitat proporcionado");
         }
-
+        return new Dinos(especie, edad, alturamaxima, pesomaximo, sexo, hpmaxima, tuvoHijos, faseCicloDeVida, habitat, tipo);
     }
 
     private boolean esHabitatCompatible(String habitat, String tipo) {

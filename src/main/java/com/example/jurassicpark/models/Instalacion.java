@@ -1,6 +1,12 @@
 package com.example.jurassicpark.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Instalacion {
+
     protected String nombre;
     protected int capacidad;
     protected String tipo; // Ejemplo: "Dinosaurios_Plantas"
@@ -27,88 +33,6 @@ public class Instalacion {
         this.habitat = habitat;
         this.dieta = dieta;
     }
-
-    // Getters y Setters
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getCapacidad() {
-        return capacidad;
-    }
-
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public double getTerreno() {
-        return terreno;
-    }
-
-    public void setTerreno(double terreno) {
-        this.terreno = terreno;
-    }
-
-    public String getSeguridad() {
-        return seguridad;
-    }
-
-    public void setSeguridad(String seguridad) {
-        this.seguridad = seguridad;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public int getPersonal() {
-        return personal;
-    }
-
-    public void setPersonal(int personal) {
-        this.personal = personal;
-    }
-
-    public String getHorario() {
-        return horario;
-    }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
-    }
-
-    public String getHabitat() {
-        return habitat;
-    }
-
-    public void setHabitat(String habitat) {
-        this.habitat = habitat;
-    }
-
-    public String getDieta() {
-        return dieta;
-    }
-
-    public void setDieta(String dieta) {
-        this.dieta = dieta;
-    }
-
     @Override
     public String toString() {
         return "Instalacion{" +

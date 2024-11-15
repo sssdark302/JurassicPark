@@ -16,9 +16,9 @@ public class InstalacionFactory {
     public InstalacionE crearInstalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
         switch (tipo) {
             case "Turismo":
-                return new Turismo(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+                return new Turismo(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario, habitat, dieta);
             case "Instalacion_Islas":
-                return new Instalacion_Islas(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+                return new Instalacion_Islas(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario, habitat, dieta);
             case "Dinosaurios_Plantas":
                 return dinosauriosPlantasFactory.crearInstalacionDinosauriosPlantas(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, habitat, dieta);
             default:
