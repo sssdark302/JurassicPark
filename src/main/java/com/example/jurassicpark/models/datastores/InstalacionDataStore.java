@@ -1,13 +1,12 @@
-package com.example.jurassicpark.models;
+package com.example.jurassicpark.models.datastores;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.example.jurassicpark.models.entidades.InstalacionE;
+import com.example.jurassicpark.models.factorias.DinosauriosPlantasFactory;
+import com.example.jurassicpark.models.factorias.InstalacionFactory;
 import com.example.jurassicpark.repository.InstalacionRepository;
 import com.example.jurassicpark.service.InstalacionService;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,6 +1,7 @@
 package com.example.jurassicpark.models;
 
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
+import com.example.jurassicpark.models.Sexo;
 
 public class Dinosaurio {
 
@@ -10,19 +11,28 @@ public class Dinosaurio {
     protected int peso_maximo;
     protected double hp_maxima;
     protected Sexo sexo;
-    protected boolean tuvoHijos; //inicializado a false
-    protected String tipo;
+    protected boolean tuvoHijos;
+    protected String tipo; // Dieta
+    protected FaseCicloDeVida faseCicloDeVida;
+    protected String habitat;
 
-    public Dinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida) {
+    public Dinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida, String habitat, String tipo) {
+        if (altura_maxima < 0 || peso_maximo < 0 || hp_maxima < 0) { //cambiarlo cuando la fase de vida este completada
+            throw new IllegalArgumentException("Los valores de altura, peso y hp deben ser positivos.");
+        }
         this.especie = especie;
         this.edad = edad;
         this.altura_maxima = altura_maxima;
         this.peso_maximo = peso_maximo;
-        this.sexo = sexo;
         this.hp_maxima = hp_maxima;
-        this.tuvoHijos = tuvoHijos ;
+        this.sexo = sexo;
+        this.tuvoHijos = tuvoHijos;
+        this.faseCicloDeVida = faseCicloDeVida;
+        this.habitat = habitat;
+        this.tipo = tipo;
     }
 
+    // Getters y Setters
     public String getEspecie() {
         return especie;
     }
@@ -71,12 +81,12 @@ public class Dinosaurio {
         this.sexo = sexo;
     }
 
-    public boolean getTuvoHijos() {
+    public boolean isTuvoHijos() {
         return tuvoHijos;
     }
 
     public void setTuvoHijos(boolean tuvoHijos) {
-        this.tuvoHijos = false;
+        this.tuvoHijos = tuvoHijos;
     }
 
     public String getTipo() {
@@ -85,6 +95,22 @@ public class Dinosaurio {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public FaseCicloDeVida getFaseCicloDeVida() {
+        return faseCicloDeVida;
+    }
+
+    public void setFaseCicloDeVida(FaseCicloDeVida faseCicloDeVida) {
+        this.faseCicloDeVida = faseCicloDeVida;
+    }
+
+    public String getHabitat() {
+        return habitat;
+    }
+
+    public void setHabitat(String habitat) {
+        this.habitat = habitat;
     }
 
     @Override
@@ -98,7 +124,8 @@ public class Dinosaurio {
                 ", sexo=" + sexo +
                 ", tuvoHijos=" + tuvoHijos +
                 ", tipo='" + tipo + '\'' +
+                ", faseCicloDeVida=" + faseCicloDeVida +
+                ", habitat='" + habitat + '\'' +
                 '}';
     }
 }
-

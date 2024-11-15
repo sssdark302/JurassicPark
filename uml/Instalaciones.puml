@@ -1,12 +1,46 @@
 @startuml
-'https://plantuml.com/use-case-diagram
-title Instalaciones
-actor Usuario
-participant InstalacionDataStore
-participant InstalacionFactory
-participant gestorInstalacion
+file instalaciones.csv{
+}
+class Instalaciones{
 
+}
 
+class Turismo extends InstalacionesE {}
+class Instalacion_Isla extends InstalacionesE{}
+class Dinosaurios_Plantas extends InstalacionesE{}
+class Jaula_Carnivoro extends Dinosaurios_Plantas{}
+class Jaula_Herbivoro extends Dinosaurios_Plantas{}
+class Jaula_Omnivoro extends Dinosaurios_Plantas{}
+
+class InstalacionesDataStore{
+    +cargarCSV(): void
+
+}
+class InstalacionesFactory{
+
+}
+class InstalacionService{
+
+}
+class InstalacionesController{
+
+}
+class InstalacionesRepository{
+
+}
+class (entidad)InstalacionesE extends Instalaciones{
+}
+class Dinosaurios_Plantas{
+
+}
+class DinosauriosPlantasFactory{
+
+}
+
+instalaciones.csv --> InstalacionesDataStore : carga
+InstalacionesDataStore --> InstalacionService : llama
+InstalacionService --> InstalacionesFactory : llama
+InstalacionesFactory --> InstalacionesE : crea
 
 
 @enduml

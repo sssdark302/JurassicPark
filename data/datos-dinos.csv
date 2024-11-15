@@ -1,13 +1,13 @@
-especie,edad,alturamaxima,pesomaximo,hpmaxima,tipo
-T-Rex,14,4.0,9000,36000.0,Carnivoro
-Triceratops,29,3.0,12000,36000.0,Herbivoro
-Velociraptor,2,1.5,200,300.0,Carnivoro
-Stegosaurus,5,4.0,5000,20000.0,Herbivoro
-Mosasaurus,16,17.0,14000,238000.0,Carnivoro
-Plesiosaurus,8,10.0,6000,120000.0,Carnivoro
-Ichthyosaurus,5,6.0,3000,60000.0,Carnivoro
-Liopleurodon,12,11.0,10000,220000.0,Carnivoro
-Pteranodon,4,1.8,80,144.0,Carnivoro
-Quetzalcoatlus,6,5.0,500,1000.0,Carnivoro
-Dsungaripterus,3,2.5,100,200.0,Carnivoro
-Rhamphorhynchus,2,1.0,50,120.0,Carnivoro
+especie,edad,alturamaxima,pesomaximo,hpmaxima,tipo, habitat
+T-Rex,14,4.0,9000,36000.0,Carnivoro, Terrestre
+Triceratops,29,3.0,12000,36000.0,Herbivoro, Terrestre
+Velociraptor,2,1.5,200,300.0,Carnivoro, Terrestre
+Stegosaurus,5,4.0,5000,20000.0,Herbivoro, Terrestre
+Mosasaurus,16,17.0,14000,238000.0,Carnivoro, Acuatico
+Plesiosaurus,8,10.0,6000,120000.0,Carnivoro, Acuatico
+Ichthyosaurus,5,6.0,3000,60000.0,Carnivoro, Acuatico
+Liopleurodon,12,11.0,10000,220000.0,Carnivoro,Acuatico
+Pteranodon,4,1.8,80,144.0,Carnivoro, Aereo
+Quetzalcoatlus,6,5.0,500,1000.0,Carnivoro, Aereo
+Dsungaripterus,3,2.5,100,200.0,Carnivoro, Aereo
+Rhamphorhynchus,2,1.0,50,120.0,Carnivoro, Aereo

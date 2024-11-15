@@ -1,4 +1,4 @@
-package com.example.jurassicpark.models;
+package com.example.jurassicpark.models.subclases;
 
 import com.example.jurassicpark.models.entidades.InstalacionE;
 

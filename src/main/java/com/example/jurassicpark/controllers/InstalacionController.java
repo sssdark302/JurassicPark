@@ -1,10 +1,9 @@
 package com.example.jurassicpark.controllers;
 
 import com.example.jurassicpark.exceptiones.InstalacionNotFoundException;
-import com.example.jurassicpark.models.InstalacionDataStore;
-import com.example.jurassicpark.models.InstalacionFactory;
+import com.example.jurassicpark.models.datastores.InstalacionDataStore;
+import com.example.jurassicpark.models.entidades.InstalacionE;
 import com.example.jurassicpark.repository.InstalacionRepository;
-import com.example.jurassicpark.models.Instalacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +24,8 @@ public class InstalacionController {
     }
 
     @GetMapping("/{nombre}")
-    public Instalacion getInstalacionByNombre(@PathVariable String nombre) {
-        Instalacion instalacion = instalacionRepository.findInstalacionByNombre(nombre);
+    public InstalacionE getInstalacionByNombre(@PathVariable String nombre) {
+        InstalacionE instalacion = instalacionRepository.findInstalacionByNombre(nombre);
         if (instalacion != null) {
             return instalacion;
         } else {
@@ -35,8 +34,8 @@ public class InstalacionController {
     }
 
     @GetMapping("/tipo/{tipo}")
-    public Instalacion getInstalacionByTipo(@PathVariable String tipo) {
-        Instalacion instalacion = instalacionRepository.findInstalacionByTipo(tipo);
+    public InstalacionE getInstalacionByTipo(@PathVariable String tipo) {
+        InstalacionE instalacion = instalacionRepository.findInstalacionByTipo(tipo);
         if (instalacion != null) {
             return instalacion;
         } else {
