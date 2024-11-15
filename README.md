@@ -14,3 +14,5 @@ Crear MODOS para pasar tiempo mas rapido: acelerar fases x2, x5
 
 BDD INSTALACIONES instalaciones2
 BDD DINOS dinosaurios
+
+tabla relacional para juntar las dos tablas en una matriz dinosaurios_insalaciones en el docker
