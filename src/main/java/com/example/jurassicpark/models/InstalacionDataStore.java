@@ -26,6 +26,12 @@ public class InstalacionDataStore {
     @Autowired
     private static InstalacionRepository instalacionRepository;
 
+    @Autowired
+    private InstalacionFactory instalacionFactory;
+
+    @Autowired
+    private DinosauriosPlantasFactory dinosauriosPlantasFactory;
+
     private InstalacionDataStore() {
         cargarDatosCSV("data/datos-instalaciones.csv");
     }
@@ -53,7 +59,14 @@ public class InstalacionDataStore {
                 int personal = Integer.parseInt(campos[6]);
                 String horario = campos[7];
 
-                instalacionService.agregarInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+                InstalacionE instalacionE;
+
+                if ("Dinosaurios_Plantas".equals(tipo)) {
+                    instalacionE = dinosauriosPlantasFactory.crearInstalacionJaula(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+                } else {
+                    instalacionE = instalacionFactory.crearInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario);
+                }
+                instalacionService.guardarInstalacion(instalacionE);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -20,4 +20,8 @@ public class InstalacionService {
         System.out.println("Se ha creado la instalación: " + instalacion);
         return instalacionRepository.save(instalacion);
     }
+    public InstalacionE guardarInstalacion(InstalacionE instalacion) {
+        System.out.println("Guardando instalación: " + instalacion);
+        return instalacionRepository.save(instalacion);
+    }
 }
