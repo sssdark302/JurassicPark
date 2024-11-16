@@ -124,5 +124,7 @@ public class InstalacionService {
 
         guardarRelacionDinosaurioInstalacion(dinosaurio, instalacion);
     }
-
+    private void eliminarInstalacion(String tipo) { //cambiarrlo despues
+        instalacionRepository.deleteInstalacionByTipo(tipo);
+    }
 }

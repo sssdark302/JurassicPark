@@ -10,4 +10,6 @@ public interface InstalacionRepository extends JpaRepository<Instalacion, String
     InstalacionE findInstalacionById(int id);
     InstalacionE findInstalacionByNombre(String nombre);
     InstalacionE findInstalacionByTipo(String tipo);
+    InstalacionE deleteInstalacionByTipo(String tipo);
+
 }
