@@ -9,6 +9,7 @@ import com.example.jurassicpark.service.DinosaurioService;
 import jakarta.annotation.PreDestroy;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -44,7 +45,6 @@ public class GestorCV implements CiclodeVida {
         dinosaurio.setPeso_maximo(0);
         dinosaurio.setHp_maxima(0);
         fasesDinosaurios.put(dinosaurio, FaseCicloDeVida.HUEVO);
-
         System.out.println("Iniciando ciclo de vida para " + dinosaurio.getEspecie() + "...");
         executorService.submit(() -> ejecutarCicloDeVida(dinosaurio));
     }
@@ -164,7 +164,8 @@ public class GestorCV implements CiclodeVida {
                 0,  // HP inicial
                 false,  // Tuvo hijos
                 FaseCicloDeVida.HUEVO,
-                dinosaurio1.getHabitat()
+                dinosaurio1.getHabitat(),
+                dinosaurio1.getDieta()
         );
         dinosaurioRepository.save((Dinos) nuevoDino);
         System.out.printf("Dinosaurio %s creado con éxito en fase HUEVO.\n", nuevoDino.getEspecie());

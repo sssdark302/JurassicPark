@@ -11,34 +11,34 @@ public class InstalacionE extends Instalacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @Column(name = "nombre")
     private String nombre;
 
-    @Column
+    @Column(name = "capacidad")
     private int capacidad;
 
-    @Column
+    @Column(name = "tipo")
     private String tipo;
 
-    @Column
+    @Column(name = "terreno")
     private double terreno;
 
-    @Column
+    @Column(name = "seguridad")
     private String seguridad;
 
-    @Column
+    @Column(name = "descripcion")
     private String descripcion;
 
-    @Column
+    @Column(name = "personal")
     private int personal;
 
-    @Column
+    @Column(name = "horario")
     private String horario;
 
-    @Column
+    @Column(name = "habitat")
     private String habitat;
 
-    @Column
+    @Column(name = "dieta")
     private String dieta;
 
     public InstalacionE(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {

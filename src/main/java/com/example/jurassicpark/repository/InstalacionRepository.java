@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface InstalacionRepository extends JpaRepository<InstalacionE, String> {
 
     InstalacionE findInstalacionByNombre(String nombre);
-    Optional<InstalacionE> findByHabitatAndTipoDieta(String habitat, String dieta);
+    Optional<InstalacionE> findByHabitatAndDieta(String habitat, String dieta);
     void deleteInstalacionByTipo(String tipo);
     List<InstalacionE> findByTipo(String tipo);
     List<InstalacionE> findByHabitat(String habitat);

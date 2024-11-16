@@ -8,6 +8,7 @@ import com.example.jurassicpark.repository.DinosaurioInstalacionRepository;
 import com.example.jurassicpark.repository.InstalacionRepository;
 import com.example.jurassicpark.service.InstalacionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class InstalacionController {
 
     @Autowired
+    @Lazy
     private InstalacionService instalacionService;
 
     @GetMapping("/listar")

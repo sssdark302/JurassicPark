@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface DinosaurioInstalacionRepository extends JpaRepository {
+public interface DinosaurioInstalacionRepository extends JpaRepository <DinosaurioInstalaciones, Integer>{
 
     List<DinosaurioInstalaciones> findByInstalacion(InstalacionE instalacion);
 }

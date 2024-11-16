@@ -10,6 +10,7 @@ import com.example.jurassicpark.repository.DinosaurioInstalacionRepository;
 import com.example.jurassicpark.repository.InstalacionRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -20,12 +21,15 @@ import java.util.stream.Collectors;
 public class InstalacionService {
 
     @Autowired
+    @Lazy
     private InstalacionRepository instalacionRepository;
 
     @Autowired
+    @Lazy
     private InstalacionFactory instalacionFactory;
 
     @Autowired
+    @Lazy
     private DinosaurioInstalacionRepository dinosaurioInstalacionesRepository;
 
     @PostConstruct
@@ -87,7 +91,7 @@ public class InstalacionService {
 
     private void asignarDinosaurioAInstalacionPorHabitat(String habitat, Dinos dinosaurio, String dieta) {
         // Busca una instalación compatible con el hábitat y dieta
-        InstalacionE instalacion = instalacionRepository.findByHabitatAndTipoDieta(habitat, dieta)
+        InstalacionE instalacion = instalacionRepository.findByHabitatAndDieta(habitat, dieta)
                 .orElseThrow(() -> new IllegalArgumentException("No se encontró una instalación para hábitat: " + habitat + " y dieta: " + dieta));
 
         // Verifica la compatibilidad del dinosaurio con otros en la instalación

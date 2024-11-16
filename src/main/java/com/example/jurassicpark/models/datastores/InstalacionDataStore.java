@@ -12,19 +12,23 @@ import com.example.jurassicpark.service.InstalacionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import static java.util.Arrays.stream;
 
-@Service
+@Component
 public class InstalacionDataStore {
 
     private static InstalacionDataStore instance;
 
     @Autowired
-    private static InstalacionRepository instalacionRepository;
+    @Lazy
+    private InstalacionRepository instalacionRepository;
 
     @Autowired
+    @Lazy
     private InstalacionService instalacionService;
 
       private InstalacionDataStore() {

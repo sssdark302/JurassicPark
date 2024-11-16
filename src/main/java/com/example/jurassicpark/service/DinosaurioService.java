@@ -8,6 +8,7 @@ import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.repository.DinosaurioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,16 +18,18 @@ import java.util.stream.Collectors;
 public class DinosaurioService {
 
     @Autowired
+    @Lazy
     private DinosaurioRepository dinosaurioRepository;
 
     @Autowired
+    @Lazy
     private DinosaurioFactory dinosaurioFactory;
 
 
     public Dinos crearDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo,
-                                 Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida fase, String habitat) {
+                                 Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida fase, String habitat, String dieta) {
         Dinos dinosaurio = dinosaurioFactory.crearDinosaurio(
-                tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, fase, habitat
+                tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, fase, habitat, dieta
         );
 
         return dinosaurioRepository.save(dinosaurio);

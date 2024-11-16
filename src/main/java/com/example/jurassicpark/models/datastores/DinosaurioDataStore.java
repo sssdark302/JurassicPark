@@ -2,13 +2,10 @@ package com.example.jurassicpark.models.datastores;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
-import com.example.jurassicpark.models.Dinosaurio;
 import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.models.factorias.DinosaurioFactory;
@@ -17,20 +14,23 @@ import com.example.jurassicpark.service.DinosaurioService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class DinosaurioDataStore {
 
     private static DinosaurioDataStore instance;
 
-    @Autowired
-    private DinosaurioService dinosaurioService;
+
+    private static DinosaurioService dinosaurioService;
 
     @Autowired
+    @Lazy
     private DinosaurioFactory dinosaurioFactory;
 
     @Autowired
+    @Lazy
     private static DinosaurioRepository dinosaurioRepository;
 
     private DinosaurioDataStore() {
@@ -68,9 +68,10 @@ public class DinosaurioDataStore {
                     String tipo = campos[5].trim();
                     String habitat = campos[6].trim();
                     Sexo sexo = randomSexo();
+                    String dieta = " ";
 
                     // Llamar al servicio para crear el dinosaurio
-                    dinosaurioService.crearDinosaurio(tipo, especie, 0, alturaMaxima, pesoMaximo, sexo, hpMaxima, false, FaseCicloDeVida.HUEVO, habitat);
+                    dinosaurioService.crearDinosaurio(tipo, especie, 0, alturaMaxima, pesoMaximo, sexo, hpMaxima, false, FaseCicloDeVida.HUEVO, habitat, dieta);
 
                 } catch (NumberFormatException e) {
                     System.err.println("Error en formato numérico en la línea: " + linea);
