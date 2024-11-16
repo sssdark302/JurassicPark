@@ -1,13 +1,14 @@
 package com.example.jurassicpark.service;
 
-import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
-import com.example.jurassicpark.models.Sexo;
+import com.example.jurassicpark.exceptiones.InstalacionNotFoundException;
+import com.example.jurassicpark.models.Instalacion;
 import com.example.jurassicpark.models.factorias.InstalacionFactory;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.models.entidades.DinosaurioInstalaciones;
 import com.example.jurassicpark.models.entidades.InstalacionE;
 import com.example.jurassicpark.repository.DinosaurioInstalacionRepository;
 import com.example.jurassicpark.repository.InstalacionRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,10 @@ public class InstalacionService {
 
     @Autowired
     private DinosaurioInstalacionRepository dinosaurioInstalacionesRepository;
+
+    public List<InstalacionE> listarInstalaciones() {
+        return instalacionRepository.findAll();
+    }
 
     private void guardarRelacionDinosaurioInstalacion(Dinos dinosaurio, InstalacionE instalacion) {
         DinosaurioInstalaciones relacion = new DinosaurioInstalaciones(dinosaurio, instalacion);
@@ -56,6 +61,46 @@ public class InstalacionService {
         }
         return true;
     }
+
+    public InstalacionE crearInstalacionPorTipo(String tipo) {
+        InstalacionE instalacion;
+        switch (tipo) {
+            case "Turismo":
+                instalacion = instalacionFactory.crearInstalacion(
+                        "Centro de Visitantes",
+                        100, "Turismo", 500.0,
+                        "Alta", "Centro para visitantes",
+                        10, "9:00-18:00",
+                        "Terrestre", "Omnívoro"
+                );
+                break;
+            case "Instalacion_Islas":
+                instalacion = instalacionFactory.crearInstalacion(
+                        "Isla Secundaria",
+                        200, "Instalacion_Islas",
+                        1000.0, "Alta",
+                        "Zona restringida para reproducción",
+                        15, "24 horas",
+                        "Terrestre", "Herbívoro"
+                );
+                break;
+            case "Dinosaurios_Plantas":
+                instalacion = instalacionFactory.crearInstalacion(
+                        "Zona de Herbívoros",
+                        50, "Dinosaurios_Plantas",
+                        300.0, "Media",
+                        "Zona segura para dinosaurios herbívoros",
+                        5, "8:00-17:00",
+                        "Terrestre", "Herbívoro"
+                );
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo desconocido: " + tipo);
+        }
+        instalacionRepository.save(instalacion);
+        return instalacion;
+    }
+
 
     public void crearYAlmacenarInstalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
         InstalacionE instalacionE = instalacionFactory.crearInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario, habitat, dieta);
@@ -124,7 +169,45 @@ public class InstalacionService {
 
         guardarRelacionDinosaurioInstalacion(dinosaurio, instalacion);
     }
-    private void eliminarInstalacion(String tipo) { //cambiarrlo despues
-        instalacionRepository.deleteInstalacionByTipo(tipo);
+    @PostConstruct
+    public void inicializarInstalaciones() {
+        if (instalacionRepository.count() == 0) {
+            InstalacionE centroVisitantes = new InstalacionE("Centro de Visitantes", 100, "Centro", 500.0, "Alta", "Centro de interacción con visitantes", 10, "9:00-18:00", "Terrestre", "Omnívoro");
+            InstalacionE enfermeria = new InstalacionE("Enfermería", 50, "Sanitario", 200.0, "Media", "Centro de atención para dinosaurios", 5, "8:00-17:00", "Terrestre", "Herbívoro");
+            InstalacionE laboratorio = new InstalacionE("Laboratorio de Genética", 20, "Científico", 300.0, "Alta", "Investigación genética de dinosaurios", 15, "9:00-18:00", "Terrestre", "Carnívoro");
+
+            instalacionRepository.saveAll(List.of(centroVisitantes, enfermeria, laboratorio));
+        }
+    }
+
+    public InstalacionE obtenerInstalacionPorNombre(String nombre) {
+        InstalacionE instalacion = instalacionRepository.findInstalacionByNombre(nombre);
+        if (instalacion != null) {
+            return instalacion;
+        } else {
+            throw new IllegalArgumentException("Instalación con nombre " + nombre + " no encontrada");
+        }
+    }
+
+    public InstalacionE obtenerInstalacionPorId(int id) {
+        return instalacionRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new IllegalArgumentException("Instalación con ID " + id + " no encontrada"));
+    }
+
+    public void eliminarInstalacionPorId(int id) {
+        if (instalacionRepository.existsById(String.valueOf(id))) {
+            instalacionRepository.deleteById(String.valueOf(id));
+        } else {
+            throw new IllegalArgumentException("Instalación con ID " + id + " no encontrada");
+        }
+    }
+
+    public void eliminarInstalacionPorNombre(String nombre) {
+        InstalacionE instalacion = instalacionRepository.findInstalacionByNombre(nombre);
+        if (instalacion != null) {
+            instalacionRepository.delete(instalacion);
+        } else {
+            throw new IllegalArgumentException("Instalación con nombre " + nombre + " no encontrada");
+        }
     }
 }

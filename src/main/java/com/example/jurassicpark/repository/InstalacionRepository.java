@@ -1,15 +1,15 @@
 package com.example.jurassicpark.repository;
 
-import com.example.jurassicpark.models.Instalacion;
 import com.example.jurassicpark.models.entidades.InstalacionE;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InstalacionRepository extends JpaRepository<Instalacion, String> {
-    //buscar por id, nombre, tipo
-    InstalacionE findByHabitatAndTipoDieta(String habitat, String tipoDieta);
-    InstalacionE findInstalacionById(int id);
-    InstalacionE findInstalacionByNombre(String nombre);
-    InstalacionE findInstalacionByTipo(String tipo);
-    InstalacionE deleteInstalacionByTipo(String tipo);
+import java.util.List;
 
+public interface InstalacionRepository extends JpaRepository<InstalacionE, String> {
+
+    InstalacionE findInstalacionByNombre(String nombre);
+    InstalacionE findByHabitatAndTipoDieta(String habitat, String dieta);
+    void deleteInstalacionByTipo(String tipo);
+    List<InstalacionE> findByTipo(String tipo);
+    List<InstalacionE> findByHabitat(String habitat);
 }

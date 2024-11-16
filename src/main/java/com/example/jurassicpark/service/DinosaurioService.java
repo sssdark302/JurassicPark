@@ -23,6 +23,10 @@ public class DinosaurioService {
     @Autowired
     private InstalacionService instalacionService;
 
+    public List<Dinos> listarDinosaurios() {
+        return dinosaurioRepository.findAll();
+    }
+
     public void crearYAlmacenarDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida, String habitat) {
         Dinos dinosaurio = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, faseCicloDeVida, habitat);
         dinosaurioRepository.save(dinosaurio);
@@ -32,9 +36,18 @@ public class DinosaurioService {
     private void enviarDinosaurioAInstalacion(Dinos dinosaurio) {
         instalacionService.asignarDinosaurioAInstalacion(dinosaurio);
     }
+    public Dinos buscarDinosaurioPorId(int id) {
+        return (Dinos) dinosaurioRepository.findDinosaurioById(id);
+    }
+
     public void eliminarDinosaurio(Dinos dinosaurio) {
         dinosaurioRepository.delete(dinosaurio);
     }
+
+    public void eliminarDinosaurioPorId(int id) {
+        dinosaurioRepository.deleteById(id);
+    }
+
     public List<Dinos> buscarDinosauriosPorFaseYEspecie(FaseCicloDeVida fase, String especie) {
         return dinosaurioRepository.findByFaseCicloDeVidaAndEspecie(fase, especie);
     }
