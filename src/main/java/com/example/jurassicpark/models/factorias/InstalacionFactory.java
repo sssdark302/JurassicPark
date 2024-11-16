@@ -1,7 +1,6 @@
 package com.example.jurassicpark.models.factorias;
 
 import com.example.jurassicpark.models.entidades.InstalacionE;
-import com.example.jurassicpark.service.InstalacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -13,19 +12,19 @@ public class InstalacionFactory {
     @Lazy
     private DinosauriosPlantasFactory dinosauriosPlantasFactory;
 
+    public InstalacionE crearInstalacion(String nombre, int capacidad, double terreno, String seguridad, String descripcion, int personal, String horario, String tipo) {
 
-    public InstalacionE crearInstalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad,
-                                         String descripcion, int personal, String horario, String habitat, String dieta) {
+        InstalacionE nuevaInstalacion;
 
-        InstalacionE nuevaInstalacion = new InstalacionE(
-                nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario, habitat, dieta
-        );
         if ("Dinosaurios_Plantas".equals(tipo)) {
-            dinosauriosPlantasFactory.crearInstalacionDinosauriosPlantas(
-                    nombre, capacidad, terreno, seguridad, descripcion, personal, horario, habitat, dieta
+            nuevaInstalacion = dinosauriosPlantasFactory.crearInstalacionDinosauriosPlantas(
+                    nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipo);
+        } else {
+            nuevaInstalacion = new InstalacionE(
+                    nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipo
             );
         }
+
         return nuevaInstalacion;
     }
 }
-

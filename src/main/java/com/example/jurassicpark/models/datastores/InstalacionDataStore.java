@@ -1,69 +1,58 @@
 package com.example.jurassicpark.models.datastores;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.example.jurassicpark.models.entidades.InstalacionE;
-import com.example.jurassicpark.repository.InstalacionRepository;
 import com.example.jurassicpark.service.InstalacionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import static java.util.Arrays.stream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class InstalacionDataStore {
 
-    private static InstalacionDataStore instance;
-
-    @Autowired
-    @Lazy
-    private InstalacionRepository instalacionRepository;
+    private final List<InstalacionE> instalaciones = new ArrayList<>();
 
     @Autowired
     @Lazy
     private InstalacionService instalacionService;
 
-      private InstalacionDataStore() {
-        cargarDatosCSV("data/datos-instalaciones.csv");
+    @PostConstruct
+    public void init() {
+        String rutaCSV = "data/datos-instalaciones.csv";
+        instalacionService.cargarDatosCSV(rutaCSV);
     }
 
-    public static synchronized InstalacionDataStore getInstance() {
-        if (instance == null) {
-            instance = new InstalacionDataStore();
-        }
-        return instance;
+    public List<InstalacionE> getInstalaciones() {
+        return new ArrayList<>(instalaciones);
     }
 
-    public void cargarDatosCSV(String rutaCSV) {
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
-            String linea;
-            br.readLine(); // Saltar encabezado
-            while ((linea = br.readLine()) != null) {
-                String[] campos = linea.split(",");
-               instalacionService.crearInstalacion(campos[0], Integer.parseInt(campos[1]), campos[2], Double.parseDouble(campos[3]), campos[4],
-                        campos[5], Integer.parseInt(campos[6]), campos[7], campos[8], campos[9]);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<InstalacionE> getInstalacionesPorTipo(String tipo) {
+        return instalaciones.stream()
+                .filter(instalacion -> instalacion.getTipo().equalsIgnoreCase(tipo))
+                .collect(Collectors.toList());
     }
 
     public String getAllInstalacionesAsJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.writeValueAsString(instalacionRepository.findAll());
+            return mapper.writeValueAsString(instalaciones);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "{}";
         }
     }
 
+    public void agregarInstalacion(InstalacionE instalacion) {
+        instalaciones.add(instalacion); // Agregar la instalación a la lista en memoria
+    }
+
+    public void eliminarInstalacion(InstalacionE instalacion) {
+        instalaciones.remove(instalacion); // Eliminar la instalación de la lista en memoria
+    }
 }

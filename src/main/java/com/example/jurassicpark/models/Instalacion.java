@@ -1,48 +1,65 @@
 package com.example.jurassicpark.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Instalacion {
+@MappedSuperclass
+public abstract class Instalacion {
 
+    @Column(nullable = false)
     protected String nombre;
-    protected int capacidad;
-    protected String tipo;
-    protected double terreno;
-    protected String seguridad;
-    protected String descripcion;
-    protected int personal;
-    protected String horario;
-    protected String habitat;
-    protected String dieta;
 
-    public Instalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
+    @Column(nullable = false)
+    protected int capacidad;
+
+    @Column(nullable = false)
+    protected double terreno;
+
+    @Column(nullable = false)
+    protected String seguridad;
+
+    @Column(nullable = false)
+    protected String descripcion;
+
+    @Column(nullable = false)
+    protected int personal;
+
+    @Column(nullable = false)
+    protected String horario;
+
+    @Column(nullable = false)
+    protected String tipo;
+
+    public Instalacion(String nombre, int capacidad, double terreno, String seguridad, String descripcion, int personal, String horario, String tipo) {
         this.nombre = nombre;
         this.capacidad = capacidad;
-        this.tipo = tipo;
         this.terreno = terreno;
-        this.seguridad = seguridad != null ? seguridad : "Media";
+        this.seguridad = seguridad;
         this.descripcion = descripcion;
         this.personal = personal;
         this.horario = horario;
-        this.habitat = habitat;
-        this.dieta = dieta;
+        this.tipo = tipo;
     }
+
+    public Instalacion() {
+        // Constructor vacío requerido por JPA
+    }
+
     @Override
     public String toString() {
         return "Instalacion{" +
                 "nombre='" + nombre + '\'' +
                 ", capacidad=" + capacidad +
-                ", tipo='" + tipo + '\'' +
                 ", terreno=" + terreno +
                 ", seguridad='" + seguridad + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", personal=" + personal +
                 ", horario='" + horario + '\'' +
-                ", habitat='" + habitat + '\'' +
-                ", dieta='" + dieta + '\'' +
+                ", tipo='" + tipo + '\'' +
                 '}';
     }
 }

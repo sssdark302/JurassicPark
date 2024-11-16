@@ -2,139 +2,132 @@ package com.example.jurassicpark.ciclodevida;
 
 import com.example.jurassicpark.models.Dinosaurio;
 import com.example.jurassicpark.models.entidades.Dinos;
+import com.example.jurassicpark.models.entidades.DinosaurioInstalaciones;
+import com.example.jurassicpark.models.entidades.InstalacionE;
 import com.example.jurassicpark.models.factorias.DinosaurioFactory;
 import com.example.jurassicpark.models.Sexo;
+import com.example.jurassicpark.repository.DinosaurioInstalacionRepository;
 import com.example.jurassicpark.repository.DinosaurioRepository;
+import com.example.jurassicpark.service.DinosaurioInstalacionService;
 import com.example.jurassicpark.service.DinosaurioService;
 import jakarta.annotation.PreDestroy;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GestorCV implements CiclodeVida {
 
-    //intentar meter las fases de los dinos en una bdd que se relacione con el id, para que no se pierda la info
-    private Map<Dinosaurio, FaseCicloDeVida> fasesDinosaurios = new HashMap<>();
-    Scanner scanner = new Scanner(System.in);
-    private ExecutorService executorService = Executors.newCachedThreadPool();
+    private Map<Integer, FaseCicloDeVida> fasesDinosaurios = new ConcurrentHashMap<>();
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 
     @Autowired
+    @Lazy
     private DinosaurioFactory dinosaurioFactory;
 
     @Autowired
+    @Lazy
     private DinosaurioService dinosaurioService;
 
     @Autowired
-    private DinosaurioRepository dinosaurioRepository;
+    @Lazy
+    private DinosaurioInstalacionRepository dinosaurioInstalacionRepository;
 
+    @Autowired
+    @Lazy
+    private DinosaurioInstalacionService dinosaurioInstalacionService;
 
     public FaseCicloDeVida obtenerFase(Dinos dinosaurio) {
-        return fasesDinosaurios.getOrDefault(dinosaurio, FaseCicloDeVida.HUEVO);
+        return fasesDinosaurios.getOrDefault(dinosaurio.getId(), FaseCicloDeVida.HUEVO);
     }
 
     public void iniciarCiclo(Dinos dinosaurio) {
         dinosaurio.setEdad(0);
-        dinosaurio.setAltura_maxima(0);
-        dinosaurio.setPeso_maximo(0);
-        dinosaurio.setHp_maxima(0);
-        fasesDinosaurios.put(dinosaurio, FaseCicloDeVida.HUEVO);
+        dinosaurio.setAlturamaxima(0);
+        dinosaurio.setPesomaximo(0);
+        dinosaurio.setHpmaxima(0);
+        fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.HUEVO);
         System.out.println("Iniciando ciclo de vida para " + dinosaurio.getEspecie() + "...");
-        executorService.submit(() -> ejecutarCicloDeVida(dinosaurio));
+        scheduler.scheduleAtFixedRate(() -> avanzarFase(dinosaurio), 0, 2, TimeUnit.SECONDS);
     }
 
-    private void ejecutarCicloDeVida(Dinos dinosaurio) {
-        try {
-            while (fasesDinosaurios.get(dinosaurio) != FaseCicloDeVida.MUERTE && !Thread.currentThread().isInterrupted()) {
-                avanzarFase(dinosaurio);
-                Thread.sleep(2000); // Simulación de espera entre fases
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } finally {
-            TerminarCiclo(dinosaurio);
-        }
-    }
+    private void avanzarFase(Dinos dinosaurio) {
+        FaseCicloDeVida faseActual = fasesDinosaurios.get(dinosaurio.getId());
 
-    public void avanzarFase(Dinos dinosaurio) {
-        FaseCicloDeVida faseActual = fasesDinosaurios.get(dinosaurio);
+        if (faseActual == null) return; // El dinosaurio podría haber sido eliminado
 
         switch (faseActual) {
             case HUEVO -> {
-                fasesDinosaurios.put(dinosaurio, FaseCicloDeVida.NACIMIENTO);
+                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.NACIMIENTO);
             }
             case NACIMIENTO -> {
-                fasesDinosaurios.put(dinosaurio, FaseCicloDeVida.CRECIMIENTO);
+                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.CRECIMIENTO);
                 dinosaurio.setEdad(1);
-                dinosaurio.setAltura_maxima(dinosaurio.getAltura_maxima() * 0.25);
-                dinosaurio.setPeso_maximo((int) (dinosaurio.getPeso_maximo() * 0.25));
-                dinosaurio.setHp_maxima(dinosaurio.getHp_maxima() * 0.25);
+                dinosaurio.setAlturamaxima(dinosaurio.getAlturamaxima() * 0.25);
+                dinosaurio.setPesomaximo((int) (dinosaurio.getPesomaximo() * 0.25));
+                dinosaurio.setHpmaxima(dinosaurio.getHpmaxima() * 0.25);
             }
             case CRECIMIENTO -> {
-                fasesDinosaurios.put(dinosaurio, FaseCicloDeVida.REPRODUCCION);
-                dinosaurio.setEdad( new Random().nextInt(5-9));
-                dinosaurio.setAltura_maxima(dinosaurio.getAltura_maxima() * 0.75);
-                dinosaurio.setPeso_maximo((int) (dinosaurio.getPeso_maximo() * 0.75));
-                dinosaurio.setHp_maxima(dinosaurio.getHp_maxima() * 0.75);
+                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.REPRODUCCION);
+                dinosaurio.setEdad(new Random().nextInt(5) + 5); // Edad entre 5 y 10
             }
             case REPRODUCCION -> {
                 System.out.println("El dinosaurio " + dinosaurio.getEspecie() + " está en la fase de reproducción.");
-                dinosaurio.setEdad( new Random().nextInt(10-20));
-                dinosaurio.setAltura_maxima(dinosaurio.getAltura_maxima() * 0.75);
-                dinosaurio.setPeso_maximo((int) (dinosaurio.getPeso_maximo() * 0.75));
-                dinosaurio.setHp_maxima(dinosaurio.getHp_maxima() * 0.75);
-
                 buscarParejaYDarloOportunidadDeReproduccion(dinosaurio);
-                fasesDinosaurios.put(dinosaurio, FaseCicloDeVida.ADULTO);
+                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.ADULTO);
             }
             case ADULTO -> {
-                fasesDinosaurios.put(dinosaurio, FaseCicloDeVida.MUERTE);
+                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.MUERTE);
             }
             case MUERTE -> TerminarCiclo(dinosaurio);
         }
     }
 
     public void TerminarCiclo(Dinos dinosaurio) {
-        fasesDinosaurios.remove(dinosaurio);
+        fasesDinosaurios.remove(dinosaurio.getId());
         dinosaurioService.eliminarDinosaurio(dinosaurio);
     }
 
-    public boolean verificarReproduccion(Dinosaurio dinosaurio1, Dinosaurio dinosaurio2) {
+    public boolean verificarReproduccion(Dinos dinosaurio1, Dinos dinosaurio2) {
         return obtenerFase((Dinos) dinosaurio1) == FaseCicloDeVida.REPRODUCCION &&
                 obtenerFase((Dinos) dinosaurio2) == FaseCicloDeVida.REPRODUCCION &&
                 dinosaurio1.getSexo() != dinosaurio2.getSexo() &&
                 dinosaurio1.getEspecie().equals(dinosaurio2.getEspecie()) &&
-                !dinosaurio1.getTuvoHijos() && !dinosaurio2.getTuvoHijos();
+                !dinosaurio1.isTuvoHijos() && !dinosaurio2.isTuvoHijos();
     }
-    private void buscarParejaYDarloOportunidadDeReproduccion(Dinosaurio dinosaurio) {
+
+    private void buscarParejaYDarloOportunidadDeReproduccion(Dinos dinosaurio) {
         System.out.println("Buscando pareja para " + dinosaurio.getEspecie() + "...");
 
-        //SE BUSCA EN LA INSTALACION EN LA QUE ESTA EL DINOSAURIO
-        List<Dinos> candidatos = dinosaurioService.buscarDinosauriosPorFaseYEspecie(FaseCicloDeVida.REPRODUCCION, dinosaurio.getEspecie());
+        // Obtener la instalación del dinosaurio desde el repositorio
+        DinosaurioInstalaciones relacionActual = dinosaurioInstalacionRepository.findByDinosaurio(dinosaurio)
+                .orElseThrow(() -> new IllegalArgumentException("El dinosaurio no está asignado a ninguna instalación"));
 
-        for (Dinos candidato : candidatos) {
-            // Evitar reproducirse con uno mismo
-            if (candidato.equals(dinosaurio)) {
-                continue;
-            }
+        InstalacionE instalacion = relacionActual.getInstalacion();
 
-            // Verificar condiciones de reproducción
-            if (verificarReproduccion(dinosaurio, candidato)) {
-                intentarReproduccion(dinosaurio, candidato);
-                return; // Salir después de encontrar una pareja compatible
-            }
+        // Filtrar los candidatos dentro de la misma instalación
+        List<Dinos> candidatos = dinosaurioInstalacionRepository.findByInstalacion(instalacion)
+                .stream()
+                .map(DinosaurioInstalaciones::getDinosaurio)
+                .filter(d -> !d.equals(dinosaurio) && verificarReproduccion(dinosaurio, d))
+                .collect(Collectors.toList());
+
+        if (candidatos.isEmpty()) {
+            System.out.println("No se encontró pareja compatible para " + dinosaurio.getEspecie() + ".");
+            return;
         }
 
-        System.out.println("No se encontró pareja compatible para " + dinosaurio.getEspecie() + ".");
+        // Intentar reproducción con el primer candidato compatible
+        intentarReproduccion(dinosaurio, candidatos.get(0));
     }
 
-    public void intentarReproduccion(Dinosaurio dinosaurio1, Dinosaurio dinosaurio2) {
+
+    public void intentarReproduccion(Dinos dinosaurio1, Dinos dinosaurio2) {
         if (verificarReproduccion(dinosaurio1, dinosaurio2)) {
             double probabilidadRepro = (Math.random() * 100) + 1;
             if (probabilidadRepro >= 29) {
@@ -145,16 +138,17 @@ public class GestorCV implements CiclodeVida {
                 System.out.println("No se ha podido realizar la reproducción debido a baja probabilidad.");
             }
         } else {
-            System.out.println("Los dinosaurios no cumplen con las condiciones para reproducirse. Asegúrate de que ambos estén en fase REPRODUCCION.");
+            System.out.println("Los dinosaurios no cumplen con las condiciones para reproducirse.");
         }
     }
 
-    @SneakyThrows
-    public void reproducirse(Dinosaurio dinosaurio1, Dinosaurio dinosaurio2) {
+    public void reproducirse(Dinos dinosaurio1, Dinos dinosaurio2) {
         System.out.println("Reproduciendo dinosaurios " + dinosaurio1.getEspecie() + " y " + dinosaurio2.getEspecie() + "...");
+
         Sexo sexo = new Random().nextBoolean() ? Sexo.MACHO : Sexo.HEMBRA;
 
-        Dinosaurio nuevoDino = dinosaurioFactory.crearDinosaurio(
+        // Crear el nuevo dinosaurio
+        Dinos nuevoDino = dinosaurioFactory.crearDinosaurio(
                 dinosaurio1.getTipo(),
                 dinosaurio1.getEspecie(),
                 0,  // Edad inicial
@@ -163,30 +157,36 @@ public class GestorCV implements CiclodeVida {
                 sexo,
                 0,  // HP inicial
                 false,  // Tuvo hijos
-                FaseCicloDeVida.HUEVO,
-                dinosaurio1.getHabitat(),
-                dinosaurio1.getDieta()
+                FaseCicloDeVida.HUEVO
         );
-        dinosaurioRepository.save((Dinos) nuevoDino);
+
+        // Obtener la instalación del primer padre
+        DinosaurioInstalaciones relacionPadre = dinosaurioInstalacionRepository.findByDinosaurio(dinosaurio1)
+                .orElseThrow(() -> new IllegalArgumentException("El dinosaurio no está asignado a ninguna instalación"));
+
+        // Asignar el nuevo dinosaurio a la misma instalación
+        dinosaurioInstalacionService.guardarRelacionDinosaurioInstalacion(nuevoDino, relacionPadre.getInstalacion());
         System.out.printf("Dinosaurio %s creado con éxito en fase HUEVO.\n", nuevoDino.getEspecie());
     }
 
+
+
     @PreDestroy
     public void shutdown() {
-        executorService.shutdown();
+        scheduler.shutdown();
         try {
-            if (!executorService.awaitTermination(120, TimeUnit.SECONDS)) {
-                executorService.shutdownNow();
+            if (!scheduler.awaitTermination(120, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
             }
         } catch (InterruptedException ex) {
-            executorService.shutdownNow();
+            scheduler.shutdownNow();
             Thread.currentThread().interrupt();
         }
     }
 
     @Override
     public void huevo() {
-        System.out.println("Se esta desarrollando un huevo.");
+        System.out.println("Se está desarrollando un huevo.");
     }
 
     @Override
@@ -214,4 +214,3 @@ public class GestorCV implements CiclodeVida {
         System.out.println("El dinosaurio ha muerto.");
     }
 }
-

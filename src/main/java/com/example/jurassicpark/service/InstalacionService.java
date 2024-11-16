@@ -1,10 +1,6 @@
 package com.example.jurassicpark.service;
 
-import com.example.jurassicpark.models.datastores.DinosaurioDataStore;
-import com.example.jurassicpark.models.datastores.InstalacionDataStore;
 import com.example.jurassicpark.models.factorias.InstalacionFactory;
-import com.example.jurassicpark.models.entidades.Dinos;
-import com.example.jurassicpark.models.entidades.DinosaurioInstalaciones;
 import com.example.jurassicpark.models.entidades.InstalacionE;
 import com.example.jurassicpark.repository.DinosaurioInstalacionRepository;
 import com.example.jurassicpark.repository.InstalacionRepository;
@@ -13,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,14 +33,44 @@ public class InstalacionService {
     @PostConstruct
     public void inicializarInstalacionesPorDefecto() {
         if (instalacionRepository.count() == 0) {
-            guardarInstalacion(new InstalacionE("Centro de Visitantes", 100, "Centro", 500.0, "Alta",
-                    "Centro de interacción con visitantes", 10, "9:00-18:00", "Terrestre", "Omnívoro"));
-            guardarInstalacion(new InstalacionE("Enfermería", 50, "Sanitario", 200.0, "Media",
-                    "Centro de atención para dinosaurios", 5, "8:00-17:00", "Terrestre", "Herbívoro"));
-            guardarInstalacion(new InstalacionE("Laboratorio de Genética", 20, "Científico", 300.0, "Alta",
-                    "Investigación genética de dinosaurios", 15, "9:00-18:00", "Terrestre", "Carnívoro"));
+            // Creación de instalaciones predeterminadas
+            InstalacionE centroVisitantes = new InstalacionE();
+            centroVisitantes.setNombre("Centro de Visitantes");
+            centroVisitantes.setCapacidad(100);
+            centroVisitantes.setTerreno(500.0);
+            centroVisitantes.setSeguridad("Alta");
+            centroVisitantes.setDescripcion("Centro de interacción con visitantes");
+            centroVisitantes.setPersonal(10);
+            centroVisitantes.setHorario("9:00-18:00");
+            centroVisitantes.setTipo("Centro");
+
+            InstalacionE enfermeria = new InstalacionE();
+            enfermeria.setNombre("Enfermería");
+            enfermeria.setCapacidad(50);
+            enfermeria.setTerreno(200.0);
+            enfermeria.setSeguridad("Media");
+            enfermeria.setDescripcion("Centro de atención para dinosaurios");
+            enfermeria.setPersonal(5);
+            enfermeria.setHorario("8:00-17:00");
+            enfermeria.setTipo("Sanitario");
+
+            InstalacionE laboratorioGenetica = new InstalacionE();
+            laboratorioGenetica.setNombre("Laboratorio de Genética");
+            laboratorioGenetica.setCapacidad(20);
+            laboratorioGenetica.setTerreno(300.0);
+            laboratorioGenetica.setSeguridad("Alta");
+            laboratorioGenetica.setDescripcion("Investigación genética de dinosaurios");
+            laboratorioGenetica.setPersonal(15);
+            laboratorioGenetica.setHorario("9:00-18:00");
+            laboratorioGenetica.setTipo("Científico");
+
+            // Guardar instalaciones en la base de datos
+            guardarInstalacion(centroVisitantes);
+            guardarInstalacion(enfermeria);
+            guardarInstalacion(laboratorioGenetica);
         }
     }
+
     public void guardarInstalacion(InstalacionE instalacion) {
         instalacionRepository.save(instalacion);
     }
@@ -51,63 +79,10 @@ public class InstalacionService {
         return instalacionRepository.findAll();
     }
 
-    public InstalacionE crearInstalacion(String nombre, int capacidad, String tipo, double terreno,String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
-        InstalacionE instalacionE = instalacionFactory.crearInstalacion(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario, habitat, dieta);
+    public InstalacionE crearInstalacion(String nombre, int capacidad, double terreno, String seguridad, String descripcion, int personal, String horario, String tipo) {
+        InstalacionE instalacionE = instalacionFactory.crearInstalacion(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipo);
+        guardarInstalacion(instalacionE);
         return instalacionE;
-    }
-
-    private boolean puedenCoexistir(Dinos dino1, Dinos dino2) {
-        if (dino1.getTipo().equals("Carnivoro") && dino2.getTipo().equals("Herbivoro")) {
-            return false;
-        }
-        if (dino1.getTipo().equals("Herbivoro") && dino2.getTipo().equals("Carnivoro")) {
-            return false;
-        }
-        return true;
-    }
-
-    // Verificar compatibilidad
-    private boolean verificarCompatibilidadConInstalacion(Dinos dinosaurio, InstalacionE instalacion) {
-        List<DinosaurioInstalaciones> relaciones = dinosaurioInstalacionesRepository.findByInstalacion(instalacion);
-
-        for (DinosaurioInstalaciones relacion : relaciones) {
-            Dinos dinoExistente = relacion.getDinosaurio();
-
-            // Reglas de coexistencia
-            if (!puedenCoexistir(dinosaurio, dinoExistente)) {
-                System.out.println("Incompatibilidad detectada con dinosaurio existente: " + dinoExistente.getEspecie());
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public void guardarRelacionDinosaurioInstalacion(Dinos dinosaurio, InstalacionE instalacion) {
-        DinosaurioInstalaciones relacion = new DinosaurioInstalaciones(dinosaurio, instalacion);
-        dinosaurioInstalacionesRepository.save(relacion);
-        System.out.println("Dinosaurio " + dinosaurio.getEspecie() + " asignado a la instalación: " + instalacion.getNombre());
-    }
-
-    private void asignarDinosaurioAInstalacionPorHabitat(String habitat, Dinos dinosaurio, String dieta) {
-        // Busca una instalación compatible con el hábitat y dieta
-        InstalacionE instalacion = instalacionRepository.findByHabitatAndDieta(habitat, dieta)
-                .orElseThrow(() -> new IllegalArgumentException("No se encontró una instalación para hábitat: " + habitat + " y dieta: " + dieta));
-
-        // Verifica la compatibilidad del dinosaurio con otros en la instalación
-        if (!verificarCompatibilidadConInstalacion(dinosaurio, instalacion)) {
-            throw new IllegalArgumentException("La instalación ya contiene dinosaurios incompatibles");
-        }
-
-        // Guarda la relación dinosaurio-instalación
-        guardarRelacionDinosaurioInstalacion(dinosaurio, instalacion);
-    }
-
-    public void asignarDinosaurioAInstalacion(Dinos dinosaurio) {
-        String habitat = dinosaurio.getHabitat();
-        String dieta = dinosaurio.getTipo();
-
-        asignarDinosaurioAInstalacionPorHabitat(habitat, dinosaurio, dieta);
     }
 
     public void eliminarInstalacionPorId(int id) {
@@ -117,36 +92,51 @@ public class InstalacionService {
             throw new IllegalArgumentException("Instalación con ID " + id + " no encontrada.");
         }
     }
+    public void cargarDatosCSV(String rutaCSV) {
+        int lineasProcesadas = 0;
+        int errores = 0;
 
-    public void inicializarDinosauriosParaInstalacion(InstalacionE instalacion, String habitat, String dieta) {
-        System.out.println("Inicializando dinosaurios para la instalación: " + instalacion.getNombre());
-        int numeroDinosaurios = 2;
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
+            String linea;
+            String encabezado = br.readLine(); // Leer encabezado y descartarlo
+            if (encabezado == null || encabezado.isEmpty()) {
+                throw new IOException("El archivo CSV está vacío o no tiene encabezado.");
+            }
 
-        // en el data store se filtran los dinosaurios por habitat y dieta
-        List<Dinos> dinosauriosCompatibles = DinosaurioDataStore.getInstance()
-                .getDinosauriosPorHabitatYDieta(habitat, dieta);
+            while ((linea = br.readLine()) != null) {
+                String[] campos = linea.split(",");
+                if (campos.length < 8) {
+                    System.err.println("Línea inválida en CSV (menos de 8 campos): " + linea);
+                    errores++;
+                    continue;
+                }
 
-        if (dinosauriosCompatibles.size() < numeroDinosaurios) {
-            throw new IllegalArgumentException("No hay suficientes dinosaurios compatibles para hábitat: " + habitat + " y dieta: " + dieta);
+                try {
+                    String nombre = campos[0].trim();
+                    int capacidad = Integer.parseInt(campos[1].trim());
+                    String tipo = campos[2].trim();
+                    double terreno = Double.parseDouble(campos[3].trim());
+                    String seguridad = campos[4].trim();
+                    String descripcion = campos[5].trim();
+                    int personal = Integer.parseInt(campos[6].trim());
+                    String horario = campos[7].trim();
+
+                    // Crear la instalación usando los datos del CSV
+                    crearInstalacion(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipo);
+
+                    lineasProcesadas++;
+                } catch (Exception e) {
+                    System.err.println("Error al procesar la línea: " + linea);
+                    e.printStackTrace();
+                    errores++;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo CSV: " + rutaCSV);
+            e.printStackTrace();
         }
-
-        // se vuelve a filtrar por dieta y se limita al número de dinosaurios requeridos
-        List<Dinos> dinosauriosFiltrados = dinosauriosCompatibles.stream()
-                .filter(dino -> dino.getTipo().equalsIgnoreCase(dieta))
-                .limit(numeroDinosaurios)
-                .collect(Collectors.toList());
-
-        if (dinosauriosFiltrados.isEmpty()) {
-            throw new IllegalArgumentException("No hay dinosaurios con la dieta: " + dieta + " en el hábitat: " + habitat);
-        }
-
-        // ahora se inicializan
-        for (Dinos dinosaurio : dinosauriosFiltrados) {
-            guardarRelacionDinosaurioInstalacion(dinosaurio, instalacion);
-            System.out.println("Dinosaurio " + dinosaurio.getEspecie() + " asignado a la instalación " + instalacion.getNombre());
-        }
+        System.out.println("Carga completada. Líneas procesadas: " + lineasProcesadas + ", Errores: " + errores);
     }
-
     public List<String> getTiposInstalaciones() {
         List<InstalacionE> instalaciones = instalacionRepository.findAll();
         return instalaciones.stream()

@@ -10,9 +10,7 @@ import java.util.List;
 
 public interface DinosaurioRepository extends JpaRepository<Dinos,Integer> {
 
-    Dinos findDinosaurioByEspecie(String especie);
-    Dinos findDinosaurioByTipo(String tipo);
-    Dinos findDinosaurioById(int id);
+    List<Dinos> findByTipo(String tipo);
     @Query("SELECT d FROM Dinos d WHERE d.faseCicloDeVida = :fase AND d.especie = :especie")
     List<Dinos> findByFaseCicloDeVidaAndEspecie(@Param("fase") FaseCicloDeVida fase, @Param("especie") String especie);;
 }

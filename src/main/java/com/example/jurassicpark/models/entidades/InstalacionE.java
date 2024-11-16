@@ -1,8 +1,16 @@
 package com.example.jurassicpark.models.entidades;
 
 import com.example.jurassicpark.models.Instalacion;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "instalaciones")
 public class InstalacionE extends Instalacion {
@@ -11,48 +19,11 @@ public class InstalacionE extends Instalacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "nombre")
-    private String nombre;
-
-    @Column(name = "capacidad")
-    private int capacidad;
-
-    @Column(name = "tipo")
-    private String tipo;
-
-    @Column(name = "terreno")
-    private double terreno;
-
-    @Column(name = "seguridad")
-    private String seguridad;
-
-    @Column(name = "descripcion")
-    private String descripcion;
-
-    @Column(name = "personal")
-    private int personal;
-
-    @Column(name = "horario")
-    private String horario;
-
-    @Column(name = "habitat")
-    private String habitat;
-
-    @Column(name = "dieta")
-    private String dieta;
-
-    public InstalacionE(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
-        super(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario, habitat, dieta);
+    public InstalacionE(String nombre, int capacidad, double terreno, String seguridad, String descripcion, int personal, String horario, String tipo) {
+        super(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipo);
     }
 
     public InstalacionE() {
-        super(null, 0, null, 0, null, null, 0, null, null, null);
-    }
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        super();
     }
 }

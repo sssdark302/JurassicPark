@@ -1,43 +1,61 @@
 package com.example.jurassicpark.models;
 
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class Dinosaurio {
+@Setter
+@MappedSuperclass
+public abstract class Dinosaurio {
 
+    @Column(name = "especie", nullable = false)
     protected String especie;
-    protected int edad;
-    protected double altura_maxima;
-    protected int peso_maximo;
-    protected double hp_maxima;
-    protected Sexo sexo;
-    protected boolean tuvoHijos;
-    protected String tipo; // Dieta
-    protected FaseCicloDeVida faseCicloDeVida;
-    protected String habitat;
 
-    public Dinosaurio(String especie, int edad, double altura_maxima, int peso_maximo, Sexo sexo, double hp_maxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida, String habitat, String tipo) {
+    @Column(name= "edad")
+    protected int edad;
+
+    @Column(name = "alturamaxima", nullable = false)
+    protected double alturamaxima;
+
+    @Column(name = "pesomaximo")
+    protected int pesomaximo;
+
+    @Column(name = "hpmaxima")
+    protected double hpmaxima;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sexo", nullable = false)
+    protected Sexo sexo;
+
+    @Column(nullable = false)
+    protected String tipo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "faseciclodevida")
+    protected FaseCicloDeVida faseCicloDeVida;
+
+    @Column(name = "tuvohijos")
+    protected boolean tuvoHijos;
+
+    public Dinosaurio(String especie, int edad, double alturamaxima, int pesomaximo, Sexo sexo, double hpmaxima, String tipo, FaseCicloDeVida faseCicloDeVida, boolean tuvoHijos) {
         this.especie = especie;
         this.edad = edad;
-        this.altura_maxima = altura_maxima;
-        this.peso_maximo = peso_maximo;
-        this.hp_maxima = hp_maxima;
+        this.alturamaxima = alturamaxima;
+        this.pesomaximo = pesomaximo;
+        this.hpmaxima = hpmaxima;
         this.sexo = sexo;
-        this.tuvoHijos = tuvoHijos;
-        this.faseCicloDeVida = faseCicloDeVida;
-        this.habitat = habitat;
         this.tipo = tipo;
-    }
-
-    public boolean getTuvoHijos() {
-        return tuvoHijos;
-    }
-
-    public void setTuvoHijos(boolean tuvoHijos) {
+        this.faseCicloDeVida = faseCicloDeVida;
         this.tuvoHijos = tuvoHijos;
+    }
+
+    public Dinosaurio() {
+        // Constructor vacío necesario para JPA
     }
 
     public String getEspecie() {
@@ -56,28 +74,28 @@ public class Dinosaurio {
         this.edad = edad;
     }
 
-    public double getAltura_maxima() {
-        return altura_maxima;
+    public double getAlturamaxima() {
+        return alturamaxima;
     }
 
-    public void setAltura_maxima(double altura_maxima) {
-        this.altura_maxima = altura_maxima;
+    public void setAlturamaxima(double alturamaxima) {
+        this.alturamaxima = alturamaxima;
     }
 
-    public int getPeso_maximo() {
-        return peso_maximo;
+    public int getPesomaximo() {
+        return pesomaximo;
     }
 
-    public void setPeso_maximo(int peso_maximo) {
-        this.peso_maximo = peso_maximo;
+    public void setPesomaximo(int pesomaximo) {
+        this.pesomaximo = pesomaximo;
     }
 
-    public double getHp_maxima() {
-        return hp_maxima;
+    public double getHpmaxima() {
+        return hpmaxima;
     }
 
-    public void setHp_maxima(double hp_maxima) {
-        this.hp_maxima = hp_maxima;
+    public void setHpmaxima(double hpmaxima) {
+        this.hpmaxima = hpmaxima;
     }
 
     public Sexo getSexo() {
@@ -86,10 +104,6 @@ public class Dinosaurio {
 
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
-    }
-
-    public boolean isTuvoHijos() {
-        return tuvoHijos;
     }
 
     public String getTipo() {
@@ -108,12 +122,12 @@ public class Dinosaurio {
         this.faseCicloDeVida = faseCicloDeVida;
     }
 
-    public String getHabitat() {
-        return habitat;
+    public boolean isTuvoHijos() {
+        return tuvoHijos;
     }
 
-    public void setHabitat(String habitat) {
-        this.habitat = habitat;
+    public void setTuvoHijos(boolean tuvoHijos) {
+        this.tuvoHijos = tuvoHijos;
     }
 
     @Override
@@ -121,17 +135,11 @@ public class Dinosaurio {
         return "Dinosaurio{" +
                 "especie='" + especie + '\'' +
                 ", edad=" + edad +
-                ", altura_maxima=" + altura_maxima +
-                ", peso_maximo=" + peso_maximo +
-                ", hp_maxima=" + hp_maxima +
+                ", alturamaxima=" + alturamaxima +
+                ", pesomaximo=" + pesomaximo +
+                ", hpmaxima=" + hpmaxima +
                 ", sexo=" + sexo +
-                ", tuvoHijos=" + tuvoHijos +
-                ", tipo='" + tipo + '\'' +
-                ", faseCicloDeVida=" + faseCicloDeVida +
-                ", habitat='" + habitat + '\'' +
+                ", tipo='" + tipo + ", tuvoHijos=" + tuvoHijos + ", faseCicloDeVida=" + faseCicloDeVida + '\''+
                 '}';
-    }
-    public String getDieta(){
-        return tipo;
     }
 }
