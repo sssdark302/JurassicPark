@@ -1,12 +1,15 @@
 package com.example.jurassicpark.service;
 
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
+import com.example.jurassicpark.models.Dinosaurio;
 import com.example.jurassicpark.models.factorias.DinosaurioFactory;
 import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.repository.DinosaurioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DinosaurioService {
@@ -27,18 +30,13 @@ public class DinosaurioService {
     }
 
     private void enviarDinosaurioAInstalacion(Dinos dinosaurio) {
-        switch (dinosaurio.getTipo()) {
-            case "Carnivoro":
-                instalacionService.asignarDinosaurioAInstalacion(dinosaurio);
-                break;
-            case "Herbivoro":
-                instalacionService.asignarDinosaurioAInstalacion(dinosaurio);
-                break;
-            case "Omnivoro":
-                instalacionService.asignarDinosaurioAInstalacion(dinosaurio);
-                break;
-            default:
-                throw new IllegalArgumentException("Tipo de dinosaurio desconocido: " + dinosaurio.getTipo());
-        }
+        instalacionService.asignarDinosaurioAInstalacion(dinosaurio);
     }
+    public void eliminarDinosaurio(Dinos dinosaurio) {
+        dinosaurioRepository.delete(dinosaurio);
+    }
+    public List<Dinos> buscarDinosauriosPorFaseYEspecie(FaseCicloDeVida fase, String especie) {
+        return dinosaurioRepository.findByFaseCicloDeVidaAndEspecie(fase, especie);
+    }
+
 }
