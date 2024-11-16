@@ -1,18 +1,25 @@
 package com.example.jurassicpark.models.factorias;
 
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
+import com.example.jurassicpark.ciclodevida.GestorCV;
 import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DinosaurioFactory {
 
+    @Autowired
+    GestorCV gestorCV;
+
     public Dinos crearDinosaurio(String tipo, String especie, int edad, double alturamaxima, int pesomaximo, Sexo sexo, double hpmaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida, String habitat) {
         if (!esHabitatCompatible(habitat, tipo)) {
-            throw new IllegalArgumentException("El dinosaurio no es compatible con el habitat proporcionado");
+            throw new IllegalArgumentException("El dinosaurio no es compatible con el hábitat proporcionado: " + habitat);
         }
-        return new Dinos(especie, edad, alturamaxima, pesomaximo, sexo, hpmaxima, tuvoHijos, faseCicloDeVida, habitat, tipo);
+        Dinos dino = new Dinos(especie, edad, alturamaxima, pesomaximo, sexo, hpmaxima, tuvoHijos, faseCicloDeVida, habitat, tipo);
+        gestorCV.iniciarCiclo(dino);
+        return dino;
     }
 
     private boolean esHabitatCompatible(String habitat, String tipo) {

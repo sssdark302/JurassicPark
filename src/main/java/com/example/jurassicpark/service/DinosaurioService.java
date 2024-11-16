@@ -1,7 +1,8 @@
 package com.example.jurassicpark.service;
 
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
-import com.example.jurassicpark.models.Dinosaurio;
+import com.example.jurassicpark.models.datastores.DinosaurioDataStore;
+import com.example.jurassicpark.models.entidades.InstalacionE;
 import com.example.jurassicpark.models.factorias.DinosaurioFactory;
 import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DinosaurioService {
@@ -20,36 +22,33 @@ public class DinosaurioService {
     @Autowired
     private DinosaurioFactory dinosaurioFactory;
 
-    @Autowired
-    private InstalacionService instalacionService;
+
+    public Dinos crearDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo,
+                                 Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida fase, String habitat) {
+        Dinos dinosaurio = dinosaurioFactory.crearDinosaurio(
+                tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, fase, habitat
+        );
+
+        return dinosaurioRepository.save(dinosaurio);
+    }
 
     public List<Dinos> listarDinosaurios() {
         return dinosaurioRepository.findAll();
     }
 
-    public void crearYAlmacenarDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida, String habitat) {
-        Dinos dinosaurio = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, faseCicloDeVida, habitat);
-        dinosaurioRepository.save(dinosaurio);
-        enviarDinosaurioAInstalacion(dinosaurio);
+    public void eliminarDinosaurioPorId(int id) {
+        if (dinosaurioRepository.existsById(id)) {
+            dinosaurioRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Dinosaurio con ID " + id + " no encontrado.");
+        }
     }
 
-    private void enviarDinosaurioAInstalacion(Dinos dinosaurio) {
-        instalacionService.asignarDinosaurioAInstalacion(dinosaurio);
-    }
-    public Dinos buscarDinosaurioPorId(int id) {
-        return (Dinos) dinosaurioRepository.findDinosaurioById(id);
+    public List<Dinos> buscarDinosauriosPorFaseYEspecie(FaseCicloDeVida faseCicloDeVida, String especie) {
+        return dinosaurioRepository.findByFaseCicloDeVidaAndEspecie(faseCicloDeVida, especie);
     }
 
     public void eliminarDinosaurio(Dinos dinosaurio) {
         dinosaurioRepository.delete(dinosaurio);
     }
-
-    public void eliminarDinosaurioPorId(int id) {
-        dinosaurioRepository.deleteById(id);
-    }
-
-    public List<Dinos> buscarDinosauriosPorFaseYEspecie(FaseCicloDeVida fase, String especie) {
-        return dinosaurioRepository.findByFaseCicloDeVidaAndEspecie(fase, especie);
-    }
-
 }

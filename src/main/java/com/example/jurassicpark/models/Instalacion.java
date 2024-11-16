@@ -9,19 +9,16 @@ public class Instalacion {
 
     protected String nombre;
     protected int capacidad;
-    protected String tipo; // Ejemplo: "Dinosaurios_Plantas"
+    protected String tipo;
     protected double terreno;
     protected String seguridad;
     protected String descripcion;
     protected int personal;
     protected String horario;
     protected String habitat;
-    protected String dieta; // Ejemplo: "Carnivoro", "Herbivoro", "Omnivoro"
+    protected String dieta;
 
     public Instalacion(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
-        if (capacidad <= 0) {
-            throw new IllegalArgumentException("La capacidad debe ser mayor a 0.");
-        }
         this.nombre = nombre;
         this.capacidad = capacidad;
         this.tipo = tipo;

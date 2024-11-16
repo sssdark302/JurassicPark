@@ -1,7 +1,7 @@
 package com.example.jurassicpark.AOP;
 
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,18 +10,37 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    // Log para cambios en el ciclo de vida
-    @After("execution(* com.example.jurassicpark.ciclodevida.GestorCV.avanzarFase(..))")
-    public void logPhaseChange() {
-        logger.info("El ciclo de vida del dinosaurio ha avanzado de fase.");
+    @Pointcut("execution(* com.example.jurassicpark.service.InstalacionService.*(..))")
+    public void instalacionServiceMethods() {}
+
+    @Pointcut("execution(* com.example.jurassicpark.service.DinosaurioService.*(..))")
+    public void dinosaurioServiceMethods() {}
+
+    @Before("instalacionServiceMethods() || dinosaurioServiceMethods()")
+    public void logBeforeMethod(JoinPoint joinPoint) {
+        logger.info("Ejecutando método: {}", joinPoint.getSignature().toShortString());
+        Object[] args = joinPoint.getArgs();
+        if (args.length > 0) {
+            logger.info("Con argumentos: ");
+            for (Object arg : args) {
+                logger.info("  - {}", arg);
+            }
+        }
     }
 
-    // Log para creación de dinosaurios
-    @After("execution(* com.example.jurassicpark.service.DinosaurioService.crearYAlmacenarDinosaurio(..))")
-    public void logDinosaurioCreation() {
-        logger.info("Se ha creado un nuevo dinosaurio.");
+    @AfterReturning(value = "instalacionServiceMethods() || dinosaurioServiceMethods()", returning = "result")
+    public void logAfterReturning(JoinPoint joinPoint, Object result) {
+        logger.info("Método finalizado: {}", joinPoint.getSignature().toShortString());
+        if (result != null) {
+            logger.info("Resultado: {}", result);
+        }
     }
-    //log eliminar agregar un par mas
+
+    @AfterThrowing(value = "instalacionServiceMethods() || dinosaurioServiceMethods()", throwing = "exception")
+    public void logAfterThrowing(JoinPoint joinPoint, Throwable exception) {
+        logger.error("Excepción en método: {}", joinPoint.getSignature().toShortString());
+        logger.error("Detalle de la excepción: {}", exception.getMessage());
+    }
 }

@@ -1,7 +1,6 @@
 package com.example.jurassicpark.models;
 
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
-import com.example.jurassicpark.models.Sexo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +8,6 @@ import lombok.Setter;
 @Getter
 public class Dinosaurio {
 
-    // Getters y Setters
     protected String especie;
     protected int edad;
     protected double altura_maxima;
@@ -132,5 +130,8 @@ public class Dinosaurio {
                 ", faseCicloDeVida=" + faseCicloDeVida +
                 ", habitat='" + habitat + '\'' +
                 '}';
+    }
+    public String getDieta(){
+        return tipo;
     }
 }

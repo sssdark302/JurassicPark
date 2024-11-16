@@ -52,4 +52,8 @@ public class Dinos extends Dinosaurio {
         super(null, 0, 0, 0, null, 0, false, null, null, null);
     }
 
+    @Override
+    public String getTipo() {
+        return tipo;
+    }
 }

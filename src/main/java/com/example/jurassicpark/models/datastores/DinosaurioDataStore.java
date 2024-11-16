@@ -2,10 +2,15 @@ package com.example.jurassicpark.models.datastores;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
+import com.example.jurassicpark.models.Dinosaurio;
 import com.example.jurassicpark.models.Sexo;
+import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.models.factorias.DinosaurioFactory;
 import com.example.jurassicpark.repository.DinosaurioRepository;
 import com.example.jurassicpark.service.DinosaurioService;
@@ -39,35 +44,47 @@ public class DinosaurioDataStore {
         return instance;
     }
 
-    private synchronized void cargarDatosCSV(String rutaCSV) {
+    public void cargarDatosCSV(String rutaCSV) {
         try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
             String linea;
-            br.readLine(); // Saltar el encabezado del CSV
-            while ((linea = br.readLine()) != null) { // Leer las líneas mientras no sean nulas
-                String[] campos = linea.split(",");
-                String especie = campos[0];
-                int edad = Integer.parseInt(campos[1]);
-                double alturaMaxima = Double.parseDouble(campos[2]);
-                int pesoMaximo = Integer.parseInt(campos[3]);
-                Sexo sexo = randomSexo();
-                double hpMaxima = Double.parseDouble(campos[4]);
-                String tipo = campos[5];
-                boolean tuvoHijos = Boolean.parseBoolean(campos[6]);
-                String habitat = campos[7];
-                FaseCicloDeVida faseCicloDeVida = FaseCicloDeVida.HUEVO;
+            String encabezado = br.readLine(); // Leer encabezado y descartarlo
+            if (encabezado == null || encabezado.isEmpty()) {
+                throw new IOException("El archivo CSV está vacío o no tiene encabezado.");
+            }
 
-                generarDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, faseCicloDeVida, habitat);
+            while ((linea = br.readLine()) != null) {
+                String[] campos = linea.split(",");
+                if (campos.length < 7) { // Verificar que haya al menos 7 columnas
+                    System.err.println("Línea inválida en CSV (menos de 7 campos): " + linea);
+                    continue; // Saltar líneas inválidas
+                }
+
+                try {
+                    String especie = campos[0].trim();
+                    int edad = Integer.parseInt(campos[1].trim());
+                    double alturaMaxima = Double.parseDouble(campos[2].trim());
+                    int pesoMaximo = Integer.parseInt(campos[3].trim());
+                    double hpMaxima = Double.parseDouble(campos[4].trim());
+                    String tipo = campos[5].trim();
+                    String habitat = campos[6].trim();
+                    Sexo sexo = randomSexo();
+
+                    // Llamar al servicio para crear el dinosaurio
+                    dinosaurioService.crearDinosaurio(tipo, especie, 0, alturaMaxima, pesoMaximo, sexo, hpMaxima, false, FaseCicloDeVida.HUEVO, habitat);
+
+                } catch (NumberFormatException e) {
+                    System.err.println("Error en formato numérico en la línea: " + linea);
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    System.err.println("Error al procesar la línea: " + linea);
+                    e.printStackTrace();
+                }
             }
         } catch (IOException e) {
+            System.err.println("Error al leer el archivo CSV: " + rutaCSV);
             e.printStackTrace();
         }
     }
-
-    private void generarDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo, Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida, String habitat) {
-        dinosaurioService.crearYAlmacenarDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima, tuvoHijos, faseCicloDeVida, habitat);
-    }
-
-
     private Sexo randomSexo() {
         return new Random().nextBoolean() ? Sexo.MACHO : Sexo.HEMBRA;
     }
@@ -75,11 +92,18 @@ public class DinosaurioDataStore {
     public String getAllDinosauriosAsJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            //  map completo de dinosaurios a JSON
             return mapper.writeValueAsString(dinosaurioFactory);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "{}";
         }
     }
+
+    public List<Dinos> getDinosauriosPorHabitatYDieta(String habitat, String dieta) {
+        return dinosaurioRepository.findAll().stream()
+                .filter(dino -> dino.getHabitat().equalsIgnoreCase(habitat))
+                .filter(dino -> dino.getTipo().equalsIgnoreCase(dieta))
+                .collect(Collectors.toList());
+    }
+
 }

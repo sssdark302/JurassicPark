@@ -1,44 +1,30 @@
 package com.example.jurassicpark.controllers;
-import com.example.jurassicpark.exceptiones.DinosaurioNotFoundException;
 import com.example.jurassicpark.models.Dinosaurio;
-import com.example.jurassicpark.models.datastores.DinosaurioDataStore;
-import com.example.jurassicpark.repository.DinosaurioRepository;
+import com.example.jurassicpark.models.entidades.Dinos;
+import com.example.jurassicpark.service.DinosaurioService;
+import com.example.jurassicpark.service.InstalacionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.example.jurassicpark.repository.DinosaurioRepository;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/dinosaurios")
 public class DinosaurioController {
 
     @Autowired
-    private DinosaurioRepository dinosaurioRepository;
+    private DinosaurioService dinosaurioService;
 
-    @GetMapping("/todosdinosaurios")
-    public String getAllDinosaurios() {
-        DinosaurioDataStore dataStore = DinosaurioDataStore.getInstance();
-        return dataStore.getAllDinosauriosAsJSON();
+    @GetMapping("/listar")
+    public ResponseEntity<List<Dinos>> listarDinosaurios() {
+        return ResponseEntity.ok(dinosaurioService.listarDinosaurios());
     }
 
-    @GetMapping("/{especie}")
-    public Dinosaurio getDinosaurioByEspecie(@PathVariable String especie) {
-        Dinosaurio dinosaurio = dinosaurioRepository.findDinosaurioByEspecie(especie);
-        if (dinosaurio != null) {
-            return dinosaurio;
-        } else {
-            throw new DinosaurioNotFoundException("Dinosaurio con especie " + especie + " no encontrado");
-        }
-    }
-
-    @GetMapping("/tipo/{tipo}")
-    public Dinosaurio getDinosaurioByTipo(@PathVariable String tipo) {
-        Dinosaurio dinosaurio = dinosaurioRepository.findDinosaurioByTipo(tipo);
-        if (dinosaurio != null) {
-            return dinosaurio;
-        } else {
-            throw new DinosaurioNotFoundException("Dinosaurio con tipo " + tipo + " no encontrado");
-        }
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<String> eliminarDinosaurio(@PathVariable int id) {
+        dinosaurioService.eliminarDinosaurioPorId(id);
+        return ResponseEntity.ok("Dinosaurio eliminado exitosamente.");
     }
 }
