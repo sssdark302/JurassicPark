@@ -11,6 +11,36 @@ public class InstalacionE extends Instalacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column
+    private String nombre;
+
+    @Column
+    private int capacidad;
+
+    @Column
+    private String tipo;
+
+    @Column
+    private double terreno;
+
+    @Column
+    private String seguridad;
+
+    @Column
+    private String descripcion;
+
+    @Column
+    private int personal;
+
+    @Column
+    private String horario;
+
+    @Column
+    private String habitat;
+
+    @Column
+    private String dieta;
+
     public InstalacionE(String nombre, int capacidad, String tipo, double terreno, String seguridad, String descripcion, int personal, String horario, String habitat, String dieta) {
         super(nombre, capacidad, tipo, terreno, seguridad, descripcion, personal, horario, habitat, dieta);
     }
