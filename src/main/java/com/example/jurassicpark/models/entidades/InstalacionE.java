@@ -48,4 +48,11 @@ public class InstalacionE extends Instalacion {
     public InstalacionE() {
         super(null, 0, null, 0, null, null, 0, null, null, null);
     }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

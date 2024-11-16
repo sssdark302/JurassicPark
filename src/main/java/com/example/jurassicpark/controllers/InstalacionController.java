@@ -1,16 +1,15 @@
 package com.example.jurassicpark.controllers;
 
 import com.example.jurassicpark.exceptiones.InstalacionNotFoundException;
-import com.example.jurassicpark.models.datastores.InstalacionDataStore;
+import com.example.jurassicpark.models.Instalacion;
 import com.example.jurassicpark.models.entidades.DinosaurioInstalaciones;
 import com.example.jurassicpark.models.entidades.InstalacionE;
 import com.example.jurassicpark.repository.DinosaurioInstalacionRepository;
 import com.example.jurassicpark.repository.InstalacionRepository;
+import com.example.jurassicpark.service.InstalacionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,10 +23,12 @@ public class InstalacionController {
     @Autowired
     private DinosaurioInstalacionRepository dinosaurioInstalacionRepository;
 
-    @GetMapping("/todasinstalaciones")
-    public String getAllInstalaciones() {
-        InstalacionDataStore dataStore = InstalacionDataStore.getInstance();
-        return dataStore.getAllInstalacionesAsJSON();
+    @Autowired
+    private InstalacionService instalacionService;
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<InstalacionE>> listarInstalaciones() {
+        return ResponseEntity.ok(instalacionService.listarInstalaciones());
     }
 
     @GetMapping("/{nombre}")
@@ -41,8 +42,8 @@ public class InstalacionController {
     }
 
     @GetMapping("/tipo/{tipo}")
-    public InstalacionE getInstalacionByTipo(@PathVariable String tipo) {
-        InstalacionE instalacion = instalacionRepository.findInstalacionByTipo(tipo);
+    public List<InstalacionE> getInstalacionByTipo(@PathVariable String tipo) {
+        List<InstalacionE> instalacion = instalacionRepository.findByTipo(tipo);
         if (instalacion != null) {
             return instalacion;
         } else {
@@ -59,4 +60,25 @@ public class InstalacionController {
             throw new InstalacionNotFoundException("Dinosaurios en la instalación " + instalacion + " no encontrados");
         }
     }
+
+    @PostMapping("/agregar")
+    public ResponseEntity<String> agregarInstalacion(@RequestParam String tipo) {
+        try {
+            InstalacionE nuevaInstalacion = instalacionService.crearInstalacionPorTipo(tipo);
+            return ResponseEntity.ok("Instalación creada exitosamente: " + nuevaInstalacion.getNombre());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<String> eliminarInstalacion(@PathVariable int id) {
+        try {
+            instalacionService.eliminarInstalacionPorId(id);
+            return ResponseEntity.ok("Instalación eliminada exitosamente.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
