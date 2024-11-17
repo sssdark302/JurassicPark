@@ -18,20 +18,4 @@ import java.util.List;
 @RequestMapping("/instalaciones")
 public class InstalacionController {
 
-    @Autowired
-    @Lazy
-    private InstalacionService instalacionService;
-
-    @GetMapping("/listar")
-    public ResponseEntity<List<InstalacionE>> listarInstalaciones() {
-        return ResponseEntity.ok(instalacionService.listarInstalaciones());
-    }
-
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarInstalacion(@PathVariable int id) {
-        instalacionService.eliminarInstalacionPorId(id);
-        return ResponseEntity.ok("Instalación eliminada exitosamente.");
-    }
-    //añadir instalacion
-    //con metodo crearInstalacion
 }

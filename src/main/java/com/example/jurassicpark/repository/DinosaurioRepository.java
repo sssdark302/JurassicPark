@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DinosaurioRepository extends JpaRepository<Dinos,Integer> {
@@ -15,8 +16,13 @@ public interface DinosaurioRepository extends JpaRepository<Dinos,Integer> {
     @Query("SELECT d FROM Dinos d WHERE d.tipo = :tipo")
     List<Dinos> findByTipo(@Param("tipo") String tipo);
 
+    // Buscar dinosaurio por especie
+    Optional<Dinos> findByEspecie(String especie);
+
     @Query("SELECT d FROM Dinos d WHERE d.faseCicloDeVida = :fase AND d.especie = :especie")
-    List<Dinos> findByFaseCicloDeVidaAndEspecie(@Param("fase") FaseCicloDeVida fase, @Param("especie") String especie);;
+    List<Dinos> findByFaseCicloDeVidaAndEspecie(@Param("fase") FaseCicloDeVida fase, @Param("especie") String especie);
+
+    Dinos deleteDinosById(int id);
 }
 
 

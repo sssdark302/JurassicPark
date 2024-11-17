@@ -2,19 +2,16 @@ package com.example.jurassicpark.models.factorias;
 
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.models.entidades.InstalacionE;
-import com.example.jurassicpark.models.subclases.Jaula_Acuatica_Omnivoro;
-import com.example.jurassicpark.models.subclases.Jaula_Aerea_Carnivoro;
-import com.example.jurassicpark.models.subclases.Jaula_Terrestre_Herbivoro;
+import com.example.jurassicpark.models.subclases.*;
 import com.example.jurassicpark.repository.DinosaurioRepository;
 import com.example.jurassicpark.service.DinosaurioInstalacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
-
 import java.util.stream.Collectors;
-
-
 
 @Component
 public class DinosauriosPlantasFactory {
@@ -27,86 +24,131 @@ public class DinosauriosPlantasFactory {
     @Lazy
     private DinosaurioRepository dinosaurioRepository;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     public InstalacionE crearInstalacionDinosauriosPlantas(String nombre, int capacidad, double terreno, String seguridad,
-                                                           String descripcion, int personal, String horario, String tipoInstalacion) {
+                                                           String descripcion, int personal, String horario, String tipo) {
         InstalacionE nuevaInstalacion;
 
-        // Determinar el tipo de instalación basado en el nombre
-        String tipoDeInstalacion = determinarTipoDeInstalacion(nombre);
-
-        // Crear la instalación según su tipo
-        switch (tipoDeInstalacion) {
-            case "Acuatica" -> nuevaInstalacion = crearInstalacionAcuatica(nombre, capacidad, terreno, seguridad, descripcion, personal, horario);
-            case "Terrestre" -> nuevaInstalacion = crearInstalacionTerrestre(nombre, capacidad, terreno, seguridad, descripcion, personal, horario);
-            case "Aerea" -> nuevaInstalacion = crearInstalacionAerea(nombre, capacidad, terreno, seguridad, descripcion, personal, horario);
-            default -> throw new IllegalArgumentException("Tipo de instalación desconocido: " + tipoDeInstalacion);
+        if (!"Dinosaurios_Plantas".equals(tipo)) {
+            throw new IllegalArgumentException("Este método solo maneja instalaciones de tipo Dinosaurios_Plantas");
         }
 
-        // Asignar dinosaurios compatibles a la instalación
-        dinosaurioInstalacionService.inicializarDinosauriosParaInstalacion(nuevaInstalacion);
+        String tipoDeInstalacion = determinarTipoEspecificoDeInstalacion(nombre);
+
+        // Crear instalación específica
+        switch (tipoDeInstalacion) {
+            case "Jaula_Acuatica_Carnivoro" ->
+                    nuevaInstalacion = new Jaula_Acuatica_Carnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipoDeInstalacion);
+            case "Jaula_Acuatica_Omnivoro" ->
+                    nuevaInstalacion = new Jaula_Acuatica_Omnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipoDeInstalacion);
+            case "Jaula_Terrestre_Carnivoro" ->
+                    nuevaInstalacion = new Jaula_Terrestre_Carnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipoDeInstalacion);
+            case "Jaula_Terrestre_Herbivoro" ->
+                    nuevaInstalacion = new Jaula_Terrestre_Herbivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipoDeInstalacion);
+            case "Jaula_Terrestre_Omnivoro" ->
+                    nuevaInstalacion = new Jaula_Terrestre_Omnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipoDeInstalacion);
+            case "Jaula_Aerea_Carnivoro" ->
+                    nuevaInstalacion = new Jaula_Aerea_Carnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipoDeInstalacion);
+            case "Jaula_Aerea_Omnivoro" ->
+                    nuevaInstalacion = new Jaula_Aerea_Omnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipoDeInstalacion);
+            default ->
+                    throw new IllegalArgumentException("Tipo de instalación desconocido: " + tipoDeInstalacion);
+        }
+
+        // Guardar en tabla temporal
+        guardarEnTablaTemporal(nuevaInstalacion);
+
+        // Asignar dinosaurios compatibles
+        List<Dinos> dinosauriosCompatibles = obtenerDinosauriosCompatiblesPorReglas(nuevaInstalacion);
+        dinosaurioInstalacionService.asignarDinosauriosAInstalacion(dinosauriosCompatibles, nuevaInstalacion);
 
         return nuevaInstalacion;
     }
 
-    private InstalacionE crearInstalacionAcuatica(String nombre, int capacidad, double terreno, String seguridad,
-                                                  String descripcion, int personal, String horario) {
-        return new Jaula_Acuatica_Omnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Acuatica");
-    }
-
-    private InstalacionE crearInstalacionTerrestre(String nombre, int capacidad, double terreno, String seguridad,
-                                                   String descripcion, int personal, String horario) {
-        return new Jaula_Terrestre_Herbivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Terrestre");
-    }
-
-    private InstalacionE crearInstalacionAerea(String nombre, int capacidad, double terreno, String seguridad,
-                                               String descripcion, int personal, String horario) {
-        return new Jaula_Aerea_Carnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Aerea");
-    }
-
-    private String determinarTipoDeInstalacion(String nombre) {
-        if (nombre.contains("Acuatica")) {
-            return "Acuatica";
-        } else if (nombre.contains("Terrestre")) {
-            return "Terrestre";
-        } else if (nombre.contains("Aerea")) {
-            return "Aerea";
-        } else {
-            throw new IllegalArgumentException("No se puede determinar el tipo de instalación para el nombre: " + nombre);
-        }
+    private void guardarEnTablaTemporal(InstalacionE instalacion) {
+        jdbcTemplate.update("""
+            INSERT INTO temp_instalaciones (nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, instalacion.getNombre(), instalacion.getCapacidad(), instalacion.getTerreno(),
+                instalacion.getSeguridad(), instalacion.getDescripcion(), instalacion.getPersonal(),
+                instalacion.getHorario(), instalacion.getTipo());
     }
 
     public List<Dinos> obtenerDinosauriosCompatiblesPorReglas(InstalacionE instalacion) {
-        String tipoDeInstalacion = instalacion.getTipo(); // Tipo: Acuatica, Terrestre, Aerea
+        String tipoDeInstalacion = instalacion.getTipo();
 
-        // Obtener todos los dinosaurios de la base de datos
-        List<Dinos> dinosaurios = dinosaurioRepository.findAll();
-
-        // Filtrar según las reglas de compatibilidad
-        return dinosaurios.stream()
+        // Filtrar dinosaurios desde la base de datos
+        return dinosaurioRepository.findAll().stream()
                 .filter(dino -> esDinosaurioCompatibleConInstalacion(dino, tipoDeInstalacion))
                 .collect(Collectors.toList());
     }
 
-    private boolean esDinosaurioCompatibleConInstalacion(Dinos dinosaurio, String tipoDeInstalacion) {
-        // Reglas de compatibilidad
+    public boolean esDinosaurioCompatibleConInstalacion(Dinos dinosaurio, String tipoDeInstalacion) {
         return switch (tipoDeInstalacion) {
-            case "Acuatica" -> esDinosaurioAcuatico(dinosaurio);
-            case "Terrestre" -> esDinosaurioTerrestre(dinosaurio);
-            case "Aerea" -> esDinosaurioAereo(dinosaurio);
+            case "Acuatica" -> List.of("Mosasaurus", "Plesiosaurus", "Ichthyosaurus", "Liopleurodon").contains(dinosaurio.getEspecie());
+            case "Terrestre" -> List.of("T-Rex", "Triceratops", "Velociraptor", "Stegosaurus").contains(dinosaurio.getEspecie());
+            case "Aerea" -> List.of("Pteranodon", "Quetzalcoatlus", "Dsungaripterus", "Rhamphorhynchus").contains(dinosaurio.getEspecie());
             default -> false;
         };
     }
 
-    public boolean esDinosaurioAcuatico(Dinos dinosaurio) {
-        return List.of("Mosasaurus", "Plesiosaurus", "Ichthyosaurus", "Liopleurodon").contains(dinosaurio.getEspecie());
+    private String determinarTipoEspecificoDeInstalacion(String nombre) {
+        if (nombre.contains("Acuatica") && nombre.contains("Carnivoro")) {
+            return "Jaula_Acuatica_Carnivoro";
+        } else if (nombre.contains("Acuatica") && nombre.contains("Omnivoro")) {
+            return "Jaula_Acuatica_Omnivoro";
+        } else if (nombre.contains("Terrestre") && nombre.contains("Carnivoro")) {
+            return "Jaula_Terrestre_Carnivoro";
+        } else if (nombre.contains("Terrestre") && nombre.contains("Herbivoro")) {
+            return "Jaula_Terrestre_Herbivoro";
+        } else if (nombre.contains("Terrestre") && nombre.contains("Omnivoro")) {
+            return "Jaula_Terrestre_Omnivoro";
+        } else if (nombre.contains("Aerea") && nombre.contains("Carnivoro")) {
+            return "Jaula_Aerea_Carnivoro";
+        } else if (nombre.contains("Aerea") && nombre.contains("Omnivoro")) {
+            return "Jaula_Aerea_Omnivoro";
+        } else {
+            throw new IllegalArgumentException("No se puede determinar el tipo específico de instalación para el nombre: " + nombre);
+        }
     }
 
-    public boolean esDinosaurioTerrestre(Dinos dinosaurio) {
-        return List.of("Tyrannosaurus", "Triceratops", "Stegosaurus", "Velociraptor").contains(dinosaurio.getEspecie());
+    public boolean esDinosaurioAcuaticoCarnivoro(Dinos dinosaurio) {
+        // Reglas específicas para Jaula_Acuatica_Carnivoro
+        return List.of("Mosasaurus", "Plesiosaurus", "Ichthyosaurus", "Liopleurodon")
+                .contains(dinosaurio.getEspecie());
     }
 
-    public boolean esDinosaurioAereo(Dinos dinosaurio) {
-        return List.of("Pterodactyl", "Quetzalcoatlus", "Dimorphodon", "Tapejara").contains(dinosaurio.getEspecie());
+    public boolean esDinosaurioAcuaticoOmnivoro(Dinos dinosaurio) {
+        // Reglas específicas para Jaula_Acuatica_Omnivoro (si no hay ninguno, retorna falso)
+        return false; // No hay especies registradas como omnívoras acuáticas
+    }
+
+    public boolean esDinosaurioTerrestreCarnivoro(Dinos dinosaurio) {
+        // Reglas específicas para Jaula_Terrestre_Carnivoro
+        return List.of("T-Rex", "Velociraptor").contains(dinosaurio.getEspecie());
+    }
+
+    public boolean esDinosaurioTerrestreHerbivoro(Dinos dinosaurio) {
+        // Reglas específicas para Jaula_Terrestre_Herbivoro
+        return List.of("Triceratops", "Stegosaurus").contains(dinosaurio.getEspecie());
+    }
+
+    public boolean esDinosaurioTerrestreOmnivoro(Dinos dinosaurio) {
+        // Reglas específicas para Jaula_Terrestre_Omnivoro
+        return List.of("Gallimimus", "Therizinosaurus").contains(dinosaurio.getEspecie());
+    }
+
+    public boolean esDinosaurioAereoCarnivoro(Dinos dinosaurio) {
+        // Reglas específicas para Jaula_Aerea_Carnivoro
+        return List.of("Pteranodon", "Quetzalcoatlus", "Dsungaripterus", "Rhamphorhynchus")
+                .contains(dinosaurio.getEspecie());
+    }
+
+    public boolean esDinosaurioAereoOmnivoro(Dinos dinosaurio) {
+        // Reglas específicas para Jaula_Aerea_Omnivoro
+        return List.of("Microraptor", "Archaeopteryx").contains(dinosaurio.getEspecie());
     }
 
 }

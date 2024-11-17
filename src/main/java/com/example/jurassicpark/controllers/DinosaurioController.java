@@ -15,18 +15,4 @@ import java.util.List;
 @RequestMapping("/dinosaurios")
 public class DinosaurioController {
 
-    @Autowired
-    @Lazy
-    private DinosaurioService dinosaurioService;
-
-    @GetMapping("/listar")
-    public ResponseEntity<List<Dinos>> listarDinosaurios() {
-        return ResponseEntity.ok(dinosaurioService.listarDinosaurios());
-    }
-
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarDinosaurio(@PathVariable int id) {
-        dinosaurioService.eliminarDinosaurioPorId(id);
-        return ResponseEntity.ok("Dinosaurio eliminado exitosamente.");
-    }
 }

@@ -32,7 +32,7 @@ public class GestorCV implements CiclodeVida {
 
     @Autowired
     @Lazy
-    private DinosaurioService dinosaurioService;
+    private DinosaurioRepository dinosaurioRepository;
 
     @Autowired
     @Lazy
@@ -47,53 +47,62 @@ public class GestorCV implements CiclodeVida {
     }
 
     public void iniciarCiclo(Dinos dinosaurio) {
+        Runnable cicloDeVida = () -> avanzarFase(dinosaurio);
         dinosaurio.setEdad(0);
-        dinosaurio.setAlturamaxima(dinosaurio.getAlturamaximaOriginal() * 0); // Por ejemplo, 25% del original
-        dinosaurio.setPesomaximo((int) (dinosaurio.getPesomaximoOriginal() * 0));
-        dinosaurio.setHpmaxima(dinosaurio.getHpmaximaOriginal() * 0);
+        dinosaurio.setAlturamaxima(0);
+        dinosaurio.setPesomaximo(0);
+        dinosaurio.setHpmaxima(0);
         fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.HUEVO);
+
         System.out.println("Iniciando ciclo de vida para " + dinosaurio.getEspecie() + "...");
-        scheduler.scheduleAtFixedRate(() -> avanzarFase(dinosaurio), 0, 2, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(cicloDeVida, 0, 2, TimeUnit.SECONDS);
     }
 
-
     private void avanzarFase(Dinos dinosaurio) {
-        FaseCicloDeVida faseActual = fasesDinosaurios.get(dinosaurio.getId());
-        if (faseActual == null) return; // El dinosaurio podría haber sido eliminado
+        synchronized (dinosaurio) {
+            FaseCicloDeVida faseActual = fasesDinosaurios.get(dinosaurio.getId());
+            if (faseActual == null) return; // El dinosaurio podría haber sido eliminado
 
-        switch (faseActual) {
-            case HUEVO -> {
-                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.NACIMIENTO);
+            switch (faseActual) {
+                case HUEVO -> {
+                    System.out.println(dinosaurio.getEspecie() + " ha salido del huevo.");
+                    fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.NACIMIENTO);
+                }
+                case NACIMIENTO -> {
+                    System.out.println(dinosaurio.getEspecie() + " está creciendo.");
+                    fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.CRECIMIENTO);
+                    dinosaurio.setEdad(1);
+                    dinosaurio.setAlturamaxima(dinosaurio.getAlturamaximaOriginal() * 0.25);
+                    dinosaurio.setPesomaximo((int) (dinosaurio.getPesomaximoOriginal() * 0.25));
+                    dinosaurio.setHpmaxima(dinosaurio.getHpmaximaOriginal() * 0.25);
+                }
+                case CRECIMIENTO -> {
+                    System.out.println(dinosaurio.getEspecie() + " ha alcanzado la fase de reproducción.");
+                    fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.REPRODUCCION);
+                    dinosaurio.setEdad(new Random().nextInt(5) + 5);
+                    dinosaurio.setAlturamaxima(dinosaurio.getAlturamaximaOriginal() * 0.75);
+                    dinosaurio.setPesomaximo((int) (dinosaurio.getPesomaximoOriginal() * 0.75));
+                    dinosaurio.setHpmaxima(dinosaurio.getHpmaximaOriginal() * 0.75);
+                }
+                case REPRODUCCION -> {
+                    System.out.println("El dinosaurio " + dinosaurio.getEspecie() + " está en la fase de reproducción.");
+                    buscarParejaYDarloOportunidadDeReproduccion(dinosaurio);
+                    fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.ADULTO);
+                }
+                case ADULTO -> {
+                    System.out.println(dinosaurio.getEspecie() + " ha alcanzado la adultez completa.");
+                    fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.MUERTE);
+                }
+                case MUERTE -> {
+                    TerminarCiclo(dinosaurio);
+                }
             }
-            case NACIMIENTO -> {
-                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.CRECIMIENTO);
-                dinosaurio.setEdad(1);
-                dinosaurio.setAlturamaxima(dinosaurio.getAlturamaximaOriginal() * 0.25);
-                dinosaurio.setPesomaximo((int) (dinosaurio.getPesomaximoOriginal() * 0.25));
-                dinosaurio.setHpmaxima(dinosaurio.getHpmaximaOriginal() * 0.25);
-            }
-            case CRECIMIENTO -> {
-                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.REPRODUCCION);
-                dinosaurio.setEdad(new Random().nextInt(5) + 5); // Edad entre 5 y 10
-                dinosaurio.setAlturamaxima(dinosaurio.getAlturamaximaOriginal() * 0.75);
-                dinosaurio.setPesomaximo((int) (dinosaurio.getPesomaximoOriginal() * 0.75));
-                dinosaurio.setHpmaxima(dinosaurio.getHpmaximaOriginal() * 0.75);
-            }
-            case REPRODUCCION -> {
-                System.out.println("El dinosaurio " + dinosaurio.getEspecie() + " está en la fase de reproducción.");
-                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.ADULTO);
-            }
-            case ADULTO -> {
-                fasesDinosaurios.put(dinosaurio.getId(), FaseCicloDeVida.MUERTE);
-            }
-            case MUERTE -> TerminarCiclo(dinosaurio);
         }
     }
 
-
     public void TerminarCiclo(Dinos dinosaurio) {
         fasesDinosaurios.remove(dinosaurio.getId());
-        dinosaurioService.eliminarDinosaurio(dinosaurio);
+        dinosaurioRepository.deleteDinosById(dinosaurio.getId());
     }
 
     public boolean verificarReproduccion(Dinos dinosaurio1, Dinos dinosaurio2) {
@@ -151,27 +160,29 @@ public class GestorCV implements CiclodeVida {
         Sexo sexo = new Random().nextBoolean() ? Sexo.MACHO : Sexo.HEMBRA;
 
         Dinos nuevoDino = dinosaurioFactory.crearDinosaurio(
-             dinosaurio1.getTipo(),
+                dinosaurio1.getTipo(),
                 dinosaurio1.getEspecie(),
-                0, // Edad
-                0, //altura
-                0, //peso
+                0, // Edad inicial
+                0, // Altura inicial (fase HUEVO)
+                0, // Peso inicial (fase HUEVO)
                 sexo,
-                0, false,
+                0, // HP inicial (fase HUEVO)
+                false, // No ha tenido hijos aún
                 FaseCicloDeVida.HUEVO,
                 dinosaurio1.getAlturamaximaOriginal(),
                 dinosaurio1.getPesomaximoOriginal(),
-                dinosaurio2.getHpmaximaOriginal()//hp
+                dinosaurio1.getHpmaximaOriginal()
         );
 
-        // Obtener la instalación del primer padre
+        // Asignar el nuevo dinosaurio a la instalación del padre
         DinosaurioInstalaciones relacionPadre = dinosaurioInstalacionRepository.findByDinosaurio(dinosaurio1)
                 .orElseThrow(() -> new IllegalArgumentException("El dinosaurio no está asignado a ninguna instalación"));
 
-        // Asignar el nuevo dinosaurio a la misma instalación
         dinosaurioInstalacionService.guardarRelacionDinosaurioInstalacion(nuevoDino, relacionPadre.getInstalacion());
+
         System.out.printf("Dinosaurio %s creado con éxito en fase HUEVO.\n", nuevoDino.getEspecie());
     }
+
 
     @PreDestroy
     public void shutdown() {
