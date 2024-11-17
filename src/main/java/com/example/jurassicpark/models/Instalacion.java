@@ -1,14 +1,19 @@
 package com.example.jurassicpark.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
+import com.example.jurassicpark.models.entidades.Dinos;
+import com.example.jurassicpark.models.entidades.InstalacionE;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @MappedSuperclass
 public abstract class Instalacion {
+
 
     @Column(nullable = false)
     protected String nombre;

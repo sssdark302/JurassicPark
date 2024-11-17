@@ -58,7 +58,7 @@ public class GestorCV implements CiclodeVida {
         scheduler.scheduleAtFixedRate(cicloDeVida, 0, 2, TimeUnit.SECONDS);
     }
 
-    private void avanzarFase(Dinos dinosaurio) {
+    public void avanzarFase(Dinos dinosaurio) {
         synchronized (dinosaurio) {
             FaseCicloDeVida faseActual = fasesDinosaurios.get(dinosaurio.getId());
             if (faseActual == null) return; // El dinosaurio podría haber sido eliminado

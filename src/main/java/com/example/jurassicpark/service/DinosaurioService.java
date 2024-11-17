@@ -33,6 +33,10 @@ public class DinosaurioService {
     }
 
 
+    public List<Dinos> obtenerTodosLosDinosaurios() {
+        return dinosaurioRepository.findAll();
+    }
+
 }
 
 

@@ -6,31 +6,26 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "dinosaurios_instalaciones")
 public class DinosaurioInstalaciones {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "dinosaurio_id", nullable = false)
-    private Dinos dinosaurio; // Relación con la entidad Dinos
+    @JoinColumn(name = "dinosaurio_id", nullable = false, foreignKey = @ForeignKey(name = "fk_dinosaurio"))
+    private Dinos dinosaurio;
 
     @ManyToOne
-    @JoinColumn(name = "instalacion_id", nullable = false)
-    private InstalacionE instalacion; // Relación con la entidad InstalacionE
+    @JoinColumn(name = "instalacion_id", nullable = false, foreignKey = @ForeignKey(name = "fk_instalacion"))
+    private InstalacionE instalacion;
 
-    @Column(name = "fecha_ingreso", nullable = false)
-    private LocalDateTime fechaIngreso; // Fecha de ingreso del dinosaurio a la instalación
-
+    // Constructores, getters y setters
     public DinosaurioInstalaciones() {}
 
     public DinosaurioInstalaciones(Dinos dinosaurio, InstalacionE instalacion) {
         this.dinosaurio = dinosaurio;
         this.instalacion = instalacion;
-        this.fechaIngreso = LocalDateTime.now();
     }
 
-    // Getters y Setters
     public int getId() {
         return id;
     }
@@ -55,21 +50,12 @@ public class DinosaurioInstalaciones {
         this.instalacion = instalacion;
     }
 
-    public LocalDateTime getFechaIngreso() {
-        return fechaIngreso;
-    }
-
-    public void setFechaIngreso(LocalDateTime fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
-    }
-
     @Override
     public String toString() {
         return "DinosaurioInstalaciones{" +
                 "id=" + id +
                 ", dinosaurio=" + dinosaurio.getEspecie() +
                 ", instalacion=" + instalacion.getNombre() +
-                ", fechaIngreso=" + fechaIngreso +
                 '}';
     }
 }

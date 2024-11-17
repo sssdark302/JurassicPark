@@ -5,6 +5,9 @@ import com.example.jurassicpark.models.Dinosaurio;
 import com.example.jurassicpark.models.Sexo;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "dinosaurios")
 public class Dinos extends Dinosaurio {
@@ -12,6 +15,9 @@ public class Dinos extends Dinosaurio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToMany(mappedBy = "dinosaurios") // Cambiado para que apunte a "dinosaurios" en InstalacionE
+    private Set<InstalacionE> instalaciones = new HashSet<>();
 
     public Dinos(String especie, int edad, double alturamaxima, int pesomaximo, Sexo sexo, double hpmaxima, String tipo, FaseCicloDeVida faseCicloDeVida, boolean tuvoHijos, double alturamaximaOriginal, double pesomaximoOriginal, double hpmaximaOriginal) {
         super(especie, edad, alturamaxima, pesomaximo, sexo, hpmaxima, tipo, faseCicloDeVida, tuvoHijos, alturamaximaOriginal, pesomaximoOriginal, hpmaximaOriginal);

@@ -1,12 +1,13 @@
 package com.example.jurassicpark.models;
 
 import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.example.jurassicpark.models.entidades.InstalacionE;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter

@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface TemporalDinosaurioRepository extends JpaRepository<Dinos, Integer > {
+
     void deleteAll();
 
     @Query(value = "INSERT INTO temporal_dinosaurios (especie, tipo, edad) VALUES (:especie, :tipo, :edad)", nativeQuery = true)
