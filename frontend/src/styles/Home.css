@@ -1,0 +1,32 @@
+.home {
+    background-image: url('../assests/img/isla.webp');
+    background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+    background-position: center; /* Centra la imagen */
+    height: 100vh; /* Ocupa toda la altura de la veyntana */
+    width: 100vw; /* Ocupa toda la anchura de la ventana */
+    align-items: center;
+    justify-content: center;
+}
+
+.instalaciones-list{
+    display: flex;
+    flex-wrap: wrap; /* Permite que las instalaciones ocupen varias filas */
+    gap: 50px; /* Espaciado entre botones */
+    justify-content: center; /* Centra los botones */
+}
+
+.instalacion-btn {
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.instalacion-btn:hover {
+    background-color: rgba(255, 255, 255, 0.8); /* Cambia el color al pasar el mouse */
+    color: black;
+}
