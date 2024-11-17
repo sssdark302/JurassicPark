@@ -1,47 +1,40 @@
-import React, {useState} from 'react';
-import RSocketTerminal from '../componentes/RSocketTerminal';
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../styles/instalacion.css';
 
-const Instalacion = () => {
-    const {instalacion} = useParams();
+const Instalacion = ({ instalacion }) => {
+    const navigate = useNavigate();
 
-    const [instalacionSeleccionada, setInstalacionSeleccionada] = useState(null);
-
-    function obtenerMensajesPorInstalacion(instalacionSeleccionada) {
-        switch (instalacionSeleccionada) {
-            case "Enfermeria":
-                return [
-                    "Bienvenido a la enfermería"
-                ];
-            case "Laboratorio":
-                return [
-                    "Bienvenido al laboratorio"
-                ];
-            case "Centro_Visitantes":
-                return [
-                    "Bienvenido al centro de visitantes"
-                ];
-        }
-
+    if (!instalacion || !instalacion.nombre) {
+        console.error('Error: La instalación no está definida correctamente.', instalacion);
         return (
             <div>
-                <h1>Instalación: {instalacion}</h1>
-                <img
-                    src={`http://localhost:8080/images/${instalacion}.png`}
-                    alt={instalacion}
-                    style={{imageRendering: 'pixelated', width: '300px', height: '300px'}}
-                />
-                {instalacionSeleccionada && (
-                    <div style={{marginTop: "30px"}}>
-                        <RSocketTerminal
-                            instalacion={instalacionSeleccionada}
-                            mensajes={obtenerMensajesPorInstalacion(instalacionSeleccionada)}
-                        />
-                    </div>
-                )} />
+                <p>Error: La instalación no está definida. Volviendo a la página principal...</p>
+                <button onClick={() => navigate('/home')}>Volver a Home</button>
             </div>
         );
-    };
-}
+    }
+
+    const nombreInstalacion = instalacion.nombre.replace(/\s+/g, '_');
+
+    return (
+        <div
+            className="instalacion-container"
+            style={{
+                backgroundImage: `url(${instalacion.fondo})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                minHeight: '100vh',
+            }}
+        >
+            <button
+                className="instalacion-boton"
+                onClick={() => navigate(`/home/${instalacion.nombre}`)}
+            >
+                {instalacion.nombre}
+            </button>
+        </div>
+    );
+};
 
 export default Instalacion;

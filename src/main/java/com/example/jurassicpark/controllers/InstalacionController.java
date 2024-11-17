@@ -24,6 +24,9 @@ public class InstalacionController {
     @Lazy
     private DinosauriosPlantasFactory dinosauriosPlantasFactory;
 
+    @Autowired
+    private RSocketController instalacionRSocketController;
+
     // Obtener todas las instalaciones
     @GetMapping
     public ResponseEntity<List<InstalacionE>> obtenerInstalaciones() {
@@ -38,7 +41,7 @@ public class InstalacionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaInstalacion);
     }
 
-    @PostMapping("/{nombre}")
+    @PostMapping("instalacion/{nombre}")
     public ResponseEntity<String> crearInstalacion(@PathVariable String nombre) {
         String mensaje;
         try {
@@ -55,6 +58,8 @@ public class InstalacionController {
             );
             mensaje = "Instalación creada con éxito: " + nombre;
             System.out.println(mensaje);
+
+            instalacionRSocketController.enviarMensaje(mensaje);
             return ResponseEntity.ok(mensaje);
         } catch (IllegalArgumentException e) {
             mensaje = "Error al crear instalación: " + e.getMessage();

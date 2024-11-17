@@ -1,34 +1,39 @@
 import React, { useState } from "react";
 import AgregarInstalaciones from "../componentes/AgegarInstalacion";
-import RSocketTerminal from "../componentes/RSocketTerminal";
 import "../styles/Home.css";
 
 const Home = () => {
     const [instalaciones, setInstalaciones] = useState([
-        "Centro Visitantes",
-        "Laboratorio",
-        "Enfermería"
+        { nombre: "Centro Visitantes", id: 1, fondo: "/assets/img/centrodevisitantes.webp" },
+        { nombre: "Laboratorio", id: 2, fondo: "/assets/img/laboratorio.webp" },
+        { nombre: "Enfermería", id: 3, fondo: "/assets/img/enfermeria.webp" },
     ]);
 
-    const agregarInstalacion = (nombre) => {
-        setInstalaciones((prev) => [...prev, nombre]);
+    const agregarNuevaInstalacion = (nombre, fondo) => {
+        const nuevaInstalacion = {
+            nombre: nombre.trim(),
+            id: instalaciones.length + 1,
+            fondo: fondo || "/assets/img/default.webp", // Fondo predeterminado
+        };
+
+        setInstalaciones((prev) => [...prev, nuevaInstalacion]);
     };
 
-    const handleClickInstalacion = (instalacion) => {
-        setInstalacionSeleccionada(instalacion);
-    };
     return (
         <div className="home-container">
-            <div className="instalaciones-list">
+            <div className="instalaciones-row">
                 {instalaciones.map((instalacion, index) => (
                     <button
                         key={index}
-                        onClick={() => navigate(`/instalacion/${instalacion}`)}
-                        className="instalacion-boton">
-                        {instalacion}
+                        className="instalacion-boton"
+                        onClick={() =>
+                            window.location.href = `/home/${instalacion.nombre}`
+                        }
+                    >
+                        {instalacion.nombre}
                     </button>
                 ))}
-                <AgregarInstalaciones onNewInstalacion={agregarInstalacion} />
+                <AgregarInstalaciones onNewInstalacion={agregarNuevaInstalacion} />
             </div>
         </div>
     );

@@ -1,32 +1,55 @@
-.home {
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-image: url('../assests/img/isla.webp');
-    background-size: cover; /* Asegura que la imagen cubra todo el fondo */
-    background-position: center; /* Centra la imagen */
-    height: 100vh; /* Ocupa toda la altura de la veyntana */
-    width: 100vw; /* Ocupa toda la anchura de la ventana */
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    font-family: 'Press Start 2P', sans-serif;
+    padding: 20px;
+}
+
+.instalaciones-row {
+    display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding: 10px;
 }
 
-.instalaciones-list{
-    display: flex;
-    flex-wrap: wrap; /* Permite que las instalaciones ocupen varias filas */
-    gap: 50px; /* Espaciado entre botones */
-    justify-content: center; /* Centra los botones */
-}
-
-.instalacion-btn {
-    padding: 10px 20px;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+.boton-agregar {
+    align-self: flex-end;
+    background-color: red;
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-family: 'Press Start 2P', sans-serif;
 }
 
-.instalacion-btn:hover {
-    background-color: rgba(255, 255, 255, 0.8); /* Cambia el color al pasar el mouse */
-    color: black;
+.boton-agregar:hover {
+    background-color: darkred;
+}
+
+.lista-desplegable {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    border: 2px solid black;
+    position: absolute;
+}
+
+.lista-desplegable .opcion {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid black;
+}
+
+.lista-desplegable .opcion:hover {
+    background-color: lightgray;
 }

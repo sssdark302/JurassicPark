@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import "../styles/agregarInstalaciones.css";
 
 const AgregarInstalaciones = ({ onNewInstalacion }) => {
-    const [nombre, setNombre] = useState("");
+    const [mostrarLista, setMostrarLista] = useState(false);
 
-    const instalacionesDisponibles = [
+    const instalacionesDinosauriosPlantas = [
         "Jaula_Acuatica_Carnivoro",
         "Jaula_Acuatica_Omnivoro",
         "Jaula_Terrestre_Carnivoro",
@@ -14,41 +14,47 @@ const AgregarInstalaciones = ({ onNewInstalacion }) => {
         "Jaula_Aerea_Omnivoro"
     ];
 
-    const crearInstalacion = async () => {
-        if (!nombre) {
-            alert("Selecciona una instalación.");
-            return;
-        }
+    const manejarSeleccion = async (nombre) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/instalacion/${nombre}`, {
+                method: "POST",
+            });
 
-        const response = await fetch(`http://localhost:8080/api/instalaciones/${nombre}`, {
-            method: "POST",
-        });
-
-        if (response.ok) {
-            const mensaje = await response.text();
-            alert(mensaje);
-            onNewInstalacion(nombre);
-        } else {
-            const errorMensaje = await response.text();
-            alert("Error: " + errorMensaje);
+            if (response.ok) {
+                const mensaje = await response.text();
+                alert(`Éxito: ${mensaje}`);
+                onNewInstalacion(nombre); // Actualizar lista en el frontend
+            } else {
+                const errorMensaje = await response.text();
+                alert(`Error: ${errorMensaje}`);
+            }
+        } catch (error) {
+            alert(`Error al conectar con el servidor: ${error.message}`);
         }
+        setMostrarLista(false);
     };
 
     return (
-        <div>
-            <h3>Agregar Instalación</h3>
-            <select
-                className={nombre}
-                onChange={(e) => setNombre(e.target.value)}
+        <div className="agregar-instalaciones">
+            <button
+                onClick={() => setMostrarLista((prev) => !prev)}
+                className="boton-agregar"
             >
-                <option className={Lista}>Selecciona una instalación</option>
-                {instalacionesDisponibles.map((instalacion, index) => (
-                    <option key={index} value={instalacion}>
-                        {instalacion}
-                    </option>
-                ))}
-            </select>
-            <button className={botonAgregar}>Crear</button>
+                Agregar Instalación
+            </button>
+            {mostrarLista && (
+                <ul className="lista-desplegable">
+                    {instalacionesDinosauriosPlantas.map((instalacion, index) => (
+                        <li
+                            key={index}
+                            onClick={() => manejarSeleccion(instalacion)}
+                            className="opcion"
+                        >
+                            {instalacion}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };

@@ -1,26 +1,50 @@
 import React, { useState, useEffect } from "react";
-import "../styles/RSocketTerminal.css";
+import { connectToRSocket } from "../rsocketService";
 
-const RSocketTerminal = ({ instalacion, mensajes }) => {
+const RSocketTerminal = ({ instalacion }) => {
     const [logs, setLogs] = useState([]);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (mensajes) {
-            setLogs(mensajes);
-        }
-    }, [instalacion, mensajes]);
+        let subscription;
 
-    const agregarMensaje = (mensaje) => {
-        setLogs((prevLogs) => [...prevLogs, mensaje]);
-    };
+        connectToRSocket().subscribe({
+            onComplete: (socket) => {
+                subscription = socket
+                    .requestStream({
+                        data: instalacion,
+                        metadata: String.fromCharCode(
+                            "instalaciones.terminal".length
+                        ) + "instalaciones.terminal",
+                    })
+                    .subscribe({
+                        onNext: (payload) => {
+                            setLogs((prevLogs) => [...prevLogs, payload.data]);
+                        },
+                        onError: (err) =>
+                            setError("Error al recibir mensajes: " + err),
+                        onComplete: () => console.log("Flujo completo."),
+                    });
+            },
+            onError: (err) => setError("Error al conectar: " + err),
+        });
+
+        return () => {
+            if (subscription) {
+                subscription.cancel();
+            }
+        };
+    }, [instalacion]);
 
     return (
-        <div className="terminal-container">
+        <div>
             <h2>Terminal para {instalacion}</h2>
-            <div className="terminal">
-                {logs.map((msg, index) => (
-                    <p key={index}>{msg}</p>
-                ))}
+            <div style={{ backgroundColor: "#333", color: "#fff", padding: "10px" }}>
+                {error ? (
+                    <p>{error}</p>
+                ) : (
+                    logs.map((log, index) => <p key={index}>{log}</p>)
+                )}
             </div>
         </div>
     );
