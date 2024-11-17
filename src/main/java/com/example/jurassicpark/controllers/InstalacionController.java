@@ -24,8 +24,6 @@ public class InstalacionController {
     @Lazy
     private DinosauriosPlantasFactory dinosauriosPlantasFactory;
 
-
-
     // Obtener todas las instalaciones
     @GetMapping
     public ResponseEntity<List<InstalacionE>> obtenerInstalaciones() {
