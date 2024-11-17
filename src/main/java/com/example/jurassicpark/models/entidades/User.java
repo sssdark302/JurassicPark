@@ -1,9 +1,6 @@
 package com.example.jurassicpark.models.entidades;
 
 import jakarta.persistence.*;
-
-import com.example.jurassicpark.models.entidades.Roles;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,14 +21,15 @@ public class User {
     @Column(nullable = false)
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany
     @JoinTable(
-            name = "user_roles", // Tabla intermedia
-            joinColumns = @JoinColumn(name = "user_id"), // FK hacia User
-            inverseJoinColumns = @JoinColumn(name = "role_id") // FK hacia Role
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Roles> roles = new HashSet<>();
 
+    // Getters y setters
     public Long getId() {
         return id;
     }

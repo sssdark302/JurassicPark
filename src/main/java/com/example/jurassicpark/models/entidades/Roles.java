@@ -1,24 +1,24 @@
 package com.example.jurassicpark.models.entidades;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
-import com.example.jurassicpark.models.entidades.User;
 
 @Entity
 @Table(name = "roles")
 public class Roles {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "role_name", nullable = false, unique = true)
     private String roleName;
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
+    // Getters y setters
     public Long getId() {
         return id;
     }
