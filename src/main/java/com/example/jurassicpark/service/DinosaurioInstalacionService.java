@@ -4,6 +4,7 @@ import com.example.jurassicpark.models.datastores.DinosaurioDataStore;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.models.entidades.DinosaurioInstalaciones;
 import com.example.jurassicpark.models.entidades.InstalacionE;
+import com.example.jurassicpark.models.factorias.DinosauriosPlantasFactory;
 import com.example.jurassicpark.repository.DinosaurioInstalacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,7 +22,7 @@ public class DinosaurioInstalacionService {
 
     @Autowired
     @Lazy
-    private DinosaurioDataStore DinosaurioDataStore;
+    private DinosauriosPlantasFactory dinosauriosPlantasFactory;
 
     private boolean puedenCoexistir(Dinos dino1, Dinos dino2) {
         if (dino1.getTipo().equals("Carnivoro") && dino2.getTipo().equals("Herbivoro")) {
@@ -44,29 +45,25 @@ public class DinosaurioInstalacionService {
     }
 
     public void inicializarDinosauriosParaInstalacion(InstalacionE instalacion) {
+        // Definir dinosaurios compatibles según el tipo de instalación
+        List<Dinos> dinosauriosCompatibles = dinosauriosPlantasFactory.obtenerDinosauriosCompatiblesPorReglas(instalacion);
+
         // Definir el número de dinosaurios que se quieren asignar
-        int numeroDinosaurios = 2;
+        int numeroDinosaurios = 0;
 
-        // Obtener dinosaurios compatibles basados en el tipo de instalación
-        List<Dinos> dinosauriosCompatibles = DinosaurioDataStore
-                .getDinosauriosCompatibles(instalacion.getTipo());
-
-        // Verificar que hay suficientes dinosaurios compatibles
-        if (dinosauriosCompatibles.size() < numeroDinosaurios) {
-            throw new IllegalArgumentException("No hay suficientes dinosaurios compatibles para la instalación " + instalacion.getNombre());
-        }
-
-        // Filtrar y limitar la lista de dinosaurios compatibles al número necesario
-        List<Dinos> dinosauriosFiltrados = dinosauriosCompatibles.stream()
+        // Seleccionar dinosaurios compatibles
+        List<Dinos> dinosauriosSeleccionados = dinosauriosCompatibles.stream()
                 .limit(numeroDinosaurios)
                 .toList();
 
-        // Guardar la relación entre cada dinosaurio filtrado y la instalación
-        for (Dinos dinosaurio : dinosauriosFiltrados) {
+        // Asignar los dinosaurios seleccionados a la instalación
+        for (Dinos dinosaurio : dinosauriosSeleccionados) {
             guardarRelacionDinosaurioInstalacion(dinosaurio, instalacion);
             System.out.println("Dinosaurio " + dinosaurio.getEspecie() + " asignado a la instalación " + instalacion.getNombre());
         }
     }
+
+
 
     public void guardarRelacionDinosaurioInstalacion(Dinos dinosaurio, InstalacionE instalacion) {
         DinosaurioInstalaciones relacion = new DinosaurioInstalaciones(dinosaurio, instalacion);

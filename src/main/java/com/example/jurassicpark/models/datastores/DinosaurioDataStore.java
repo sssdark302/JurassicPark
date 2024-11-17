@@ -2,7 +2,6 @@ package com.example.jurassicpark.models.datastores;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import com.example.jurassicpark.models.entidades.Dinos;
 import com.example.jurassicpark.service.DinosaurioService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,13 +30,15 @@ public class DinosaurioDataStore {
     public List<Dinos> getDinosaurios() {
         return new ArrayList<>(dinosaurios);
     }
-
+/*
     public List<Dinos> getDinosauriosCompatibles(String tipoInstalacion) {
         return dinosaurios.stream()
-                .filter(dino -> dino.getTipo().equalsIgnoreCase(tipoInstalacion))
+                .filter(dino -> dino.getTipoInstalacion().equalsIgnoreCase(tipoInstalacion))
                 .collect(Collectors.toList());
     }
 
+
+ */
     public String getAllDinosauriosAsJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {

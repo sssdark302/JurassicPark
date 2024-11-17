@@ -1,13 +1,13 @@
-especie,edad,alturamaxima,pesomaximo,hpmaxima,tipo, habitat
-T-Rex,14,4.0,9000,36000.0,Carnivoro, Terrestre
-Triceratops,29,3.0,12000,36000.0,Herbivoro, Terrestre
-Velociraptor,2,1.5,200,300.0,Carnivoro, Terrestre
-Stegosaurus,5,4.0,5000,20000.0,Herbivoro, Terrestre
-Mosasaurus,16,17.0,14000,238000.0,Carnivoro, Acuatico
-Plesiosaurus,8,10.0,6000,120000.0,Carnivoro, Acuatico
-Ichthyosaurus,5,6.0,3000,60000.0,Carnivoro, Acuatico
-Liopleurodon,12,11.0,10000,220000.0,Carnivoro,Acuatico
-Pteranodon,4,1.8,80,144.0,Carnivoro, Aereo
-Quetzalcoatlus,6,5.0,500,1000.0,Carnivoro, Aereo
-Dsungaripterus,3,2.5,100,200.0,Carnivoro, Aereo
-Rhamphorhynchus,2,1.0,50,120.0,Carnivoro, Aereo
+especie,edad,alturamaxima_original,pesomaximo_original,hpmaxima_original,tipo,pesomaximo,alturamaxima,hpmaxima,tuvoHijos,faseciclodevida
+T-Rex,14,4.0,9000,36000.0,Carnivoro,0,0,0,false,HUEVO
+Triceratops,29,3.0,12000,36000.0,Herbivoro,0,0,0,false,HUEVO
+Velociraptor,2,1.5,200,300.0,Carnivoro,0,0,0,false,HUEVO
+Stegosaurus,5,4.0,5000,20000.0,Herbivoro,0,0,0,false,HUEVO
+Mosasaurus,16,17.0,14000,238000.0,Carnivoro,0,0,0,false,HUEVO
+Plesiosaurus,8,10.0,6000,120000.0,Carnivoro,0,0,0,false,HUEVO
+Ichthyosaurus,5,6.0,3000,60000.0,Carnivoro,0,0,0,false,HUEVO
+Liopleurodon,12,11.0,10000,220000.0,Carnivoro,0,0,0,false,HUEVO
+Pteranodon,4,1.8,80,144.0,Carnivoro,0,0,0,false,HUEVO
+Quetzalcoatlus,6,5.0,500,1000.0,Carnivoro,0,0,0,false,HUEVO
+Dsungaripterus,3,2.5,100,200.0,Carnivoro,0,0,0,false,HUEVO
+Rhamphorhynchus,2,1.0,50,120.0,Carnivoro,0,0,0,false,HUEVO

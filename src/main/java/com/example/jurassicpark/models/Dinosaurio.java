@@ -22,10 +22,10 @@ public abstract class Dinosaurio {
     @Column(name = "alturamaxima", nullable = false)
     protected double alturamaxima = 0.0;
 
-    @Column(name = "pesomaximo")
+    @Column(name = "pesomaximo", nullable = false)
     protected int pesomaximo = 0;
 
-    @Column(name = "hpmaxima")
+    @Column(name = "hpmaxima", nullable = false)
     protected double hpmaxima = 0.0;
 
     @Enumerated(EnumType.STRING)
@@ -39,16 +39,16 @@ public abstract class Dinosaurio {
     @Column(name = "faseciclodevida")
     protected FaseCicloDeVida faseCicloDeVida;
 
-    @Column(name = "tuvohijos")
+    @Column(name = "tuvohijos", nullable = false)
     protected boolean tuvoHijos = false;
 
-    @Column(name = "pesomaximo_original")
+    @Column(name = "pesomaximo_original", nullable = false)
     protected double pesomaximoOriginal = 0.0;
 
-    @Column(name = "hpmaxima_original")
+    @Column(name = "hpmaxima_original", nullable = false)
     protected double hpmaximaOriginal = 0.0;
 
-    @Column(name = "alturamaxima_original")
+    @Column(name = "alturamaxima_original", nullable = false)
     protected double alturamaximaOriginal = 0.0;
 
     public Dinosaurio(String especie, int edad, double alturamaxima, int pesomaximo, Sexo sexo, double hpmaxima, String tipo, FaseCicloDeVida faseCicloDeVida, boolean tuvoHijos, double alturamaximaOriginal, double pesomaximoOriginal, double hpmaximaOriginal) {

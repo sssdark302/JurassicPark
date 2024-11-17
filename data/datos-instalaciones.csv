@@ -1,7 +1,11 @@
-nombre,capacidad,tipo,seguridad,descripcion,personal,horario
-Centro de Visitantes,422,Turismo,Media,"Área destinada para visitantes, con mapas y guías.",7,8:00 - 21:00
-Laboratorio de Genética,474,Instalacion_Islas,Alta,Laboratorio de alta seguridad para manipulación genética.,25,6:00 - 18:00
-Criadero-Acuatico,426,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies acuáticas.,6,8:00 - 22:00
-Criadero-Terrestre,434,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies terrestres.,12,8:00 - 22:00
-Criadero-Aereo,344,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies voladoras.,25,8:00 - 22:00
-Enfermeria,364,Instalacion_Islas,Baja,Área médica para cuidado de especímenes.,26,00:00 - 23:59
+nombre,capacidad,tipo,seguridad,descripcion,personal,horario,terreno
+Centro de Visitantes,422,Turismo,Media,"Área destinada para visitantes",7,8:00 - 21:00, 2000
+Laboratorio de Genética,474,Instalacion_Islas,Alta,Laboratorio de alta seguridad para manipulación genética.,25,6:00 - 18:00, 500
+Jaula-Acuatica-Carnivoro,426,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies acuáticas.,6,8:00 - 22:00, 2500
+Jaula-Acuatica-Omnivoro,426,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies acuáticas.,6,8:00 - 22:00, 2500
+Jaula-Terrestre-Carnivoro,434,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies terrestres.,12,8:00 - 22:00, 2500
+Jaula-Terrestre-Herbivoro,434,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies terrestres.,12,8:00 - 22:00, 2500
+Jaula-Terrestre-Omnivoro,434,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies terrestres.,12,8:00 - 22:00, 2500
+Jaula-Aerea-Carnivoro,344,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies voladoras.,25,8:00 - 22:00, 2500
+Jaula-Aerea-Omnivoro,344,Dinosaurios_Plantas,Media,Área de cría y cuidado de especies voladoras.,25,8:00 - 22:00, 2500
+Enfermeria,364,Instalacion_Islas,Baja,Área médica para cuidado de especímenes.,26,00:00 - 23:59, 500

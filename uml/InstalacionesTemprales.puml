@@ -1,0 +1,14 @@
+@startuml
+class InstalacionTemporal{
+
+}
+class DinosauriosTemporal{
+
+}
+class Dinosaurios{}
+class Instalacion{}
+
+class LimpiezaBasedeDatosService{
+
+}
+@enduml

@@ -4,6 +4,7 @@ import com.example.jurassicpark.models.factorias.InstalacionFactory;
 import com.example.jurassicpark.models.entidades.InstalacionE;
 import com.example.jurassicpark.repository.DinosaurioInstalacionRepository;
 import com.example.jurassicpark.repository.InstalacionRepository;
+import com.example.jurassicpark.repository.TemporalInstalacionRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,13 +24,23 @@ public class InstalacionService {
     private InstalacionRepository instalacionRepository;
 
     @Autowired
-    @Lazy
-    private InstalacionFactory instalacionFactory;
+    private TemporalInstalacionRepository temporalInstalacionRepository;
 
-    @Autowired
-    @Lazy
-    private DinosaurioInstalacionRepository dinosaurioInstalacionesRepository;
 
+    public InstalacionE obtenerInstalacionOriginalPorNombre(String nombre) {
+        return instalacionRepository.findByNombre(nombre)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró la instalación con el nombre: " + nombre));
+    }
+
+    public void guardarInstalacionTemporal(InstalacionE instalacion) {
+        temporalInstalacionRepository.save(instalacion);
+    }
+
+    public void limpiarInstalacionesTemporales() {
+        temporalInstalacionRepository.deleteAll();
+    }
+
+    /*
     @PostConstruct
     public void inicializarInstalacionesPorDefecto() {
         if (instalacionRepository.count() == 0) {
@@ -70,78 +81,7 @@ public class InstalacionService {
             guardarInstalacion(laboratorioGenetica);
         }
     }
+     */
 
-    public void guardarInstalacion(InstalacionE instalacion) {
-        instalacionRepository.save(instalacion);
-    }
 
-    public List<InstalacionE> listarInstalaciones() {
-        return instalacionRepository.findAll();
-    }
-
-    public InstalacionE crearInstalacion(String nombre, int capacidad, double terreno, String seguridad, String descripcion, int personal, String horario, String tipo) {
-        InstalacionE instalacionE = instalacionFactory.crearInstalacion(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipo);
-        guardarInstalacion(instalacionE);
-        return instalacionE;
-    }
-
-    public void eliminarInstalacionPorId(int id) {
-        if (instalacionRepository.existsById(String.valueOf(id))) {
-            instalacionRepository.deleteById(String.valueOf(id));
-        } else {
-            throw new IllegalArgumentException("Instalación con ID " + id + " no encontrada.");
-        }
-    }
-    public void cargarDatosCSV(String rutaCSV) {
-        int lineasProcesadas = 0;
-        int errores = 0;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
-            String linea;
-            String encabezado = br.readLine(); // Leer encabezado y descartarlo
-            if (encabezado == null || encabezado.isEmpty()) {
-                throw new IOException("El archivo CSV está vacío o no tiene encabezado.");
-            }
-
-            while ((linea = br.readLine()) != null) {
-                String[] campos = linea.split(",");
-                if (campos.length < 8) {
-                    System.err.println("Línea inválida en CSV (menos de 8 campos): " + linea);
-                    errores++;
-                    continue;
-                }
-
-                try {
-                    String nombre = campos[0].trim();
-                    int capacidad = Integer.parseInt(campos[1].trim());
-                    String tipo = campos[2].trim();
-                    double terreno = Double.parseDouble(campos[3].trim());
-                    String seguridad = campos[4].trim();
-                    String descripcion = campos[5].trim();
-                    int personal = Integer.parseInt(campos[6].trim());
-                    String horario = campos[7].trim();
-
-                    // Crear la instalación usando los datos del CSV
-                    crearInstalacion(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, tipo);
-
-                    lineasProcesadas++;
-                } catch (Exception e) {
-                    System.err.println("Error al procesar la línea: " + linea);
-                    e.printStackTrace();
-                    errores++;
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo CSV: " + rutaCSV);
-            e.printStackTrace();
-        }
-        System.out.println("Carga completada. Líneas procesadas: " + lineasProcesadas + ", Errores: " + errores);
-    }
-    public List<String> getTiposInstalaciones() {
-        List<InstalacionE> instalaciones = instalacionRepository.findAll();
-        return instalaciones.stream()
-                .map(InstalacionE::getTipo)
-                .distinct()
-                .collect(Collectors.toList());
-    }
 }

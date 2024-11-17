@@ -26,6 +26,7 @@ public class InstalacionDataStore {
     public void init() {
         instalaciones.clear();
         instalacionService.cargarDatosCSV("data/datos-instalaciones.csv");
+        instalacionService.inicializarInstalacionesPorDefecto();
         instalaciones.addAll(instalacionService.listarInstalaciones());
     }
 
