@@ -1,17 +1,9 @@
 package com.example.jurassicpark.models.datastores;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
-import com.example.jurassicpark.ciclodevida.FaseCicloDeVida;
-import com.example.jurassicpark.models.Dinosaurio;
-import com.example.jurassicpark.models.Sexo;
 import com.example.jurassicpark.models.entidades.Dinos;
-import com.example.jurassicpark.models.factorias.DinosaurioFactory;
-import com.example.jurassicpark.repository.DinosaurioRepository;
 import com.example.jurassicpark.service.DinosaurioService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,8 +23,9 @@ public class DinosaurioDataStore {
 
     @PostConstruct
     public void init() {
-        String rutaCSV = "data/datos-dinos.csv";
-        dinosaurioService.cargarDatosCSV(rutaCSV);
+        dinosaurios.clear();
+        dinosaurioService.cargarDatosCSV("data/datos-dinos.csv");
+        dinosaurios.addAll(dinosaurioService.listarDinosaurios());
     }
 
     public List<Dinos> getDinosaurios() {

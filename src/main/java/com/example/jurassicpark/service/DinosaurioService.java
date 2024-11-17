@@ -29,29 +29,28 @@ public class DinosaurioService {
     @Lazy
     private DinosaurioFactory dinosaurioFactory;
 
-    @Autowired
-    @Lazy
-    private DinosaurioDataStore dinosaurioDataStore;
-
-
     public Dinos crearDinosaurio(String tipo, String especie, int edad, double alturaMaxima, int pesoMaximo,
-                                 Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida) {
+                                 Sexo sexo, double hpMaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida, double alturamaximaOriginal, double pesomaximoOriginal, double hpmaximaOriginal) {
         // Crear dinosaurio usando la fábrica
         Dinos dinosaurio = dinosaurioFactory.crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo,
-                sexo, hpMaxima, tuvoHijos, faseCicloDeVida);
-
+                sexo, hpMaxima, tuvoHijos, faseCicloDeVida, alturamaximaOriginal, pesomaximoOriginal, hpmaximaOriginal);
         // Guardar en la base de datos
         Dinos dinosaurioGuardado = dinosaurioRepository.save(dinosaurio);
-
-        // Actualizar el DataStore
-        dinosaurioDataStore.agregarDinosaurio(dinosaurioGuardado);
 
         return dinosaurioGuardado;
     }
 
     public List<Dinos> listarDinosaurios() {
-        return dinosaurioRepository.findAll();
+        List<Dinos> dinosaurios = dinosaurioRepository.findAll();
+        for (Dinos dino : dinosaurios) {
+            System.out.println("Dino: " + dino.getEspecie() +
+                    ", Altura Original: " + dino.getAlturamaximaOriginal() +
+                    ", Peso Original: " + dino.getPesomaximoOriginal() +
+                    ", HP Original: " + dino.getHpmaximaOriginal());
+        }
+        return dinosaurios;
     }
+
 
     public void eliminarDinosaurioPorId(int id) {
         if (dinosaurioRepository.existsById(id)) {
@@ -66,57 +65,39 @@ public class DinosaurioService {
     }
 
     public void eliminarDinosaurio(Dinos dinosaurio) {
-        // Eliminar de la base de datos
         dinosaurioRepository.delete(dinosaurio);
-
-        // Actualizar el DataStore
-        dinosaurioDataStore.eliminarDinosaurio(dinosaurio);
     }
+
     public void cargarDatosCSV(String rutaCSV) {
-        int lineasProcesadas = 0;
-        int errores = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(rutaCSV))) {
             String linea;
-            String encabezado = br.readLine(); // Leer encabezado y descartarlo
-            if (encabezado == null || encabezado.isEmpty()) {
-                throw new IOException("El archivo CSV está vacío o no tiene encabezado.");
-            }
-
+            br.readLine(); // Saltar encabezado
             while ((linea = br.readLine()) != null) {
                 String[] campos = linea.split(",");
                 if (campos.length < 7) {
-                    System.err.println("Línea inválida en CSV (menos de 7 campos): " + linea);
-                    errores++;
+                    System.err.println("Línea inválida: " + linea);
                     continue;
                 }
 
-                try {
-                    String especie = campos[0].trim();
-                    int edad = Integer.parseInt(campos[1].trim());
-                    double alturaMaxima = Double.parseDouble(campos[2].trim());
-                    int pesoMaximo = Integer.parseInt(campos[3].trim());
-                    double hpMaxima = Double.parseDouble(campos[4].trim());
-                    String tipo = campos[5].trim();
-                    String habitat = campos[6].trim();
-                    Sexo sexo = randomSexo();
-                    String dieta = "Desconocida";
+                Dinos nuevoDino = new Dinos();
+                nuevoDino.setEspecie(campos[0].trim());
+                nuevoDino.setAlturamaximaOriginal(Double.parseDouble(campos[2].trim()));
+                nuevoDino.setPesomaximoOriginal(Integer.parseInt(campos[3].trim()));
+                nuevoDino.setHpmaximaOriginal(Double.parseDouble(campos[4].trim()));
+                nuevoDino.setAlturamaxima(0.0);
+                nuevoDino.setPesomaximo(0);
+                nuevoDino.setHpmaxima(0.0);
+                nuevoDino.setTipo(campos[5].trim());
+                nuevoDino.setSexo(randomSexo());
+                nuevoDino.setFaseCicloDeVida(FaseCicloDeVida.HUEVO);
 
-                    crearDinosaurio(tipo, especie, edad, alturaMaxima, pesoMaximo, sexo, hpMaxima,
-                            false, FaseCicloDeVida.HUEVO);
-
-                    lineasProcesadas++;
-                } catch (Exception e) {
-                    System.err.println("Error al procesar la línea: " + linea);
-                    e.printStackTrace();
-                    errores++;
-                }
+                dinosaurioRepository.save(nuevoDino); // Guardar en la base
             }
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo CSV: " + rutaCSV);
+        } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
-        System.out.println("Carga completada. Líneas procesadas: " + lineasProcesadas + ", Errores: " + errores);
     }
+
 
     private Sexo randomSexo() {
         return Math.random() < 0.5 ? Sexo.MACHO : Sexo.HEMBRA;

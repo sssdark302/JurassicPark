@@ -64,8 +64,8 @@ public class DinosauriosPlantasFactory {
         String categoriaDinosaurio = determinarCategoriaDeDinosauriosPorTipo(tipo);
 
         return switch (categoriaDinosaurio) {
-            case "Carnivoro" -> new Jaula_Acuatica_Carnivoro(nombre, capacidad, "Dinosaurios_Plantas", terreno, seguridad, descripcion, personal, horario);
-            case "Omnivoro" -> new Jaula_Acuatica_Omnivoro(nombre, capacidad, "Dinosaurios_Plantas", terreno, seguridad, descripcion, personal, horario);
+            case "Carnivoro" -> new Jaula_Acuatica_Carnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Dinosaurios_Plantas");
+            case "Omnivoro" -> new Jaula_Acuatica_Omnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Dinosaurios_Plantas");
             default -> throw new IllegalArgumentException("Categoría de dinosaurios no compatible con instalación Acuática");
         };
     }
@@ -73,9 +73,9 @@ public class DinosauriosPlantasFactory {
     private InstalacionE crearInstalacionTerrestre(String nombre, int capacidad, double terreno, String seguridad,
                                                    String descripcion, int personal, String horario, String categoriaDinosaurio) {
         return switch (categoriaDinosaurio) {
-            case "Carnivoro" -> new Jaula_Terrestre_Carnivoro(nombre, capacidad, "Dinosaurios_Plantas", terreno, seguridad, descripcion, personal, horario);
-            case "Herbivoro" -> new Jaula_Terrestre_Herbivoro(nombre, capacidad, "Dinosaurios_Plantas", terreno, seguridad, descripcion, personal, horario);
-            case "Omnivoro" -> new Jaula_Terrestre_Omnivoro(nombre, capacidad, "Dinosaurios_Plantas", terreno, seguridad, descripcion, personal, horario);
+            case "Carnivoro" -> new Jaula_Terrestre_Carnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Dinosaurios_Plantas");
+            case "Herbivoro" -> new Jaula_Terrestre_Herbivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Dinosaurios_Plantas");
+            case "Omnivoro" -> new Jaula_Terrestre_Omnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Dinosaurios_Plantas");
             default -> throw new IllegalArgumentException("Categoría de dinosaurios no compatible con instalación Terrestre");
         };
     }
@@ -85,8 +85,8 @@ public class DinosauriosPlantasFactory {
         String categoriaDinosaurio = determinarCategoriaDeDinosauriosPorTipo(tipo);
 
         return switch (categoriaDinosaurio) {
-            case "Carnivoro" -> new Jaula_Aerea_Carnivoro(nombre, capacidad, "Dinosaurios_Plantas", terreno, seguridad, descripcion, personal, horario);
-            case "Omnivoro" -> new Jaula_Aerea_Omnivoro(nombre, capacidad, "Dinosaurios_Plantas", terreno, seguridad, descripcion, personal, horario);
+            case "Carnivoro" -> new Jaula_Aerea_Carnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Dinosaurios_Plantas");
+            case "Omnivoro" -> new Jaula_Aerea_Omnivoro(nombre, capacidad, terreno, seguridad, descripcion, personal, horario, "Dinosaurios_Plantas");
             default -> throw new IllegalArgumentException("Categoría de dinosaurios no compatible con instalación Aérea");
         };
     }

@@ -13,8 +13,8 @@ public class Dinos extends Dinosaurio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public Dinos(String especie, int edad, double alturamaxima, int pesomaximo, Sexo sexo, double hpmaxima, String tipo, FaseCicloDeVida faseCicloDeVida, boolean tuvoHijos) {
-        super(especie, edad, alturamaxima, pesomaximo, sexo, hpmaxima, tipo, faseCicloDeVida, tuvoHijos);
+    public Dinos(String especie, int edad, double alturamaxima, int pesomaximo, Sexo sexo, double hpmaxima, String tipo, FaseCicloDeVida faseCicloDeVida, boolean tuvoHijos, double alturamaximaOriginal, double pesomaximoOriginal, double hpmaximaOriginal) {
+        super(especie, edad, alturamaxima, pesomaximo, sexo, hpmaxima, tipo, faseCicloDeVida, tuvoHijos, alturamaximaOriginal, pesomaximoOriginal, hpmaximaOriginal);
     }
     public Dinos() {
         super();
@@ -38,7 +38,7 @@ public class Dinos extends Dinosaurio {
                 ", pesomaximo=" + pesomaximo +
                 ", hpmaxima=" + hpmaxima +
                 ", sexo=" + sexo +
-                ", tipo='" + tipo + '\'' +
+                ", tipo='" + tipo +  '\'' +
                 '}';
     }
 }

@@ -15,13 +15,11 @@ public class DinosaurioFactory {
     private GestorCV gestorCV;
 
     public Dinos crearDinosaurio(String tipo, String especie, int edad, double alturamaxima, int pesomaximo,
-                                 Sexo sexo, double hpmaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida) {
+                                 Sexo sexo, double hpmaxima, boolean tuvoHijos, FaseCicloDeVida faseCicloDeVida, double alturamaximaOriginal, double pesomaximoOriginal, double hpmaximaOriginal) {
         // Crear el dinosaurio con los atributos básicos
-        Dinos dino = new Dinos(especie, edad, alturamaxima, pesomaximo, sexo, hpmaxima, tipo, faseCicloDeVida, tuvoHijos);
-
+        Dinos dino = new Dinos(especie, edad, alturamaxima, pesomaximo, sexo, hpmaxima, tipo, faseCicloDeVida, tuvoHijos, alturamaximaOriginal, pesomaximoOriginal, hpmaximaOriginal);
         // Iniciar el ciclo de vida para el dinosaurio recién creado
         gestorCV.iniciarCiclo(dino);
-
         return dino;
     }
 }

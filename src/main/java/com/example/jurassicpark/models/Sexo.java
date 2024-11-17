@@ -1,5 +1,5 @@
 package com.example.jurassicpark.models;
 
 public enum Sexo {
-    MACHO, HEMBRA
+    MACHO, HEMBRA, DESCONOCIDO
 }

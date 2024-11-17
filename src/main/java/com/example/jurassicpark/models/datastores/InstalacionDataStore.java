@@ -24,8 +24,9 @@ public class InstalacionDataStore {
 
     @PostConstruct
     public void init() {
-        String rutaCSV = "data/datos-instalaciones.csv";
-        instalacionService.cargarDatosCSV(rutaCSV);
+        instalaciones.clear();
+        instalacionService.cargarDatosCSV("data/datos-instalaciones.csv");
+        instalaciones.addAll(instalacionService.listarInstalaciones());
     }
 
     public List<InstalacionE> getInstalaciones() {

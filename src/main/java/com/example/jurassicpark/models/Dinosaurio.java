@@ -14,35 +14,44 @@ import lombok.Setter;
 public abstract class Dinosaurio {
 
     @Column(name = "especie", nullable = false)
-    protected String especie;
+    protected String especie = "DESCONOCIDO";
 
     @Column(name= "edad")
-    protected int edad;
+    protected int edad = 0;
 
     @Column(name = "alturamaxima", nullable = false)
-    protected double alturamaxima;
+    protected double alturamaxima = 0.0;
 
     @Column(name = "pesomaximo")
-    protected int pesomaximo;
+    protected int pesomaximo = 0;
 
     @Column(name = "hpmaxima")
-    protected double hpmaxima;
+    protected double hpmaxima = 0.0;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sexo", nullable = false)
-    protected Sexo sexo;
+    protected Sexo sexo = Sexo.valueOf("DESCONOCIDO");
 
     @Column(nullable = false)
-    protected String tipo;
+    protected String tipo = "DESCONOCIDO";
 
     @Enumerated(EnumType.STRING)
     @Column(name = "faseciclodevida")
     protected FaseCicloDeVida faseCicloDeVida;
 
     @Column(name = "tuvohijos")
-    protected boolean tuvoHijos;
+    protected boolean tuvoHijos = false;
 
-    public Dinosaurio(String especie, int edad, double alturamaxima, int pesomaximo, Sexo sexo, double hpmaxima, String tipo, FaseCicloDeVida faseCicloDeVida, boolean tuvoHijos) {
+    @Column(name = "pesomaximo_original")
+    protected double pesomaximoOriginal = 0.0;
+
+    @Column(name = "hpmaxima_original")
+    protected double hpmaximaOriginal = 0.0;
+
+    @Column(name = "alturamaxima_original")
+    protected double alturamaximaOriginal = 0.0;
+
+    public Dinosaurio(String especie, int edad, double alturamaxima, int pesomaximo, Sexo sexo, double hpmaxima, String tipo, FaseCicloDeVida faseCicloDeVida, boolean tuvoHijos, double alturamaximaOriginal, double pesomaximoOriginal, double hpmaximaOriginal) {
         this.especie = especie;
         this.edad = edad;
         this.alturamaxima = alturamaxima;
@@ -52,6 +61,9 @@ public abstract class Dinosaurio {
         this.tipo = tipo;
         this.faseCicloDeVida = faseCicloDeVida;
         this.tuvoHijos = tuvoHijos;
+        this.alturamaximaOriginal = alturamaximaOriginal;
+        this.pesomaximoOriginal = pesomaximoOriginal;
+        this.hpmaximaOriginal = hpmaximaOriginal;
     }
 
     public Dinosaurio() {
@@ -128,6 +140,30 @@ public abstract class Dinosaurio {
 
     public void setTuvoHijos(boolean tuvoHijos) {
         this.tuvoHijos = tuvoHijos;
+    }
+
+    public double getPesomaximoOriginal() {
+        return pesomaximoOriginal;
+    }
+
+    public void setPesomaximoOriginal(double pesomaximoOriginal) {
+        this.pesomaximoOriginal = pesomaximoOriginal;
+    }
+
+    public double getHpmaximaOriginal() {
+        return hpmaximaOriginal;
+    }
+
+    public void setHpmaximaOriginal(double hpmaximaOriginal) {
+        this.hpmaximaOriginal = hpmaximaOriginal;
+    }
+
+    public double getAlturamaximaOriginal() {
+        return alturamaximaOriginal;
+    }
+
+    public void setAlturamaximaOriginal(double alturamaximaOriginal) {
+        this.alturamaximaOriginal = alturamaximaOriginal;
     }
 
     @Override
